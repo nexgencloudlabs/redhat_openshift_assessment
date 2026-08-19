@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>OpenShift Well-Architected Assessment Framework</title>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OpenShift Well-Architected Assessment Framework</title>
+  <style>
     :root {
       --bg: #0b0f14;
       --panel: #121923;
@@ -40,971 +39,169 @@
 
     a { color: inherit; text-decoration: none; }
 
-    .layout {
-      display: grid;
-      grid-template-columns: var(--sidebar-width) 1fr;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      position: sticky;
-      top: 0;
-      height: 100vh;
-      padding: 28px 20px;
-      border-right: 1px solid var(--line);
-      background: rgba(9, 13, 19, 0.92);
-      backdrop-filter: blur(12px);
-      overflow-y: auto;
-    }
-
-    .brand {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      margin-bottom: 26px;
-      padding: 18px;
-      border-radius: var(--radius-md);
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
-
-    .brand-mark {
-      width: 50px;
-      height: 50px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--accent), #a80000);
-      display: grid;
-      place-items: center;
-      font-size: 26px;
-      font-weight: 700;
-      color: #fff;
-      box-shadow: 0 10px 28px rgba(238,0,0,0.35);
-    }
-
-.brand-logo-wrap {
-  width: 96px;
-  height: 96px;
-  border-radius: 18px;
-  overflow: hidden;
-  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-  border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 10px 28px rgba(0,0,0,0.30);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.brand-logo {
-  width: 142%;
-  height: 142%;
-  object-fit: contain;
-  object-position: center 44%;
-  display: block;
-}
-    .brand h1 {
-      margin: 0;
-      font-size: 1rem;
-      line-height: 1.35;
-      letter-spacing: 0.01em;
-    }
-
-    .brand p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 0.84rem;
-    }
-
-    .nav-title {
-      font-size: 0.77rem;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: #d7e0ea;
-      margin: 20px 10px 10px;
-      opacity: 0.8;
-    }
-
-    .nav-list {
-      display: grid;
-      gap: 8px;
-      margin-bottom: 18px;
-    }
-
-    .nav-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 12px;
-      color: var(--muted);
-      border: 1px solid transparent;
-      transition: 180ms ease;
-    }
-
-    .nav-link:hover,
-    .nav-link.active {
-      color: var(--text);
-      background: rgba(255,255,255,0.04);
-      border-color: var(--line);
-      transform: translateX(2px);
-    }
-
-    .nav-link .count {
-      min-width: 32px;
-      padding: 4px 8px;
-      text-align: center;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      font-size: 0.76rem;
-      color: #dbe6f1;
-    }
-
-    .nav-groups {
-      display: grid;
-      gap: 10px;
-      margin-bottom: 18px;
-    }
-
-    .nav-group {
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      background: rgba(255,255,255,0.03);
-      overflow: hidden;
-    }
-
-    .nav-group[open] {
-      background: rgba(255,255,255,0.045);
-      border-color: rgba(238,0,0,0.18);
-    }
-
-    .nav-group-summary {
-      list-style: none;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px 14px;
-      color: var(--text);
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: 180ms ease;
-    }
-
-    .nav-group-summary::-webkit-details-marker {
-      display: none;
-    }
-
-    .nav-group-summary:hover {
-      background: rgba(255,255,255,0.04);
-    }
-
-    .nav-group-meta {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 0.76rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .nav-group-meta .count {
-      min-width: 32px;
-      padding: 4px 8px;
-      text-align: center;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      font-size: 0.72rem;
-      color: #dbe6f1;
-    }
-
-    .nav-sub-list {
-      display: grid;
-      gap: 6px;
-      padding: 0 10px 12px;
-    }
-
-    .nav-sub-link {
-      display: block;
-      padding: 9px 10px;
-      border-radius: 10px;
-      color: #d7e0ea;
-      border: 1px solid transparent;
-      background: rgba(255,255,255,0.02);
-      transition: 180ms ease;
-      line-height: 1.45;
-    }
-
-    .nav-sub-link:hover {
-      color: #ffffff;
-      background: rgba(238,0,0,0.10);
-      border-color: rgba(238,0,0,0.16);
-      transform: translateX(2px);
-    }
-
-    .nav-sub-link .code {
-      display: block;
-      color: #ffd1d1;
-      font-size: 0.74rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      margin-bottom: 3px;
-    }
-
-    .nav-sub-link .label {
-      display: block;
-      font-size: 0.82rem;
-      color: inherit;
-    }
-
-
-    .nav-children {
-      display: grid;
-      gap: 10px;
-      margin: -2px 0 10px 16px;
-      padding-left: 10px;
-      border-left: 1px solid rgba(255,255,255,0.08);
-    }
-
-    .nav-child-link {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 14px;
-      color: var(--text);
-      border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
-      transition: 180ms ease;
-    }
-
-    .nav-child-link:hover {
-      background: rgba(255,255,255,0.05);
-      border-color: rgba(238,0,0,0.18);
-      transform: translateX(2px);
-    }
-
-    .nav-child-text {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 600;
-      line-height: 1.42;
-    }
-
-    .sidebar-footer {
-      margin-top: 22px;
-      padding: 16px;
-      border-radius: var(--radius-md);
-      background: linear-gradient(180deg, rgba(238,0,0,0.10), rgba(238,0,0,0.05));
-      border: 1px solid rgba(238,0,0,0.18);
-    }
-
+    .layout { display: grid; grid-template-columns: var(--sidebar-width) 1fr; min-height: 100vh; }
+    .sidebar { position: sticky; top: 0; height: 100vh; padding: 28px 20px; border-right: 1px solid var(--line); background: rgba(9, 13, 19, 0.92); backdrop-filter: blur(12px); overflow-y: auto; }
+    .brand { display: flex; gap: 16px; align-items: center; margin-bottom: 26px; padding: 18px; border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .brand-logo-wrap { width: 96px; height: 96px; border-radius: 18px; overflow: hidden; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 10px 28px rgba(0,0,0,0.30); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .brand-logo { width: 142%; height: 142%; object-fit: contain; object-position: center 44%; display: block; }
+    .brand h1 { margin: 0; font-size: 1rem; line-height: 1.35; letter-spacing: 0.01em; }
+    .brand p { margin: 4px 0 0; color: var(--muted); font-size: 0.84rem; }
+    .nav-title { font-size: 0.77rem; text-transform: uppercase; letter-spacing: 0.14em; color: #d7e0ea; margin: 20px 10px 10px; opacity: 0.8; }
+    .nav-list { display: grid; gap: 8px; margin-bottom: 18px; }
+    .nav-link, .nav-child-link { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: 12px; color: var(--muted); border: 1px solid transparent; transition: 180ms ease; }
+    .nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255,255,255,0.04); border-color: var(--line); transform: translateX(2px); }
+    .nav-link .count, .nav-group-meta .count { min-width: 32px; padding: 4px 8px; text-align: center; border-radius: 999px; background: rgba(255,255,255,0.06); font-size: 0.76rem; color: #dbe6f1; }
+    .nav-children { display: grid; gap: 10px; margin: -2px 0 10px 16px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.08); }
+    .nav-child-link { color: var(--text); border: 1px solid var(--line); background: rgba(255,255,255,0.03); }
+    .nav-child-link:hover { background: rgba(255,255,255,0.05); border-color: rgba(238,0,0,0.18); transform: translateX(2px); }
+    .nav-child-text { display: block; font-size: 0.9rem; font-weight: 600; line-height: 1.42; }
+    .nav-group-meta { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 0.76rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+    .sidebar-footer { margin-top: 22px; padding: 16px; border-radius: var(--radius-md); background: linear-gradient(180deg, rgba(238,0,0,0.10), rgba(238,0,0,0.05)); border: 1px solid rgba(238,0,0,0.18); }
     .sidebar-footer strong { display: block; margin-bottom: 6px; }
-    .sidebar-footer p {
-      margin: 0;
-      color: #e6eef7;
-      font-size: 0.88rem;
-      line-height: 1.5;
-    }
+    .sidebar-footer p { margin: 0; color: #e6eef7; font-size: 0.88rem; line-height: 1.5; }
 
-    .main {
-      padding: 34px 34px 60px;
-    }
+    .main { padding: 34px 34px 60px; }
+    .container { max-width: var(--content-width); margin: 0 auto; }
+    .hero { position: relative; overflow: hidden; padding: 38px; border-radius: 28px; background: linear-gradient(135deg, rgba(238,0,0,0.14), rgba(238,0,0,0.03) 40%, rgba(255,255,255,0.02) 100%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .hero::after { content: ""; position: absolute; right: -100px; top: -60px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(circle, rgba(238,0,0,0.22), transparent 66%); pointer-events: none; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: #f6d7d7; font-size: 0.82rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 16px; }
+    .hero h2 { font-size: clamp(2rem, 4vw, 3.4rem); line-height: 1.06; margin: 0 0 16px; max-width: 940px; letter-spacing: -0.03em; }
+    .hero p { max-width: 980px; margin: 0; color: #d5dee8; font-size: 1.03rem; line-height: 1.7; }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 24px; }
+    .hero-actions a, .button { display: inline-flex; align-items: center; justify-content: center; padding: 14px 20px; border-radius: 14px; text-decoration: none; font-weight: 600; font-size: 0.98rem; line-height: 1; transition: all 0.25s ease; border: 1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.04); color: #e5e7eb; box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+    .hero-actions a:hover, .button:hover { background: linear-gradient(135deg, #c40000, #ff2a2a); border-color: rgba(255,60,60,0.55); color: #ffffff; transform: translateY(-1px); box-shadow: 0 12px 28px rgba(180,0,0,0.30); }
 
-    .container {
-      max-width: var(--content-width);
-      margin: 0 auto;
-    }
+    section { scroll-margin-top: 24px; }
+    .section-card { margin-top: 24px; padding: 28px; border-radius: 24px; background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); border: 1px solid var(--line); box-shadow: var(--shadow); }
+    .section-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+    .section-tag { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: var(--accent-soft); border: 1px solid rgba(238,0,0,0.18); color: #ffd4d4; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .section-card h3 { margin: 0; font-size: clamp(1.45rem, 2vw, 2rem); letter-spacing: -0.02em; }
+    .section-card .section-desc { margin: 12px 0 0; color: #ced9e6; line-height: 1.72; max-width: 1000px; }
+    .framework-origin-card { background: linear-gradient(135deg, rgba(238,0,0,0.14), rgba(238,0,0,0.04) 48%, rgba(255,255,255,0.02) 100%), linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02)); }
+    .pill-count { white-space: nowrap; padding: 10px 14px; border-radius: 14px; background: rgba(255,255,255,0.05); border: 1px solid var(--line); color: #f3f7fb; font-weight: 700; min-width: 120px; text-align: center; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+    .overview-card, .principle, .outcome { padding: 22px; border-radius: 18px; background: var(--panel-2); border: 1px solid var(--line); height: 100%; }
+    .overview-card h4, .outcome h4 { margin: 0 0 10px; font-size: 1.05rem; }
+    .overview-card p, .overview-card li, .outcome p, .principle p { color: #d4dde7; line-height: 1.68; font-size: 0.96rem; }
+    .overview-card ul { margin: 0; padding-left: 18px; }
+    .principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 16px; }
+    .principle strong { display: block; margin-bottom: 8px; font-size: 1rem; }
+    .principle p, .outcome p { margin: 0; }
+    .outcome-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-top: 18px; }
 
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 38px;
-      border-radius: 28px;
-      background:
-        linear-gradient(135deg, rgba(238,0,0,0.14), rgba(238,0,0,0.03) 40%, rgba(255,255,255,0.02) 100%),
-        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
+    .pillar-map-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 18px; }
+    .pillar-map-card { padding: 22px; border-radius: 20px; background: rgba(255,255,255,0.035); border: 1px solid var(--line); min-height: 100%; transition: 180ms ease; }
+    .pillar-map-card:hover { transform: translateY(-2px); border-color: rgba(238,0,0,0.22); box-shadow: 0 12px 24px rgba(0,0,0,0.20); }
+    .pillar-map-card h4 { margin: 0 0 6px; font-size: 1.08rem; line-height: 1.35; }
+    .pillar-map-card p { margin: 0 0 16px; color: var(--muted); font-size: 0.94rem; line-height: 1.5; }
+    .pill-chip-list { display: flex; flex-wrap: wrap; gap: 10px; }
+    .pill-chip { display: inline-flex; align-items: center; justify-content: center; min-width: 76px; padding: 8px 12px; border-radius: 999px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.05); color: #bfd0e3; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.02em; }
+    a.pill-chip:hover { background: rgba(238,0,0,0.16); border-color: rgba(238,0,0,0.28); color: #fff; }
+    .footer { margin-top: 28px; padding: 20px 24px; border-radius: 18px; background: rgba(255,255,255,0.03); border: 1px solid var(--line); color: var(--muted); font-size: 0.92rem; line-height: 1.7; }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      right: -100px;
-      top: -60px;
-      width: 320px;
-      height: 320px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(238,0,0,0.22), transparent 66%);
-      pointer-events: none;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--line);
-      color: #f6d7d7;
-      font-size: 0.82rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .hero h2 {
-      font-size: clamp(2rem, 4vw, 3.4rem);
-      line-height: 1.06;
-      margin: 0 0 16px;
-      max-width: 940px;
-      letter-spacing: -0.03em;
-    }
-
-    .hero p {
-      max-width: 980px;
-      margin: 0;
-      color: #d5dee8;
-      font-size: 1.03rem;
-      line-height: 1.7;
-    }
-
-.hero-actions {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 24px;
-}
-
-.hero-actions a,
-.hero-actions .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 20px;
-  border-radius: 14px;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.98rem;
-  line-height: 1;
-  transition: all 0.25s ease;
-  border: 1px solid rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
-  color: #e5e7eb;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
-}
-
-/* Hover only */
-.hero-actions a:hover,
-.hero-actions .btn:hover {
-  background: linear-gradient(135deg, #c40000, #ff2a2a);
-  border-color: rgba(255,60,60,0.55);
-  color: #ffffff;
-  transform: translateY(-1px);
-  box-shadow: 0 12px 28px rgba(180,0,0,0.30);
-}
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 13px 18px;
-      border-radius: 14px;
-      border: 1px solid transparent;
-      transition: 180ms ease;
-      font-weight: 600;
-    }
-
-    .button.primary {
-      background: rgba(255,255,255,0.04);
-      color: #e5e7eb;
-      border: 1px solid rgba(255,255,255,0.10);
-    }
-.btn-primary:hover {
-  background: linear-gradient(135deg, #c40000, #ff2a2a);
-  color: #ffffff;
-  border-color: rgba(255,60,60,0.55);
-}
-    .button.secondary {
-      background: rgba(255,255,255,0.04);
-      border-color: var(--line);
-      color: var(--text);
-    }
-
-    .button:hover { transform: translateY(-1px); }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-      margin: 22px 0 0;
-    }
-
-    .stat-card {
-      padding: 20px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--line);
-      min-height: 116px;
-    }
-
-    .stat-card .label {
-      display: block;
-      color: var(--muted);
-      font-size: 0.82rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 8px;
-    }
-
-    .stat-card strong {
-      display: block;
-      font-size: 2rem;
-      margin-bottom: 8px;
-      letter-spacing: -0.03em;
-    }
-
-    .stat-card p {
-      margin: 0;
-      color: #d4dde7;
-      font-size: 0.92rem;
-      line-height: 1.55;
-    }
-
-    section {
-      scroll-margin-top: 24px;
-    }
-
-    .section-card {
-      margin-top: 24px;
-      padding: 28px;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 22px;
-    }
-
-    .section-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 7px 12px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      border: 1px solid rgba(238,0,0,0.18);
-      color: #ffd4d4;
-      font-size: 0.8rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin-bottom: 12px;
-    }
-
-    .section-card h3 {
-      margin: 0;
-      font-size: clamp(1.45rem, 2vw, 2rem);
-      letter-spacing: -0.02em;
-    }
-
-    .section-card .section-desc {
-      margin: 12px 0 0;
-      color: #ced9e6;
-      line-height: 1.72;
-      max-width: 1000px;
-    }
-
-    .framework-origin-card {
-      background:
-        linear-gradient(135deg, rgba(238,0,0,0.14), rgba(238,0,0,0.04) 48%, rgba(255,255,255,0.02) 100%),
-        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-    }
-
-    .framework-origin-card .section-desc {
-      max-width: 1100px;
-    }
-
-    .pill-count {
-      white-space: nowrap;
-      padding: 10px 14px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid var(--line);
-      color: #f3f7fb;
-      font-weight: 700;
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .overview-card {
-      padding: 22px;
-      border-radius: 18px;
-      background: var(--panel-2);
-      border: 1px solid var(--line);
-      height: 100%;
-    }
-
-    .overview-card h4 {
-      margin: 0 0 10px;
-      font-size: 1.05rem;
-    }
-
-    .overview-card p,
-    .overview-card li {
-      color: #d4dde7;
-      line-height: 1.68;
-      font-size: 0.96rem;
-    }
-
-    .overview-card ul {
-      margin: 0;
-      padding-left: 18px;
-    }
-
-    .controls-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-      margin-top: 20px;
-    }
-
-    .control-item {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.07);
-      transition: 180ms ease;
-    }
-
-    .control-item:hover {
-      transform: translateY(-2px);
-      border-color: rgba(238,0,0,0.28);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.22);
-    }
-
-    .control-code {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 88px;
-      padding: 8px 10px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(238,0,0,0.18), rgba(238,0,0,0.08));
-      border: 1px solid rgba(238,0,0,0.18);
-      color: #ffd6d6;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-    }
-
-    .control-text {
-      color: var(--text);
-      line-height: 1.52;
-      font-size: 0.95rem;
-    }
-
-    .principles {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 16px;
-    }
-
-    .principle {
-      padding: 20px;
-      border-radius: 18px;
-      background: var(--panel-2);
-      border: 1px solid var(--line);
-    }
-
-    .principle strong {
-      display: block;
-      margin-bottom: 8px;
-      font-size: 1rem;
-    }
-
-    .principle p {
-      margin: 0;
-      color: #d4dde7;
-      line-height: 1.65;
-      font-size: 0.94rem;
-    }
-
-    .outcome-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-      margin-top: 18px;
-    }
-
-    .outcome {
-      padding: 18px;
-      border-radius: 18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-    }
-
-    .outcome h4 {
-      margin: 0 0 10px;
-      font-size: 1rem;
-    }
-
-    .outcome p {
-      margin: 0;
-      color: #d4dde7;
-      line-height: 1.6;
-      font-size: 0.92rem;
-    }
-
-
-    .pillar-map-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 18px;
-    }
-
-    .pillar-map-card {
-      padding: 22px;
-      border-radius: 20px;
-      background: rgba(255,255,255,0.035);
-      border: 1px solid var(--line);
-      min-height: 100%;
-      transition: 180ms ease;
-    }
-
-    .pillar-map-card:hover {
-      transform: translateY(-2px);
-      border-color: rgba(238,0,0,0.22);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.20);
-    }
-
-    .pillar-map-card h4 {
-      margin: 0 0 6px;
-      font-size: 1.08rem;
-      line-height: 1.35;
-    }
-
-    .pillar-map-card p {
-      margin: 0 0 16px;
-      color: var(--muted);
-      font-size: 0.94rem;
-      line-height: 1.5;
-    }
-
-    .pill-chip-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .pill-chip {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 76px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.05);
-      color: #bfd0e3;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-    }
-
-    .footer {
-      margin-top: 28px;
-      padding: 20px 24px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.03);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.7;
-    }
-
-    .to-top {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 18px;
-      color: #f4d1d1;
-      font-weight: 600;
-      font-size: 0.92rem;
-    }
-
-    @media (max-width: 1280px) {
-      .stats,
-      .outcome-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .principles { grid-template-columns: 1fr; }
-      .pillar-map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
-
-    @media (max-width: 1080px) {
-      .layout { grid-template-columns: 1fr; }
-      .sidebar {
-        position: relative;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--line);
-      }
-      .main { padding: 22px 18px 48px; }
-      .grid-2,
-      .controls-grid,
-      .stats,
-      .outcome-grid,
-      .pillar-map-grid { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 720px) {
-      .hero, .section-card { padding: 22px; }
-      .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .brand { padding: 14px; }
-      .hero h2 { font-size: 1.9rem; }
-      .control-item {
-        flex-direction: column;
-      }
-    }
-  
-    .pillar-map-card h4 a { text-decoration:none; color:inherit; }
-    .pillar-map-card h4 a:hover { color:#ffd1d1; }
-</style>
+    @media (max-width: 1280px) { .outcome-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .principles { grid-template-columns: 1fr; } .pillar-map-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 1080px) { .layout { grid-template-columns: 1fr; } .sidebar { position: relative; height: auto; border-right: none; border-bottom: 1px solid var(--line); } .main { padding: 22px 18px 48px; } .grid-2, .outcome-grid, .pillar-map-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 720px) { .hero, .section-card { padding: 22px; } .section-header { flex-direction: column; align-items: flex-start; } .brand { padding: 14px; } .hero h2 { font-size: 1.9rem; } }
+  </style>
 </head>
 <body>
-<div class="layout">
-<aside class="sidebar" id="top">
-<div class="brand">
-<div class="brand-logo-wrap">
-<img alt="nexgencloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/>
-</div>
-<div>
-<h1>NextGen Cloudlabs</h1>
-<p>Red Hat OpenShift Assessment Tool</p>
-</div>
-</div>
-<div class="nav-title">Navigation</div>
-<nav class="nav-list">
-<a class="nav-link" href="#overview"><span>Executive Summary</span><span class="count">01</span></a>
-<a class="nav-link" href="#framework-origin"><span>Framework Origin</span><span class="count">02</span></a>
-<a class="nav-link" href="#methodology"><span>Assessment Methodology</span><span class="count">03</span></a>
-<a class="nav-link" href="#pillars-map"><span>Six (6) Assessment Pillars</span><span class="count">04</span></a>
-<div class="nav-children">
-<a class="nav-child-link" href="pillar-ar.html"><span class="nav-child-text">Pillar 1: Availability &amp; Resilience</span><span class="nav-group-meta"><span>AR</span><span class="count">24</span></span></a>
-<a class="nav-child-link" href="pillar-rc.html"><span class="nav-child-text">Pillar 2: Recoverability / Disaster Recovery</span><span class="nav-group-meta"><span>RC</span><span class="count">09</span></span></a>
-<a class="nav-child-link" href="pillar-ps.html"><span class="nav-child-text">Pillar 3: Performance &amp; Scalability</span><span class="nav-group-meta"><span>PS</span><span class="count">08</span></span></a>
-<a class="nav-child-link" href="pillar-sc.html"><span class="nav-child-text">Pillar 4: Security &amp; Compliance</span><span class="nav-group-meta"><span>SC</span><span class="count">20</span></span></a>
-<a class="nav-child-link" href="pillar-mo.html"><span class="nav-child-text">Pillar 5: Manageability &amp; Operational Excellence</span><span class="nav-group-meta"><span>MO</span><span class="count">10</span></span></a>
-<a class="nav-child-link" href="pillar-co.html"><span class="nav-child-text">Pillar 6: Cost &amp; Resource Optimization</span><span class="nav-group-meta"><span>CO</span><span class="count">08</span></span></a>
-</div>
-<a class="nav-link" href="#outcomes"><span>Business Outcomes</span><span class="count">05</span></a>
-</nav>
-<div class="sidebar-footer"> <strong>Framework posture</strong>
-<p>This page is styled as an enterprise-ready assessment entry point, suitable for internal tooling, client walkthroughs, or future expansion into a full control-by-control assessment portal.</p>
-</div>
-</aside>
-<main class="main">
-<div class="container">
-<section class="hero" id="overview">
-<div class="eyebrow">Red Hat OpenShift Assessment Tool</div>
-<h2>Assess your OpenShift platform against best practices for availability, resilience, disaster recovery, performance, scalability, security, compliance, and operational excellence</h2>
-<p>
-            This assessment framework evaluates Red Hat OpenShift environments against six foundational pillars to identify architectural gaps, operational risks, control weaknesses, and optimization opportunities across container and virtualization workloads.
-          </p>
-<div class="hero-actions">
-<a class="button primary" href="#pillars-map">Explore the six pillars</a>
-<a class="button secondary" href="#outcomes">View business outcomes</a>
-</div>
-</section>
-<section class="section-card framework-origin-card" id="framework-origin">
-<div class="section-header">
-<div>
-<div class="section-tag">Framework Origin</div>
-<h3>Proprietary assessment model informed by enterprise delivery experience</h3>
-<p class="section-desc">
-                Please note: While this assessment evaluates Red Hat technologies and aligns with officially documented best practices, this Well-Architected Framework is not an official methodology published by Red Hat. Rather, it is a proprietary assessment model forged from our consulting team's extensive field experience, lessons learned, and successful enterprise deployments across multiple complex customer engagements.
-              </p>
-</div>
-<div class="pill-count">Advisory Baseline</div>
-</div>
-</section>
-<section class="section-card" id="methodology">
-<div class="section-header">
-<div>
-<div class="section-tag">Assessment Methodology</div>
-<h3>Assessment methodology and review approach</h3>
-<p class="section-desc">
-                The primary objective of this assessment is to identify architectural gaps, highlight areas of operational risk, and produce a practical remediation roadmap. It provides a structured way to assess OpenShift design choices, operational controls, and enterprise readiness across all six pillars.
-              </p>
-</div>
-<div class="pill-count">6 Pillars</div>
-</div>
-<div class="grid-2">
-<div class="overview-card">
-<h4>Assessment focus</h4>
-<ul>
-<li>Evaluate the architectural fitness of the existing OpenShift environment.</li>
-<li>Surface risks that affect uptime, recoverability, security, performance, and operating model maturity.</li>
-<li>Provide traceable insights that support prioritization, remediation planning, and executive reporting.</li>
-<li>Support cloud-native and virtualization-enabled operating models within highly regulated environments.</li>
-</ul>
-</div>
-<div class="overview-card">
-<h4>Why this framework matters</h4>
-<p>
-                A mature OpenShift platform must do more than host applications. It must withstand node and site failures, preserve recoverability, enforce security by design, operate through automated controls, and optimize cost and capacity over time. This landing page organizes the framework into a clear structure that can later be extended into a full interactive assessment tool.
-              </p>
-</div>
-</div>
-<div class="principles">
-<div class="principle">
-<strong>Architecture-first review</strong>
-<p>Each pillar measures whether critical platform design decisions have been implemented in a way that supports stable, enterprise-grade operations.</p>
-</div>
-<div class="principle">
-<strong>Operational evidence</strong>
-<p>Controls are intended to be validated through observable configuration, runtime behavior, policy enforcement, and supporting operational artefacts.</p>
-</div>
-<div class="principle">
-<strong>Outcome-driven remediation</strong>
-<p>The assessment is designed to move beyond findings alone by enabling a prioritized roadmap tied to resilience, risk, efficiency, and business continuity outcomes.</p>
-</div>
-</div>
-</section>
-<section class="section-card" id="pillars-map">
-<div class="section-header">
-<div>
-<div class="section-tag">Assessment Pillars</div>
-<h3>Six (6) Assessment Pillars and their controls</h3>
-<p class="section-desc">
-                The framework organizes all control statements into six assessment pillars so that architecture, security, recovery, performance, operations, and optimization domains can be reviewed consistently. Use this section as the control map for reviewing the framework’s coverage at a glance.
-              </p>
-</div>
-<div class="pill-count">79 Controls</div>
-</div>
-<div class="pillar-map-grid">
-<div class="pillar-map-card">
-<h4><a href="pillar-ar.html">Availability &amp; Resilience</a></h4>
-<p>24 controls</p>
-<div class="pill-chip-list">
-<a class="pill-chip" href="pillar-ar.html#control-id-ar-001">AR-001</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-002">AR-002</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-003">AR-003</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-004">AR-004</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-005">AR-005</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-006">AR-006</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-007">AR-007</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-008">AR-008</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-009">AR-009</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-010">AR-010</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-011">AR-011</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-012">AR-012</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-013">AR-013</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-014">AR-014</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-015">AR-015</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-016">AR-016</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-017">AR-017</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-018">AR-018</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-019">AR-019</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-020">AR-020</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-021">AR-021</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-022">AR-022</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-023">AR-023</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-024">AR-024</a>
-</div>
-</div>
-<div class="pillar-map-card">
-<h4><a href="pillar-rc.html">Recoverability / Disaster Recovery</a></h4>
-<p>9 controls</p>
-<div class="pill-chip-list">
-<a class="pill-chip" href="pillar-rc.html#control-id-rc-001">RC-001</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-002">RC-002</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-003">RC-003</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-004">RC-004</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-005">RC-005</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-006">RC-006</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-007">RC-007</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-008">RC-008</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-009">RC-009</a>
-</div>
-</div>
-<div class="pillar-map-card">
-<h4><a href="pillar-ps.html">Performance &amp; Scalability</a></h4>
-<p>8 controls</p>
-<div class="pill-chip-list">
-<a class="pill-chip" href="pillar-ps.html#control-id-ps-001">PS-001</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-002">PS-002</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-003">PS-003</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-004">PS-004</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-005">PS-005</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-006">PS-006</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-007">PS-007</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-008">PS-008</a>
-</div>
-</div>
-<div class="pillar-map-card">
-<h4><a href="pillar-sc.html">Security &amp; Compliance</a></h4>
-<p>20 controls</p>
-<div class="pill-chip-list">
-<a class="pill-chip" href="pillar-sc.html#control-id-sc-001">SC-001</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-002">SC-002</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-003">SC-003</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-004">SC-004</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-005">SC-005</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-006">SC-006</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-007">SC-007</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-008">SC-008</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-009">SC-009</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-010">SC-010</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-011">SC-011</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-012">SC-012</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-013">SC-013</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-014">SC-014</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-015">SC-015</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-016">SC-016</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-017">SC-017</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-018">SC-018</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-019">SC-019</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-020">SC-020</a>
-</div>
-</div>
-<div class="pillar-map-card">
-<h4><a href="pillar-mo.html">Manageability &amp; Operational Excellence</a></h4>
-<p>10 controls</p>
-<div class="pill-chip-list">
-<a class="pill-chip" href="pillar-mo.html#control-id-mo-001">MO-001</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-002">MO-002</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-003">MO-003</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-004">MO-004</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-005">MO-005</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-006">MO-006</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-007">MO-007</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-008">MO-008</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-009">MO-009</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-010">MO-010</a>
-</div>
-</div>
-<div class="pillar-map-card">
-<h4><a href="pillar-co.html">Cost &amp; Resource Optimization</a></h4>
-<p>8 controls</p>
-<div class="pill-chip-list">
-<a class="pill-chip" href="pillar-co.html#control-id-co-001">CO-001</a><a class="pill-chip" href="pillar-co.html#control-id-co-002">CO-002</a><a class="pill-chip" href="pillar-co.html#control-id-co-003">CO-003</a><a class="pill-chip" href="pillar-co.html#control-id-co-004">CO-004</a><a class="pill-chip" href="pillar-co.html#control-id-co-005">CO-005</a><a class="pill-chip" href="pillar-co.html#control-id-co-006">CO-006</a><a class="pill-chip" href="pillar-co.html#control-id-co-007">CO-007</a><a class="pill-chip" href="pillar-co.html#control-id-co-008">CO-008</a>
-</div>
-</div>
-</div>
-</section>
-<section class="section-card" id="outcomes">
-<div class="section-header">
-<div>
-<div class="section-tag">Business Outcomes</div>
-<h3>Target state for enterprise OpenShift operations</h3>
-<p class="section-desc">
-                By assessing the platform against this model, the organization moves beyond infrastructure provisioning toward a more disciplined cloud operating model. The resulting insights support stronger architectural decisions, clearer risk visibility, and more efficient platform operations.
-              </p>
-</div>
-<div class="pill-count">Outcome Areas</div>
-</div>
-<div class="outcome-grid">
-<div class="outcome">
-<h4>Reduce single points of failure</h4>
-<p>Strengthen platform continuity across control plane, worker, network, storage, and ingress layers.</p>
-</div>
-<div class="outcome">
-<h4>Improve recoverability</h4>
-<p>Validate backup, restoration, and multi-cluster orchestration capabilities for critical business workloads.</p>
-</div>
-<div class="outcome">
-<h4>Harden security posture</h4>
-<p>Reinforce access, workload isolation, encryption, image integrity, and continuous compliance enforcement.</p>
-</div>
-<div class="outcome">
-<h4>Optimize cost and capacity</h4>
-<p>Reduce sprawl, right-size infrastructure, and improve resource efficiency across the OpenShift estate.</p>
-</div>
-</div>
-</section>
-<div class="footer">
-          This single-file page is structured as a landing page for an OpenShift assessment tool. It can be extended next into a searchable control library, scoring dashboard, pillar-by-pillar assessment forms, evidence upload workflow, or export-ready executive summary module.
+  <div class="layout">
+    <aside class="sidebar" id="top">
+      <div class="brand">
+        <div class="brand-logo-wrap"><img class="brand-logo" src="nexgencloudlabs-logo.png" alt="nexgencloudlabs logo"></div>
+        <div><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div>
+      </div>
+
+      <div class="nav-title">Navigation</div>
+      <nav class="nav-list">
+        <a class="nav-link" href="#overview"><span>Executive Summary</span><span class="count">01</span></a>
+        <a class="nav-link" href="#framework-origin"><span>Framework Origin</span><span class="count">02</span></a>
+        <a class="nav-link" href="#methodology"><span>Assessment Methodology</span><span class="count">03</span></a>
+        <a class="nav-link" href="#pillars-map"><span>Six (6) Assessment Pillars</span><span class="count">04</span></a>
+        <div class="nav-children">
+          <a class="nav-child-link" href="pillar-ar.html"><span class="nav-child-text">Pillar 1: Availability &amp; Resilience</span><span class="nav-group-meta"><span>AR</span><span class="count">24</span></span></a>
+          <a class="nav-child-link" href="pillar-rc.html"><span class="nav-child-text">Pillar 2: Recoverability / Disaster Recovery</span><span class="nav-group-meta"><span>RC</span><span class="count">09</span></span></a>
+          <a class="nav-child-link" href="pillar-ps.html"><span class="nav-child-text">Pillar 3: Performance &amp; Scalability</span><span class="nav-group-meta"><span>PS</span><span class="count">14</span></span></a>
+          <a class="nav-child-link" href="pillar-sc.html"><span class="nav-child-text">Pillar 4: Security &amp; Compliance</span><span class="nav-group-meta"><span>SC</span><span class="count">20</span></span></a>
+          <a class="nav-child-link" href="pillar-mo.html"><span class="nav-child-text">Pillar 5: Manageability &amp; Operational Excellence</span><span class="nav-group-meta"><span>MO</span><span class="count">10</span></span></a>
+          <a class="nav-child-link" href="pillar-co.html"><span class="nav-child-text">Pillar 6: Cost &amp; Resource Optimization</span><span class="nav-group-meta"><span>CO</span><span class="count">08</span></span></a>
         </div>
-</div>
-</main>
-</div>
-<script>
+        <a class="nav-link" href="#outcomes"><span>Business Outcomes</span><span class="count">05</span></a>
+      </nav>
+
+      <div class="sidebar-footer"><strong>Framework posture</strong><p>This page is styled as an enterprise-ready assessment entry point, suitable for internal tooling, client walkthroughs, or future expansion into a full control-by-control assessment portal.</p></div>
+    </aside>
+
+    <main class="main">
+      <div class="container">
+        <section class="hero" id="overview">
+          <div class="eyebrow">Red Hat OpenShift Assessment Tool</div>
+          <h2>Assess your OpenShift platform against best practices for availability, resilience, disaster recovery, performance, scalability, security, compliance, and operational excellence</h2>
+          <p>This assessment framework evaluates Red Hat OpenShift environments against six foundational pillars to identify architectural gaps, operational risks, control weaknesses, and optimization opportunities across container and virtualization workloads.</p>
+          <div class="hero-actions"><a class="button primary" href="#pillars-map">Explore the six pillars</a><a class="button secondary" href="#outcomes">View business outcomes</a></div>
+        </section>
+
+        <section class="section-card framework-origin-card" id="framework-origin">
+          <div class="section-header"><div><div class="section-tag">Framework Origin</div><h3>Proprietary assessment model informed by enterprise delivery experience</h3><p class="section-desc">Please note: While this assessment evaluates Red Hat technologies and aligns with officially documented best practices, this Well-Architected Framework is not an official methodology published by Red Hat. Rather, it is a proprietary assessment model forged from our consulting team's extensive field experience, lessons learned, and successful enterprise deployments across multiple complex customer engagements.</p></div><div class="pill-count">Advisory Baseline</div></div>
+        </section>
+
+        <section class="section-card" id="methodology">
+          <div class="section-header"><div><div class="section-tag">Assessment Methodology</div><h3>Assessment methodology and review approach</h3><p class="section-desc">The primary objective of this assessment is to identify architectural gaps, highlight areas of operational risk, and produce a practical remediation roadmap. It provides a structured way to assess OpenShift design choices, operational controls, and enterprise readiness across all six pillars.</p></div><div class="pill-count">6 Pillars</div></div>
+          <div class="grid-2">
+            <div class="overview-card"><h4>Assessment focus</h4><ul><li>Evaluate the architectural fitness of the existing OpenShift environment.</li><li>Surface risks that affect uptime, recoverability, security, performance, and operating model maturity.</li><li>Provide traceable insights that support prioritization, remediation planning, and executive reporting.</li><li>Support cloud-native and virtualization-enabled operating models within highly regulated environments.</li></ul></div>
+            <div class="overview-card"><h4>Why this framework matters</h4><p>A mature OpenShift platform must do more than host applications. It must withstand node and site failures, preserve recoverability, enforce security by design, operate through automated controls, and optimize cost and capacity over time. This landing page organizes the framework into a clear structure that can later be extended into a full interactive assessment tool.</p></div>
+          </div>
+          <div class="principles"><div class="principle"><strong>Architecture-first review</strong><p>Each pillar measures whether critical platform design decisions have been implemented in a way that supports stable, enterprise-grade operations.</p></div><div class="principle"><strong>Operational evidence</strong><p>Controls are intended to be validated through observable configuration, runtime behavior, policy enforcement, and supporting operational artefacts.</p></div><div class="principle"><strong>Outcome-driven remediation</strong><p>The assessment is designed to move beyond findings alone by enabling a prioritized roadmap tied to resilience, risk, efficiency, and business continuity outcomes.</p></div></div>
+        </section>
+
+        <section class="section-card" id="pillars-map">
+          <div class="section-header"><div><div class="section-tag">Assessment Pillars</div><h3>Six (6) Assessment Pillars and their controls</h3><p class="section-desc">The framework organizes all control statements into six assessment pillars so that architecture, security, recovery, performance, operations, and optimization domains can be reviewed consistently. Use this section as the control map for reviewing the framework’s coverage at a glance.</p></div><div class="pill-count">85 Controls</div></div>
+          <div class="pillar-map-grid">
+            <div class="pillar-map-card"><h4>Availability &amp; Resilience</h4><p>24 controls</p><div class="pill-chip-list">
+              <a class="pill-chip" href="pillar-ar.html#control-id-ar-001">AR-001</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-002">AR-002</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-003">AR-003</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-004">AR-004</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-005">AR-005</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-006">AR-006</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-007">AR-007</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-008">AR-008</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-009">AR-009</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-010">AR-010</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-011">AR-011</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-012">AR-012</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-013">AR-013</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-014">AR-014</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-015">AR-015</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-016">AR-016</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-017">AR-017</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-018">AR-018</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-019">AR-019</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-020">AR-020</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-021">AR-021</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-022">AR-022</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-023">AR-023</a><a class="pill-chip" href="pillar-ar.html#control-id-ar-024">AR-024</a>
+            </div></div>
+
+            <div class="pillar-map-card"><h4>Recoverability / Disaster Recovery</h4><p>9 controls</p><div class="pill-chip-list">
+              <a class="pill-chip" href="pillar-rc.html#control-id-rc-001">RC-001</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-002">RC-002</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-003">RC-003</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-004">RC-004</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-005">RC-005</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-006">RC-006</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-007">RC-007</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-008">RC-008</a><a class="pill-chip" href="pillar-rc.html#control-id-rc-009">RC-009</a>
+            </div></div>
+
+            <div class="pillar-map-card"><h4>Performance &amp; Scalability</h4><p>14 controls</p><div class="pill-chip-list">
+              <a class="pill-chip" href="pillar-ps.html#control-id-ps-001">PS-001</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-002">PS-002</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-003">PS-003</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-004">PS-004</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-005">PS-005</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-006">PS-006</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-007">PS-007</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-008">PS-008</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-009">PS-009</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-010">PS-010</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-011">PS-011</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-012">PS-012</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-013">PS-013</a><a class="pill-chip" href="pillar-ps.html#control-id-ps-014">PS-014</a>
+            </div></div>
+
+            <div class="pillar-map-card"><h4>Security &amp; Compliance</h4><p>20 controls</p><div class="pill-chip-list">
+              <a class="pill-chip" href="pillar-sc.html#control-id-sc-001">SC-001</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-002">SC-002</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-003">SC-003</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-004">SC-004</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-005">SC-005</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-006">SC-006</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-007">SC-007</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-008">SC-008</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-009">SC-009</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-010">SC-010</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-011">SC-011</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-012">SC-012</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-013">SC-013</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-014">SC-014</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-015">SC-015</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-016">SC-016</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-017">SC-017</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-018">SC-018</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-019">SC-019</a><a class="pill-chip" href="pillar-sc.html#control-id-sc-020">SC-020</a>
+            </div></div>
+
+            <div class="pillar-map-card"><h4>Manageability &amp; Operational Excellence</h4><p>10 controls</p><div class="pill-chip-list">
+              <a class="pill-chip" href="pillar-mo.html#control-id-mo-001">MO-001</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-002">MO-002</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-003">MO-003</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-004">MO-004</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-005">MO-005</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-006">MO-006</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-007">MO-007</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-008">MO-008</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-009">MO-009</a><a class="pill-chip" href="pillar-mo.html#control-id-mo-010">MO-010</a>
+            </div></div>
+
+            <div class="pillar-map-card"><h4>Cost &amp; Resource Optimization</h4><p>8 controls</p><div class="pill-chip-list">
+              <a class="pill-chip" href="pillar-co.html#control-id-co-001">CO-001</a><a class="pill-chip" href="pillar-co.html#control-id-co-002">CO-002</a><a class="pill-chip" href="pillar-co.html#control-id-co-003">CO-003</a><a class="pill-chip" href="pillar-co.html#control-id-co-004">CO-004</a><a class="pill-chip" href="pillar-co.html#control-id-co-005">CO-005</a><a class="pill-chip" href="pillar-co.html#control-id-co-006">CO-006</a><a class="pill-chip" href="pillar-co.html#control-id-co-007">CO-007</a><a class="pill-chip" href="pillar-co.html#control-id-co-008">CO-008</a>
+            </div></div>
+          </div>
+        </section>
+
+        <section class="section-card" id="outcomes">
+          <div class="section-header"><div><div class="section-tag">Business Outcomes</div><h3>Target state for enterprise OpenShift operations</h3><p class="section-desc">By assessing the platform against this model, the organization moves beyond infrastructure provisioning toward a more disciplined cloud operating model. The resulting insights support stronger architectural decisions, clearer risk visibility, and more efficient platform operations.</p></div><div class="pill-count">Outcome Areas</div></div>
+          <div class="outcome-grid"><div class="outcome"><h4>Reduce single points of failure</h4><p>Strengthen platform continuity across control plane, worker, network, storage, and ingress layers.</p></div><div class="outcome"><h4>Improve recoverability</h4><p>Validate backup, restoration, and multi-cluster orchestration capabilities for critical business workloads.</p></div><div class="outcome"><h4>Harden security posture</h4><p>Reinforce access, workload isolation, encryption, image integrity, and continuous compliance enforcement.</p></div><div class="outcome"><h4>Optimize performance, cost and capacity</h4><p>Right-size resources, improve autoscaling coverage, reduce sprawl, and increase platform efficiency across the OpenShift estate.</p></div></div>
+        </section>
+
+        <div class="footer">This single-file page is structured as a landing page for an OpenShift assessment tool. It can be extended next into a searchable control library, scoring dashboard, pillar-by-pillar assessment forms, evidence upload workflow, or export-ready executive summary module.</div>
+      </div>
+    </main>
+  </div>
+
+  <script>
     const links = document.querySelectorAll('.nav-link');
     const sections = [...document.querySelectorAll('section[id]')];
-
     const activateLink = () => {
       const offset = window.scrollY + 180;
       let currentId = sections[0]?.id;
-
-      sections.forEach(section => {
-        if (offset >= section.offsetTop) currentId = section.id;
-      });
-
-      links.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`);
-      });
+      sections.forEach(section => { if (offset >= section.offsetTop) currentId = section.id; });
+      links.forEach(link => { link.classList.toggle('active', link.getAttribute('href') === `#${currentId}`); });
     };
-
     window.addEventListener('scroll', activateLink);
     window.addEventListener('load', activateLink);
   </script>

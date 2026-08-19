@@ -42,35 +42,41 @@
 .field-body pre, pre.cli { background:#0b1220; color:#f8fafc; border-radius:.75rem; padding:1rem 1.1rem; overflow:auto; border:1px solid #111827; white-space:pre-wrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); margin:.75rem 0; } .field-body pre code, pre.cli code { background:transparent!important; color:#f8fafc!important; padding:0; font-family:Consolas,'Courier New',monospace; font-size:.88rem; font-weight:700; line-height:1.45; } .verification-steps li pre.cli { margin:.35rem 0 .2rem; }
 .control-links { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem .3rem .15rem; } .control-links a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:.85rem; } .control-links a:hover { text-decoration:underline; } .empty-note { color:var(--muted); font-style:italic; } .footer { padding:1.4rem clamp(1.1rem,4vw,4rem); color:#64748b; border-top:1px solid var(--line); background:#fff; }
 @media (max-width:1120px) { .field-grid { grid-template-columns:1fr; } .field-box-full { grid-column:auto; } } @media (max-width:980px) { .page-shell { grid-template-columns:1fr; } .sidebar { position:relative; height:auto; max-height:420px; } .control-head { flex-direction:column; } } @media print { .sidebar,.control-grid,.control-links,.notice { display:none!important; } .page-shell { display:block; } .hero { color:#111; background:#fff; padding:1rem 0; } .content-wrap { padding:0; } .control-card { box-shadow:none; break-inside:avoid; } }
-
-.cross-control-link { color:#1d4ed8; text-decoration:none; font-weight:700; border-bottom:1px dotted rgba(29,78,216,.45); }
-.cross-control-link:hover { color:#b00000; border-bottom-color:#b00000; }
 </style>
 </head>
-<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label" data-cross-pillar-nav="true">Assessment pillars</div><nav data-cross-pillar-nav="true"><a class="nav-link" href="pillar-ar.html"><span>Pillar 1: Availability &amp; Resilience</span><small>Open AR pillar</small></a><a class="nav-link" href="pillar-rc.html"><span>Pillar 2: Recoverability / Disaster Recovery</span><small>Open RC pillar</small></a><a aria-current="page" class="nav-link is-primary" href="pillar-ps.html"><span>Pillar 3: Performance &amp; Scalability</span><small>PS controls — current page</small></a><a class="nav-link" href="pillar-sc.html"><span>Pillar 4: Security &amp; Compliance</span><small>Open SC pillar</small></a><a class="nav-link" href="pillar-mo.html"><span>Pillar 5: Monitoring &amp; Observability</span><small>Open MO pillar</small></a><a class="nav-link" href="pillar-co.html"><span>Pillar 6: Cost Optimization</span><small>Open CO pillar</small></a></nav><div class="label">Pillar 3 controls</div><nav><a class="nav-link" href="#control-id-ps-001"><span>PS-001</span><small>CPU Manager (Static Policy)</small></a>
+<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label">Pillar 3 controls</div><nav><a class="nav-link" href="#control-id-ps-001"><span>PS-001</span><small>CPU Manager (Static Policy)</small></a>
 <a class="nav-link" href="#control-id-ps-002"><span>PS-002</span><small>Topology Manager (NUMA Alignment)</small></a>
 <a class="nav-link" href="#control-id-ps-003"><span>PS-003</span><small>SR-IOV for High-Performance Networking</small></a>
 <a class="nav-link" href="#control-id-ps-004"><span>PS-004</span><small>HugePages Allocation</small></a>
 <a class="nav-link" href="#control-id-ps-005"><span>PS-005</span><small>Node Feature Discovery (NFD) and Specialized Hardware</small></a>
 <a class="nav-link" href="#control-id-ps-006"><span>PS-006</span><small>Real-Time Kernel for Latency-Sensitive Workloads</small></a>
 <a class="nav-link" href="#control-id-ps-007"><span>PS-007</span><small>Vertical &amp; Horizontal Pod Autoscaling (VPA/HPA)</small></a>
-<a class="nav-link" href="#control-id-ps-008"><span>PS-008</span><small>I/O Priority and Bandwidth Management (cgroup v2)</small></a></nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 3</span><h2>Pillar 3: Performance &amp; Scalability</h2><p>Architecture assessment page for validating bare-metal compute optimization, NUMA alignment, high-performance networking, memory tuning, hardware-aware scheduling, real-time processing, autoscaling, and storage I/O controls.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Performance and Scalability define the platform's capability to deliver predictable transaction latency, efficient resource utilization, and elastic capacity under changing workload demand. For OpenShift environments supporting containerized workloads and OpenShift Virtualization on bare-metal infrastructure, these controls validate that CPU, memory, NUMA topology, network acceleration, specialized hardware, autoscaling, and storage I/O are configured through tested, policy-driven, and evidence-backed performance practices.</p>
-</div><section aria-labelledby="control-summary" class="summary-panel">
+<a class="nav-link" href="#control-id-ps-008"><span>PS-008</span><small>I/O Priority and Bandwidth Management (cgroup v2)</small></a>
+<a class="nav-link" href="#control-id-ps-009"><span>PS-009</span><small>Cluster Autoscaler and Machine Autoscaler</small></a>
+<a class="nav-link" href="#control-id-ps-010"><span>PS-010</span><small>Resource Requests, Limits, Quotas and LimitRanges</small></a>
+<a class="nav-link" href="#control-id-ps-011"><span>PS-011</span><small>PerformanceProfile and Node Tuning Governance</small></a>
+<a class="nav-link" href="#control-id-ps-012"><span>PS-012</span><small>System Reserved Resources and Node Stability</small></a>
+<a class="nav-link" href="#control-id-ps-013"><span>PS-013</span><small>Pod Density and Cluster Sizing</small></a>
+<a class="nav-link" href="#control-id-ps-014"><span>PS-014</span><small>Performance Baseline and Load Testing</small></a>
+</nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 3</span><h2>Pillar 3: Performance &amp; Scalability</h2><p>Architecture assessment page for validating bare-metal compute optimization, NUMA alignment, high-performance networking, memory tuning, hardware-aware scheduling, real-time processing, autoscaling, and storage I/O controls.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Performance and Scalability define the platform's capability to deliver predictable transaction latency, efficient resource utilization, and elastic capacity under changing workload demand. For OpenShift environments supporting containerized workloads and OpenShift Virtualization on bare-metal infrastructure, these controls validate that CPU, memory, NUMA topology, network acceleration, specialized hardware, autoscaling, and storage I/O are configured through tested, policy-driven, and evidence-backed performance practices.</p>
+<p>The expanded pillar also includes platform-wide scalability, resource governance, node stability, pod density, and performance assurance controls so that specialized tuning is validated alongside broader capacity management practices.</p></div><section aria-labelledby="control-summary" class="summary-panel">
 <div class="summary-panel-header">
 <h2 id="control-summary">Summary of Controls</h2>
-<p>Pillar 3 contains 8 assessment controls grouped by performance and scalability domain to support deterministic compute behavior, network acceleration, memory optimization, hardware-aware scheduling, workload elasticity, and storage performance isolation.</p>
+<p>Pillar 3 contains 14 assessment controls grouped by performance and scalability domain to support deterministic compute behaviour, network acceleration, memory optimization, hardware-aware scheduling, workload and node elasticity, resource governance, node stability, pod density, and evidence-backed performance assurance.</p>
 </div>
 <div class="summary-metrics">
-<div class="summary-metric"><strong>8</strong><span>Total controls</span></div>
-<div class="summary-metric"><strong>6</strong><span>Performance &amp; Scalability domains</span></div>
+<div class="summary-metric"><strong>14</strong><span>Total controls</span></div>
+<div class="summary-metric"><strong>9</strong><span>Performance &amp; Scalability domains</span></div>
 </div>
-<div class="category-grid">
-<div class="category-card"><div class="category-top"><h3>Compute Optimization</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-ps-001">PS-001</a><a href="#control-id-ps-002">PS-002</a><a href="#control-id-ps-006">PS-006</a></div></div>
+<div class="category-grid"><div class="category-card"><div class="category-top"><h3>Compute Optimization</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-ps-001">PS-001</a><a href="#control-id-ps-002">PS-002</a><a href="#control-id-ps-006">PS-006</a></div></div>
 <div class="category-card"><div class="category-top"><h3>Network Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-003">PS-003</a></div></div>
 <div class="category-card"><div class="category-top"><h3>Memory Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-004">PS-004</a></div></div>
 <div class="category-card"><div class="category-top"><h3>Hardware Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-005">PS-005</a></div></div>
-<div class="category-card"><div class="category-top"><h3>Scalability &amp; Resource Elasticity</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-007">PS-007</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Scalability &amp; Resource Elasticity</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-ps-007">PS-007</a><a href="#control-id-ps-009">PS-009</a><a href="#control-id-ps-013">PS-013</a></div></div>
 <div class="category-card"><div class="category-top"><h3>Storage Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-008">PS-008</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Resource Governance</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-010">PS-010</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Node Performance Governance</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-ps-011">PS-011</a><a href="#control-id-ps-012">PS-012</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Performance Assurance</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-014">PS-014</a></div></div>
 </div>
 </section><section aria-labelledby="controls-index" class="index-section"><h2 id="controls-index">Assessment Controls Index</h2><div class="control-grid"><a class="control-chip" href="#control-id-ps-001"><strong>PS-001</strong><span>CPU Manager (Static Policy)</span></a>
 <a class="control-chip" href="#control-id-ps-002"><strong>PS-002</strong><span>Topology Manager (NUMA Alignment)</span></a>
@@ -79,7 +85,14 @@
 <a class="control-chip" href="#control-id-ps-005"><strong>PS-005</strong><span>Node Feature Discovery (NFD) and Specialized Hardware</span></a>
 <a class="control-chip" href="#control-id-ps-006"><strong>PS-006</strong><span>Real-Time Kernel for Latency-Sensitive Workloads</span></a>
 <a class="control-chip" href="#control-id-ps-007"><strong>PS-007</strong><span>Vertical &amp; Horizontal Pod Autoscaling (VPA/HPA)</span></a>
-<a class="control-chip" href="#control-id-ps-008"><strong>PS-008</strong><span>I/O Priority and Bandwidth Management (cgroup v2)</span></a></div></section><article class="article">
+<a class="control-chip" href="#control-id-ps-008"><strong>PS-008</strong><span>I/O Priority and Bandwidth Management (cgroup v2)</span></a>
+<a class="control-chip" href="#control-id-ps-009"><strong>PS-009</strong><span>Cluster Autoscaler and Machine Autoscaler</span></a>
+<a class="control-chip" href="#control-id-ps-010"><strong>PS-010</strong><span>Resource Requests, Limits, Quotas and LimitRanges</span></a>
+<a class="control-chip" href="#control-id-ps-011"><strong>PS-011</strong><span>PerformanceProfile and Node Tuning Governance</span></a>
+<a class="control-chip" href="#control-id-ps-012"><strong>PS-012</strong><span>System Reserved Resources and Node Stability</span></a>
+<a class="control-chip" href="#control-id-ps-013"><strong>PS-013</strong><span>Pod Density and Cluster Sizing</span></a>
+<a class="control-chip" href="#control-id-ps-014"><strong>PS-014</strong><span>Performance Baseline and Load Testing</span></a>
+</div></section><article class="article">
 <section class="control-card" id="control-id-ps-001">
 <div class="control-head">
 <div class="control-title-wrap">
@@ -102,11 +115,11 @@
 <li><p><strong>QoS Class:</strong> Confirm that critical application pods are assigned the Guaranteed Quality of Service (QoS) class (CPU request = CPU limit).</p></li>
 <li><p><strong>Node Status:</strong> Verify that nodes have recognized the static policy and are reporting "pinned" cores.</p></li>
 </ul></div></div>
-<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment, latency-sensitive applications (like payment gateways or high-speed messaging) cannot tolerate the "jitter" caused by CPU context switching.</p>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Latency-sensitive and high-throughput workloads can be affected by CPU context switching, scheduler contention, and noisy-neighbor activity on shared bare-metal nodes.</p>
 <ul>
-<li><p><strong>Predictable Latency:</strong> Reducing context switches significantly improves the p99 latency for transaction processing.</p></li>
-<li><p><strong>L1/L2 Cache Efficiency:</strong> Pinning a process to a core ensures it can fully utilize the local CPU cache, preventing "cache thrashing" from other applications.</p></li>
-<li><p><strong>Bare-Metal Performance:</strong> Directly leverages the raw power of the physical CPU without the overhead of a hypervisor.</p></li>
+<li><p><strong>Predictable Latency:</strong> Reducing context switches helps improve p99 latency for transaction-processing, messaging, and other performance-sensitive workloads.</p></li>
+<li><p><strong>L1/L2 Cache Efficiency:</strong> Pinning a process to a core helps it use the local CPU cache efficiently, reducing cache thrashing from unrelated workloads.</p></li>
+<li><p><strong>Bare-Metal Performance:</strong> Directly leverages physical CPU capacity without hypervisor overhead, supporting deterministic performance for workloads that require dedicated compute resources.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
 <li><strong>Validation Method:</strong> Kubelet configuration audit and pod-level verification.</li>
@@ -148,7 +161,7 @@
 <h4>Key Aspects of Topology Manager:</h4>
 <ul>
 <li><p><strong>NUMA Affinity:</strong> Ensures a pod's CPU and Memory are allocated from the same socket to avoid the "cross-socket" latency penalty.</p></li>
-<li><p><strong>Device Alignment:</strong> If a pod uses an SR-IOV NIC (<a class="cross-control-link" href="pillar-ps.html#control-id-ps-003" title="Open PS-003">PS-003</a>), the Topology Manager ensures the CPU cores assigned to that pod are the ones directly connected to that NIC.</p></li>
+<li><p><strong>Device Alignment:</strong> If a pod uses an SR-IOV NIC (PS-003), the Topology Manager ensures the CPU cores assigned to that pod are the ones directly connected to that NIC.</p></li>
 <li><p><strong>Scope:</strong> Operates at the container or pod level.</p></li>
 <li><p><strong>Policy Types:</strong> single-numa-node (strict) or best-effort.</p></li>
 </ul></div></div>
@@ -199,43 +212,61 @@
 <span class="risk-pill high">High</span>
 </div>
 <div class="field-grid">
-<div class="field-box"><h3>Description</h3><div class="field-body"><p>SR-IOV (Single Root I/O Virtualization) allows a single physical network card (NIC) to appear as multiple virtual functions (VFs). This allows pods to bypass the standard OpenShift software switch (OVS) and connect directly to the hardware for near-line-speed performance.</p>
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>SR-IOV (Single Root I/O Virtualization) allows supported physical network interface cards (NICs) to expose multiple Virtual Functions (VFs) that can be allocated directly to pods or virtualized workloads. In current OpenShift releases, SR-IOV device configuration and lifecycle management are handled through the SR-IOV Network Operator, <code>SriovNetworkNodePolicy</code>, <code>SriovNetworkNodeState</code>, and SR-IOV network attachment resources.</p>
 <h4>Key Aspects of SR-IOV:</h4>
 <ul>
-<li><p><strong>Kernel Bypass:</strong> Data packets go directly from the physical NIC to the container's memory, bypassing the host's Linux kernel.</p></li>
-<li><p><strong>Virtual Functions (VFs):</strong> Each pod is assigned a dedicated "slice" of the NIC hardware.</p></li>
-<li><p><strong>Deterministic Latency:</strong> Eliminates the CPU overhead and jitter associated with software-based packet processing.</p></li>
-<li><p><strong>Multus Integration:</strong> Often used as a secondary network (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-023" title="Open AR-023">AR-023</a>) for high-speed database replication or storage traffic.</p></li>
+<li><p><strong>Hardware-Backed Networking:</strong> Virtual Functions are exposed from supported physical NICs and advertised as allocatable resources on selected worker nodes.</p></li>
+<li><p><strong>SR-IOV Network Operator:</strong> The Operator manages SR-IOV configuration through the <code>sriovnetwork.openshift.io</code> API group and applies node-level policy changes.</p></li>
+<li><p><strong>Node State Inventory:</strong> <code>SriovNetworkNodeState</code> resources report detected physical functions, virtual functions, drivers, sync status, and allocatable SR-IOV resources.</p></li>
+<li><p><strong>Network Attachment:</strong> Workloads consume SR-IOV through <code>SriovNetwork</code> or <code>NetworkAttachmentDefinition</code> resources, commonly as secondary interfaces through Multus.</p></li>
+<li><p><strong>Deterministic Performance:</strong> SR-IOV reduces software switching overhead and supports low-latency, high-throughput network paths for workloads that require predictable network behavior.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
-<li><p><strong>SR-IOV Operator:</strong> Confirm the SR-IOV Network Operator is installed and healthy.</p></li>
-<li><p><strong>Network Policy:</strong> Verify SriovNetworkNodePolicy exists for the relevant worker nodes.</p></li>
-<li><p><strong>VFs Count:</strong> Confirm that sufficient Virtual Functions are created to accommodate the number of pods requiring high-speed networking.</p></li>
+<li><p><strong>SR-IOV Network Operator Health:</strong> Confirm the SR-IOV Network Operator is installed in the <code>openshift-sriov-network-operator</code> namespace and reports a healthy installation status.</p></li>
+<li><p><strong>Supported Hardware Readiness:</strong> Verify that target worker nodes have supported SR-IOV-capable NICs, appropriate firmware, BIOS/UEFI SR-IOV settings, and required driver support.</p></li>
+<li><p><strong>SR-IOV Node Policy:</strong> Verify that <code>SriovNetworkNodePolicy</code> resources exist in the <code>sriovnetwork.openshift.io</code> API group and target the correct worker nodes or high-performance node pools.</p></li>
+<li><p><strong>Node State and VF Inventory:</strong> Confirm that <code>SriovNetworkNodeState</code> resources show the expected physical functions, virtual functions, drivers, sync status, and allocatable SR-IOV resources.</p></li>
+<li><p><strong>Network Attachment Availability:</strong> Confirm that the required <code>SriovNetwork</code> or <code>NetworkAttachmentDefinition</code> resources are available for workloads that need SR-IOV secondary interfaces.</p></li>
+<li><p><strong>Workload Consumption:</strong> Verify that workloads request the correct SR-IOV resource name and attach the intended network using the <code>k8s.v1.cni.cncf.io/networks</code> annotation.</p></li>
+<li><p><strong>NUMA / Topology Alignment:</strong> For latency-sensitive workloads, confirm that SR-IOV device placement is aligned with CPU and memory placement through Topology Manager where applicable.</p></li>
+<li><p><strong>Change Impact Awareness:</strong> Confirm that SR-IOV policy changes are managed through change control because applying a node policy can drain nodes and, in some cases, reboot nodes.</p></li>
 </ul></div></div>
-<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Standard software-defined networking (SDN) can consume up to 20% of a node's CPU just for packet processing under high load.</p>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Standard software-defined networking (SDN) can consume significant node CPU resources for packet processing under high load.</p>
 <ul>
-<li><p><strong>Throughput for AI/Data:</strong> Essential for local AI workloads and high-performance Proxmox/OpenShift clusters.</p></li>
-<li><p><strong>Reduced CPU Overhead:</strong> Frees up CPU cycles for banking logic rather than network routing.</p></li>
-<li><p><strong>Low Latency:</strong> Critical for time-sensitive financial transactions where microsecond delays matter.</p></li>
+<li><p><strong>Throughput for Data-Intensive Workloads:</strong> Supports high-bandwidth use cases such as data processing, storage replication, AI/ML workloads, and low-latency service communication.</p></li>
+<li><p><strong>Reduced CPU Overhead:</strong> Frees CPU cycles for application processing rather than software-based network forwarding.</p></li>
+<li><p><strong>Low Latency:</strong> Reduces network jitter for time-sensitive workloads where predictable response times are required.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
-<li><strong>Validation Method:</strong> Operator and Network resource audit.</li>
+<li><strong>Validation Method:</strong> SR-IOV Operator, node policy, node state, network attachment, and workload consumption audit.</li>
 </ul>
 <p><strong>Verification Steps:</strong></p>
 <ol class="verification-steps">
-<li><p><strong>Check operator status:</strong></p><pre class="cli"><code>oc get pods -n openshift-sriov-network-operator</code></pre></li>
-<li><p><strong>Check node policy:</strong></p><pre class="cli"><code>oc get sriovnetworknodepolicies -n openshift-sriov-network-operator</code></pre></li>
-<li><p><strong>Verify VF creation:</strong></p><pre class="cli"><code>oc get sriovnetworknodestates -n openshift-sriov-network-operator -o yaml</code></pre></li>
+<li><p><strong>Check SR-IOV Operator pods:</strong></p><pre class="cli"><code>oc get pods -n openshift-sriov-network-operator</code></pre></li>
+<li><p><strong>Check SR-IOV network node policies:</strong></p><pre class="cli"><code>oc get sriovnetworknodepolicies -n openshift-sriov-network-operator</code></pre></li>
+<li><p><strong>Inspect SR-IOV node state and detected NIC/VF inventory:</strong></p><pre class="cli"><code>oc get sriovnetworknodestates -n openshift-sriov-network-operator -o yaml</code></pre></li>
+<li><p><strong>Check SR-IOV networks and network attachment definitions:</strong></p><pre class="cli"><code>oc get sriovnetwork -n openshift-sriov-network-operator
+oc get network-attachment-definitions -A</code></pre></li>
+<li><p><strong>Confirm SR-IOV-capable node labels:</strong></p><pre class="cli"><code>oc get nodes --show-labels | grep network-sriov</code></pre></li>
+<li><p><strong>Confirm workload resource requests and network attachment:</strong></p><pre class="cli"><code>oc get pod &lt;pod-name&gt; -n &lt;namespace&gt; -o yaml | grep -A 20 resources
+oc get pod &lt;pod-name&gt; -n &lt;namespace&gt; -o yaml | grep k8s.v1.cni.cncf.io/networks</code></pre></li>
+<li><p><strong>Confirm secondary interface inside the pod:</strong></p><pre class="cli"><code>oc exec -n &lt;namespace&gt; &lt;pod-name&gt; -- ip addr</code></pre></li>
 </ol></div></div>
 <div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
-<li><p><strong>SR-IOV Node State YAML:</strong> Export showing the physical NICs and their available VFs.</p></li>
-<li><p><strong>Pod Interface List:</strong> oc exec &lt;pod&gt; -- ip addr showing an interface with a high-speed driver (e.g., iavf or mlx5_core).</p></li>
-<li><p><strong>Performance Benchmark:</strong> Results from an iperf test showing line-rate (25Gbps/50Gbps) performance.</p></li>
+<li><p><strong>SR-IOV Operator Status:</strong> Output showing the SR-IOV Network Operator pods and installation status are healthy.</p></li>
+<li><p><strong>SR-IOV Node Policy YAML:</strong> Export of <code>SriovNetworkNodePolicy</code> resources showing target nodes, resource names, NIC selectors, number of VFs, and driver configuration.</p></li>
+<li><p><strong>SR-IOV Node State YAML:</strong> Export showing physical NICs, available VFs, drivers, sync status, and allocatable SR-IOV resources.</p></li>
+<li><p><strong>Network Attachment Evidence:</strong> <code>SriovNetwork</code> or <code>NetworkAttachmentDefinition</code> YAML showing the network name, namespace, resource name, VLAN or IPAM configuration where applicable.</p></li>
+<li><p><strong>Workload Manifest Snippet:</strong> Pod or deployment YAML showing SR-IOV resource requests and the <code>k8s.v1.cni.cncf.io/networks</code> annotation.</p></li>
+<li><p><strong>Pod Interface List:</strong> Output of <code>oc exec &lt;pod&gt; -- ip addr</code> showing the secondary SR-IOV interface and expected driver-backed network path.</p></li>
+<li><p><strong>Performance Benchmark:</strong> Results from an approved throughput or latency test, such as iperf, proving expected line-rate or low-latency performance.</p></li>
+<li><p><strong>Change Record:</strong> Evidence that SR-IOV policy changes were implemented through change control, including node drain or reboot impact assessment where applicable.</p></li>
 </ul></div></div>
 <div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
-<li><p><strong>High Risk (Network Bottlenecks):</strong> Without SR-IOV, high-traffic apps will hit the "CPU Wall" of the software switch, causing dropped packets and high latency.</p></li>
-<li><p><strong>Performance Risk:</strong> Inability to fully utilize 25GbE+ hardware investments.</p></li>
-<li><p><strong>Operational Risk:</strong> Resource contention between networking and application logic on the same CPU cores.</p></li>
+<li><p><strong>High Risk (Network Bottlenecks):</strong> Without SR-IOV for workloads that require deterministic high-throughput networking, traffic may be limited by software switching overhead, causing dropped packets, jitter, or increased latency.</p></li>
+<li><p><strong>Performance Risk:</strong> Inability to fully utilize 25GbE, 50GbE, 100GbE, RDMA-capable, or other specialized network hardware investments for workloads that require hardware acceleration.</p></li>
+<li><p><strong>Operational Risk:</strong> Incorrect SR-IOV policy configuration can drain or reboot worker nodes unexpectedly if not governed through change control, creating avoidable service disruption.</p></li>
+<li><p><strong>Placement Risk:</strong> If SR-IOV resources are not aligned with node labels, workload requests, and topology settings, pods may remain unschedulable or run with suboptimal NUMA placement.</p></li>
 </ul></div></div>
 <div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
 <li><p><strong>BNM RMiT (2025):</strong> Section 10.3 (Resilience); Section 10.5 (Performance).</p></li>
@@ -313,7 +344,7 @@
 <h4>Key Aspects of NFD:</h4>
 <ul>
 <li><p><strong>Automated Labeling:</strong> Scans the physical hardware and adds labels like feature.node.kubernetes.io/cpu-cpuid.AVX512F=true.</p></li>
-<li><p><strong>Targeted Scheduling:</strong> Allows developers to use nodeSelector or affinity (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-015" title="Open AR-015">AR-015</a>) to ensure their app runs on the specific hardware it was optimized for.</p></li>
+<li><p><strong>Targeted Scheduling:</strong> Allows developers to use nodeSelector or affinity (AR-015) to ensure their app runs on the specific hardware it was optimized for.</p></li>
 <li><p><strong>GPU Integration:</strong> Essential for AI/ML workloads where pods must land on nodes with specific NVIDIA or AMD GPU hardware.</p></li>
 <li><p><strong>Precision:</strong> Ensures that software compiled for specific CPU instructions (like AES-NI for encryption) is never scheduled on a node that doesn't support them.</p></li>
 </ul></div></div>
@@ -322,11 +353,11 @@
 <li><p><strong>Node Labels:</strong> Audit node objects to see if they are populated with feature.node.kubernetes.io labels.</p></li>
 <li><p><strong>Scheduling Logic:</strong> Check critical application manifests for nodeSelector requirements that match NFD labels.</p></li>
 </ul></div></div>
-<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In 2026, heterogeneous hardware is common in high-performance clusters.</p>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Heterogeneous hardware is common in modern high-performance OpenShift environments, including specialized CPU instruction sets, GPUs, FPGAs, and high-speed network adapters.</p>
 <ul>
-<li><p><strong>Hardware Acceleration:</strong> Ensures that encryption-heavy or AI-driven banking tasks are hardware-accelerated by landing on nodes with the correct chipsets.</p></li>
-<li><p><strong>Operational Intelligence:</strong> Provides the platform team with a clear inventory of what hardware capabilities are available across the data center.</p></li>
-<li><p><strong>Security Performance:</strong> Automatically routes encryption tasks to nodes with AES-NI instructions, improving speed and security.</p></li>
+<li><p><strong>Hardware Acceleration:</strong> Ensures that encryption-heavy, analytics, AI/ML, or performance-optimized workloads are scheduled onto nodes with the correct hardware capabilities.</p></li>
+<li><p><strong>Operational Intelligence:</strong> Provides the platform team with a clear inventory of hardware capabilities available across the data center.</p></li>
+<li><p><strong>Security and Performance Optimization:</strong> Helps route workloads that benefit from hardware acceleration, such as AES-NI or GPU-enabled processing, to nodes that can execute them efficiently.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
 <li><strong>Validation Method:</strong> Node label and Operator audit.</li>
@@ -377,10 +408,10 @@
 <li><p><strong>Kernel Version:</strong> Check the running kernel on the target nodes to ensure it contains the rt suffix (e.g., 5.14.0-xxx.rt.el9).</p></li>
 <li><p><strong>Node Labels:</strong> Confirm that real-time nodes are correctly labeled to prevent non-RT workloads from consuming their specialized resources.</p></li>
 </ul></div></div>
-<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Standard kernels optimize for "fairness," which can cause a critical banking transaction to wait behind a background log-rotation task.</p>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Standard kernels optimize for general-purpose fairness, which can introduce unpredictable micro-latencies when high-priority workloads compete with background system activity.</p>
 <ul>
-<li><p><strong>Hard Real-Time Requirements:</strong> Essential for applications where missing a processing window (e.g., a sub-millisecond timeout) results in a transaction failure.</p></li>
-<li><p><strong>Eliminating Spikes:</strong> Reduces the "long tail" of latency (p99.9), ensuring consistent performance regardless of system background load.</p></li>
+<li><p><strong>Hard Real-Time Requirements:</strong> Supports applications where missing a strict processing window can result in transaction failure, control-loop delay, or service degradation.</p></li>
+<li><p><strong>Eliminating Spikes:</strong> Reduces the long tail of latency (p99.9), helping workloads maintain consistent performance regardless of background system load.</p></li>
 <li><p><strong>Bare-Metal Synergy:</strong> The real-time kernel is most effective on bare metal where it has direct control over physical hardware interrupts without hypervisor interference.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
@@ -422,35 +453,41 @@
 <div class="field-box"><h3>Description</h3><div class="field-body"><p>Autoscaling ensures that applications can handle sudden bursts in banking traffic without manual intervention. Horizontal Pod Autoscaling (HPA) scales the number of instances, while Vertical Pod Autoscaling (VPA) adjusts the CPU and Memory requests of existing instances.</p>
 <h4>Key Aspects of Autoscaling:</h4>
 <ul>
-<li><p><strong>HPA (Scale Out):</strong> Monitors metrics like CPU utilization or custom transaction-per-second (TPS) counts to add more replicas (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-014" title="Open AR-014">AR-014</a>) when load increases.</p></li>
+<li><p><strong>HPA (Scale Out):</strong> Monitors metrics like CPU utilization or custom transaction-per-second (TPS) counts to add more replicas (AR-014) when load increases.</p></li>
 <li><p><strong>VPA (Scale Up):</strong> Automatically recommends and applies the "Right-Size" for container resources based on historical usage patterns, preventing "OOM" (Out of Memory) kills.</p></li>
 <li><p><strong>Metrics Server Integration:</strong> Both depend on the metrics-server or Prometheus to provide real-time resource data.</p></li>
 <li><p><strong>Cooldown Periods:</strong> Ensuring the cluster doesn't "thrash" by scaling up and down too rapidly.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
-<li><p><strong>HPA/VPA Presence:</strong> Verify that all critical banking APIs have an HPA or VPA resource defined.</p></li>
-<li><p><strong>Threshold Settings:</strong> Confirm that the target utilization (e.g., 70% CPU) is high enough to be efficient but low enough to allow for burst room.</p></li>
-<li><p><strong>Limit Alignment:</strong> For VPA, ensure it does not exceed the physical capacity of the bare-metal nodes.</p></li>
+<li><p><strong>HPA Coverage:</strong> Verify that critical application services requiring scale-out have Horizontal Pod Autoscaler (HPA) configured with appropriate <code>minReplicas</code>, <code>maxReplicas</code>, and scaling metrics such as CPU, memory, or custom application metrics.</p></li>
+<li><p><strong>VPA Usage:</strong> Verify that Vertical Pod Autoscaler (VPA) is used selectively for resource recommendation, right-sizing, or workloads suitable for vertical scaling, rather than as a substitute for horizontal scaling.</p></li>
+<li><p><strong>HPA/VPA Compatibility:</strong> Confirm that HPA and VPA are not configured in a conflicting manner for the same workload, especially where both attempt to influence CPU or memory behaviour.</p></li>
+<li><p><strong>Scaling Thresholds:</strong> Confirm that target utilization values provide sufficient burst capacity and do not trigger excessive scale-up or scale-down behaviour.</p></li>
+<li><p><strong>Node Capacity Alignment:</strong> Ensure autoscaling limits are aligned with available bare-metal node capacity to avoid unschedulable pods, resource pressure, or unnecessary contention with other workloads.</p></li>
 </ul></div></div>
-<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Banking traffic is rarely flat; it spikes during payday, holiday seasons, or marketing campaigns.</p>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Application demand is rarely constant; it can increase during peak business periods, scheduled processing windows, product launches, seasonal activity, or unexpected usage spikes.</p>
 <ul>
-<li><p><strong>Dynamic Response:</strong> Ensures that customer-facing portals remain responsive during peak load by automatically deploying more capacity.</p></li>
-<li><p><strong>Resource Efficiency:</strong> Automatically scales down during off-peak hours (e.g., 2 AM), freeing up bare-metal resources for batch processing or backups.</p></li>
-<li><p><strong>Cost Management:</strong> Prevents over-provisioning of expensive RAM and CPU by only using what the application actually needs.</p></li>
+<li><p><strong>Dynamic Response:</strong> Ensures that customer-facing and business-critical services remain responsive during peak load by automatically deploying additional capacity.</p></li>
+<li><p><strong>Resource Efficiency:</strong> Automatically scales down during off-peak periods, freeing up bare-metal resources for other workloads such as batch processing, backups, or analytics.</p></li>
+<li><p><strong>Capacity Management:</strong> Prevents over-provisioning of expensive RAM and CPU by aligning application capacity with actual demand.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
 <li><strong>Validation Method:</strong> Resource check and scaling test.</li>
 </ul>
 <p><strong>Verification Steps:</strong></p>
 <ol class="verification-steps">
-<li><p><strong>List HPAs:</strong></p><pre class="cli"><code>oc get hpa -A</code></pre></li>
-<li><p><strong>Check HPA status:</strong></p><pre class="cli"><code>oc describe hpa &lt;name&gt; (Look for AbleToScale and ScalingActive).</code></pre></li>
-<li><p><strong>Review VPA recommendations:</strong></p><pre class="cli"><code>oc get vpa -n &lt;namespace&gt;</code></pre></li>
+<li><p><strong>List HPAs across namespaces:</strong></p><pre class="cli"><code>oc get hpa -A</code></pre></li>
+<li><p><strong>Check HPA status and scaling conditions:</strong></p><pre class="cli"><code>oc describe hpa &lt;name&gt;</code></pre><p>Look for <code>AbleToScale</code>, <code>ScalingActive</code>, current metrics, <code>minReplicas</code>, and <code>maxReplicas</code>.</p></li>
+<li><p><strong>Review VPA usage and recommendations:</strong></p><pre class="cli"><code>oc get vpa -A</code></pre></li>
+<li><p><strong>Check for HPA/VPA overlap on the same workload:</strong></p><pre class="cli"><code>oc describe vpa &lt;name&gt; -n &lt;namespace&gt;</code></pre><p>Confirm VPA recommendation or update mode is appropriate and does not conflict with HPA scaling behaviour.</p></li>
 </ol></div></div>
 <div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
-<li><p><strong>HPA Resource YAML:</strong> Showing the min/max replicas and target metrics.</p></li>
-<li><p><strong>Prometheus Graph:</strong> A screenshot showing pod counts increasing in direct correlation with CPU/Traffic spikes.</p></li>
-<li><p><strong>VPA Output:</strong> Showing the "Recommended" vs "Actual" resource usage.</p></li>
+<li><p><strong>HPA Resource YAML:</strong> Showing <code>minReplicas</code>, <code>maxReplicas</code>, target metrics, and <code>scaleTargetRef</code> for critical application services requiring scale-out.</p></li>
+<li><p><strong>HPA Status Output:</strong> Output of <code>oc describe hpa &lt;name&gt;</code> showing <code>AbleToScale</code>, <code>ScalingActive</code>, current metrics, and recent scaling events.</p></li>
+<li><p><strong>Prometheus / Grafana Scaling Graph:</strong> Screenshot showing pod replica count increasing in correlation with CPU, memory, traffic, or custom application metric spikes.</p></li>
+<li><p><strong>VPA Recommendation Output:</strong> Output showing recommended versus actual CPU and memory requests for workloads under VPA review.</p></li>
+<li><p><strong>HPA/VPA Compatibility Review:</strong> Evidence that HPA and VPA are not conflicting on the same resource dimension for the same workload.</p></li>
+<li><p><strong>Node Capacity Validation:</strong> Cluster capacity or scheduling evidence showing that autoscaling limits are aligned with available bare-metal node capacity and do not create unschedulable pods or node pressure.</p></li>
 </ul></div></div>
 <div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
 <li><p><strong>High Risk (Capacity Exhaustion):</strong> Without autoscaling, a sudden spike in users will crash the application, leading to a service outage.</p></li>
@@ -487,11 +524,11 @@
 <li><p><strong>Resource Stanza:</strong> Review pod manifests for io.weight or specific annotations used by the storage provisioner to limit bandwidth.</p></li>
 <li><p><strong>Contention Monitoring:</strong> Check for I/O Wait metrics in Prometheus to identify unmanaged contention.</p></li>
 </ul></div></div>
-<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>"Noisy Neighbor" syndrome on a disk is a major cause of database latency.</p>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Noisy-neighbor activity at the storage layer is a common cause of unpredictable database, analytics, and stateful application latency.</p>
 <ul>
-<li><p><strong>Protecting Core Services:</strong> Ensures that a massive batch export or log-rotation on one pod doesn't cause a "freeze" in the core banking database.</p></li>
-<li><p><strong>Predictable Disk Performance:</strong> Provides the same level of I/O isolation on bare metal that users expect from premium cloud storage tiers.</p></li>
-<li><p><strong>SLA Enforcement:</strong> Allows the platform team to guarantee a specific number of IOPS to critical transactional services.</p></li>
+<li><p><strong>Protecting Core Services:</strong> Ensures that batch exports, log rotation, backup jobs, or other I/O-heavy workloads do not starve critical stateful services of disk bandwidth.</p></li>
+<li><p><strong>Predictable Disk Performance:</strong> Provides I/O isolation on bare metal similar to what users expect from differentiated storage tiers in cloud environments.</p></li>
+<li><p><strong>SLA Enforcement:</strong> Allows the platform team to allocate or protect storage performance for services that require predictable IOPS or throughput.</p></li>
 </ul></div></div>
 <div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
 <li><strong>Validation Method:</strong> Node-level cgroup audit and manifest review.</li>
@@ -520,4 +557,161 @@
 </div>
 <div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
 </section>
-</article></div><footer class="footer">Prepared as a structured HTML view of Pillar 3: Performance &amp; Scalability for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>
+
+<section class="control-card" id="control-id-ps-009">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-009</span><span class="subdomain-pill">Scalability &amp; Resource Elasticity</span></div>
+<h2>Cluster Autoscaler and Machine Autoscaler</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Cluster Autoscaler and Machine Autoscaler</strong> validate the platform's ability to add or remove worker capacity when workloads cannot be scheduled due to insufficient CPU, memory, or placement constraints. This complements PS-007, which scales pods, by ensuring there is enough node capacity for the additional replicas to run.</p>
+<h4>Key Aspects of Cluster and Machine Autoscaling:</h4>
+<ul>
+<li><p><strong>ClusterAutoscaler:</strong> Defines cluster-wide autoscaling limits such as maximum nodes, cores, memory, GPU resources, and scale-down behaviour.</p></li>
+<li><p><strong>MachineAutoscaler:</strong> Applies autoscaling boundaries to specific MachineSets or machine pools that host scalable application workloads.</p></li>
+<li><p><strong>Unschedulable Pod Response:</strong> Adds capacity when pending pods cannot be scheduled because no node has sufficient resources or compatible labels.</p></li>
+<li><p><strong>Scale-Down Governance:</strong> Removes unused capacity safely while respecting disruption constraints, utilization thresholds, and operational stability.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul><li><p><strong>Cluster Autoscaler Scope:</strong> Verify that ClusterAutoscaler is configured where the Machine API and infrastructure platform support automated node scaling.</p></li><li><p><strong>Machine Autoscaler Boundaries:</strong> Confirm MachineAutoscaler resources exist for relevant worker MachineSets and define appropriate minimum and maximum replica counts.</p></li><li><p><strong>Capacity Limits:</strong> Verify that maxNodesTotal, maxCoresTotal, maxMemoryTotal, and similar limits prevent uncontrolled scale-out.</p></li><li><p><strong>Workload Compatibility:</strong> Confirm scalable workloads have appropriate requests, labels, tolerations, and placement rules so additional nodes are usable.</p></li><li><p><strong>Scale-Down Safety:</strong> Review scale-down delay and utilization thresholds to avoid premature removal of capacity during variable load.</p></li></ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><ul><li><p>Pod autoscaling is ineffective if the cluster has no available node capacity to place new replicas.</p></li><li><p>Automated node scaling reduces manual capacity intervention during peak demand and improves recovery from sudden workload growth.</p></li><li><p>Defined upper and lower limits prevent runaway infrastructure expansion while still allowing controlled elasticity.</p></li><li><p>For environments where automated machine scaling is not supported, the same control should be satisfied through documented capacity buffers, manual expansion procedures, and tested provisioning timelines.</p></li></ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p><strong>Validation Method:</strong> Autoscaler resource inspection and scheduling behaviour review.</p><p><strong>Verification Steps:</strong></p><ol class="verification-steps"><li><p><strong>Check ClusterAutoscaler configuration:</strong></p><pre class="cli"><code>oc get clusterautoscaler -o yaml</code></pre></li><li><p><strong>Check MachineAutoscaler resources:</strong></p><pre class="cli"><code>oc get machineautoscaler -A</code></pre></li><li><p><strong>Check MachineSets targeted for scaling:</strong></p><pre class="cli"><code>oc get machinesets -n openshift-machine-api</code></pre></li><li><p><strong>Review unschedulable pod events:</strong></p><pre class="cli"><code>oc get events -A | grep -i "FailedScheduling"</code></pre></li></ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul><li><p><strong>ClusterAutoscaler YAML showing global scale limits and scale-down behaviour.:</strong>ClusterAutoscaler YAML showing global scale limits and scale-down behaviour.</p></li><li><p><strong>MachineAutoscaler YAML showing min/max replicas for worker MachineSets or node pools.:</strong>MachineAutoscaler YAML showing min/max replicas for worker MachineSets or node pools.</p></li><li><p><strong>Pending pod / scheduling event report showing how autoscaling responds to insufficient capacity.:</strong>Pending pod / scheduling event report showing how autoscaling responds to insufficient capacity.</p></li><li><p><strong>Capacity expansion test report demonstrating that additional worker capacity becomes Ready and schedulable.:</strong>Capacity expansion test report demonstrating that additional worker capacity becomes Ready and schedulable.</p></li><li><p><strong>Exception record where automated node scaling is not supported, with documented manual capacity expansion procedure and RTO.:</strong>Exception record where automated node scaling is not supported, with documented manual capacity expansion procedure and RTO.</p></li></ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul><li><p><strong>High Risk (Scale-Out Failure):</strong> HPA may create additional pod replicas, but those pods remain Pending when no node capacity is available.</p></li><li><p><strong>Operational Risk:</strong> Manual node expansion may be too slow during demand spikes, causing avoidable service degradation.</p></li><li><p><strong>Cost Risk:</strong> Poorly governed autoscaler limits can create uncontrolled infrastructure growth or prevent safe scale-down of idle resources.</p></li></ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul><li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management and Performance); Section 10.3 (Availability and Resilience).</p></li><li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li><li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability); CP-10 (System Recovery).</p></li></ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-010">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-010</span><span class="subdomain-pill">Resource Governance</span></div>
+<h2>Resource Requests, Limits, Quotas and LimitRanges</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Resource Requests, Limits, Quotas and LimitRanges</strong> establish the foundation for fair scheduling, predictable performance, and namespace-level capacity control. Without accurate CPU and memory requests, OpenShift cannot make reliable scheduling decisions, and autoscaling behaviour becomes inconsistent.</p>
+<h4>Key Aspects of Resource Governance:</h4>
+<ul>
+<li><p><strong>Requests:</strong> Define the minimum CPU and memory required for scheduling and capacity planning.</p></li>
+<li><p><strong>Limits:</strong> Define the maximum resource consumption allowed for a container to prevent uncontrolled usage.</p></li>
+<li><p><strong>ResourceQuota:</strong> Controls aggregate namespace consumption across CPU, memory, storage, objects, and services.</p></li>
+<li><p><strong>LimitRange:</strong> Provides default and maximum request/limit values for containers within a namespace.</p></li>
+<li><p><strong>QoS Classes:</strong> Influences eviction behaviour and performance predictability through Guaranteed, Burstable, and BestEffort classes.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul><li><p><strong>Requests and Limits Coverage:</strong> Verify that production workloads define appropriate CPU and memory requests, and limits where required by policy.</p></li><li><p><strong>Namespace ResourceQuota:</strong> Confirm that namespaces have ResourceQuota objects aligned to approved capacity allocations.</p></li><li><p><strong>LimitRange Defaults:</strong> Verify that LimitRange objects define sensible default requests/limits and maximum values to prevent unbounded workloads.</p></li><li><p><strong>QoS Review:</strong> Identify BestEffort or poorly sized Burstable workloads in production namespaces and validate exception handling.</p></li><li><p><strong>Autoscaling Dependency:</strong> Confirm HPA targets have requests defined, because utilization-based HPA calculations depend on resource requests.</p></li></ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><ul><li><p>Accurate requests allow the scheduler to place workloads safely and avoid oversubscription that leads to node pressure.</p></li><li><p>Namespace quotas prevent one team or application from consuming shared cluster resources at the expense of others.</p></li><li><p>LimitRanges reduce configuration gaps by applying default resource boundaries when developers omit resource settings.</p></li><li><p>Proper resource governance improves autoscaling accuracy, chargeback/showback quality, and capacity forecasting.</p></li></ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p><strong>Validation Method:</strong> Namespace and workload resource policy audit.</p><p><strong>Verification Steps:</strong></p><ol class="verification-steps"><li><p><strong>List ResourceQuotas across namespaces:</strong></p><pre class="cli"><code>oc get resourcequota -A</code></pre></li><li><p><strong>List LimitRanges across namespaces:</strong></p><pre class="cli"><code>oc get limitrange -A</code></pre></li><li><p><strong>Review workload requests and limits:</strong></p><pre class="cli"><code>oc get pods -A -o jsonpath='{range .items[*]}{.metadata.namespace}{"/"}{.metadata.name}{" "}{.spec.containers[*].resources}{"\n"}{end}'</code></pre></li><li><p><strong>Check QoS class for selected pods:</strong></p><pre class="cli"><code>oc get pod &lt;pod-name&gt; -n &lt;namespace&gt; -o jsonpath='{.status.qosClass}'</code></pre></li></ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul><li><p><strong>ResourceQuota YAML showing approved CPU, memory, storage, and object limits for production namespaces.:</strong>ResourceQuota YAML showing approved CPU, memory, storage, and object limits for production namespaces.</p></li><li><p><strong>LimitRange YAML showing default requests, default limits, and maximum allowed resource values.:</strong>LimitRange YAML showing default requests, default limits, and maximum allowed resource values.</p></li><li><p><strong>Workload resource audit report identifying pods without requests or limits.:</strong>Workload resource audit report identifying pods without requests or limits.</p></li><li><p><strong>QoS class report showing critical workloads are not unintentionally BestEffort.:</strong>QoS class report showing critical workloads are not unintentionally BestEffort.</p></li><li><p><strong>Remediation record showing right-sizing actions taken for workloads with missing or excessive requests.:</strong>Remediation record showing right-sizing actions taken for workloads with missing or excessive requests.</p></li></ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul><li><p><strong>High Risk (Resource Contention):</strong> Workloads without requests and limits can consume shared node capacity unpredictably and impact neighbouring services.</p></li><li><p><strong>Operational Risk:</strong> Pods may be evicted or throttled unexpectedly because resources were not sized or governed consistently.</p></li><li><p><strong>Capacity Risk:</strong> Inaccurate requests distort capacity planning, autoscaling decisions, and showback reporting.</p></li></ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul><li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management and Performance); Section 10.1 (Operations Management).</p></li><li><p><strong>CIS Benchmarks v8:</strong> Control 1 (Inventory and Control of Enterprise Assets); Control 18 (Service Software Continuity).</p></li><li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability); CM-8 (System Component Inventory).</p></li></ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-011">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-011</span><span class="subdomain-pill">Node Performance Governance</span></div>
+<h2>PerformanceProfile and Node Tuning Governance</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>PerformanceProfile and Node Tuning Governance</strong> ensures that low-latency and high-performance node configuration is applied through supported OpenShift mechanisms rather than manual node-level changes. This control acts as the governance layer for CPU isolation, reserved CPUs, huge pages, real-time kernel usage, workload hints, and tuned profiles.</p>
+<h4>Key Aspects of PerformanceProfile Governance:</h4>
+<ul>
+<li><p><strong>PerformanceProfile:</strong> Defines isolated CPUs, reserved CPUs, NUMA topology behaviour, huge pages, and real-time kernel options for selected node pools.</p></li>
+<li><p><strong>Node Tuning Operator:</strong> Applies tuned profiles consistently across matching nodes.</p></li>
+<li><p><strong>Targeted Node Selection:</strong> Ensures specialized tuning is applied only to nodes intended for performance-sensitive workloads.</p></li>
+<li><p><strong>Change Control:</strong> Treats kernel and performance tuning changes as controlled infrastructure changes due to their impact on scheduling and node behaviour.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul><li><p><strong>PerformanceProfile Presence:</strong> Verify PerformanceProfile resources exist for performance-sensitive node pools where CPU isolation, huge pages, or real-time kernel tuning is required.</p></li><li><p><strong>Node Selector Accuracy:</strong> Confirm profiles target only the intended nodes and do not accidentally tune general-purpose workers.</p></li><li><p><strong>Reserved and Isolated CPU Design:</strong> Validate that reserved CPUs are sufficient for platform and operating system duties and that isolated CPUs are allocated to application workloads.</p></li><li><p><strong>Tuned Profile Status:</strong> Confirm tuned profiles generated by the Node Tuning Operator are applied successfully to the target MachineConfigPool.</p></li><li><p><strong>Change Governance:</strong> Review whether performance tuning changes are managed through GitOps or formal change control.</p></li></ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><ul><li><p>Performance tuning can significantly alter node scheduling, CPU availability, and kernel behaviour; it must therefore be standardized and auditable.</p></li><li><p>PerformanceProfile provides a supported, declarative method to configure multiple low-latency settings consistently across a node pool.</p></li><li><p>Using targeted profiles avoids applying specialized tuning to workloads that would not benefit from it or may be negatively affected.</p></li><li><p>Governed tuning reduces configuration drift and supports repeatable recovery or rebuild of performance-sensitive nodes.</p></li></ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p><strong>Validation Method:</strong> PerformanceProfile, MachineConfigPool, and tuned profile inspection.</p><p><strong>Verification Steps:</strong></p><ol class="verification-steps"><li><p><strong>List performance profiles:</strong></p><pre class="cli"><code>oc get performanceprofiles</code></pre></li><li><p><strong>Inspect a performance profile:</strong></p><pre class="cli"><code>oc get performanceprofile &lt;profile-name&gt; -o yaml</code></pre></li><li><p><strong>Check MachineConfigPool status:</strong></p><pre class="cli"><code>oc get mcp</code></pre></li><li><p><strong>Review tuned profiles:</strong></p><pre class="cli"><code>oc get tuned -A</code></pre></li><li><p><strong>Check node labels targeted by the profile:</strong></p><pre class="cli"><code>oc get nodes --show-labels | grep -i performance</code></pre></li></ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul><li><p><strong>PerformanceProfile YAML showing isolated CPUs, reserved CPUs, huge pages, real-time kernel setting, and nodeSelector.:</strong>PerformanceProfile YAML showing isolated CPUs, reserved CPUs, huge pages, real-time kernel setting, and nodeSelector.</p></li><li><p><strong>MachineConfigPool status showing target nodes are Updated and Ready after profile application.:</strong>MachineConfigPool status showing target nodes are Updated and Ready after profile application.</p></li><li><p><strong>Node Tuning Operator / tuned profile export showing generated tuning configuration.:</strong>Node Tuning Operator / tuned profile export showing generated tuning configuration.</p></li><li><p><strong>Change approval or Git commit history for performance tuning changes.:</strong>Change approval or Git commit history for performance tuning changes.</p></li><li><p><strong>Benchmark or validation report showing workload performance after tuning.:</strong>Benchmark or validation report showing workload performance after tuning.</p></li></ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul><li><p><strong>High Risk (Node Instability):</strong> Incorrect CPU isolation or kernel tuning can starve system daemons and make nodes unstable.</p></li><li><p><strong>Performance Risk:</strong> Untuned or inconsistently tuned nodes can create unpredictable latency across replicas of the same workload.</p></li><li><p><strong>Operational Risk:</strong> Manual tuning creates snowflake nodes that are difficult to troubleshoot, patch, or recover.</p></li></ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul><li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Performance Management); Section 10.1 (Operations Management).</p></li><li><p><strong>CIS Benchmarks v8:</strong> Control 4 (Secure Configuration of Enterprise Assets); Control 18 (Service Software Continuity).</p></li><li><p><strong>NIST SP 800-53:</strong> CM-3 (Configuration Change Control); SC-6 (Resource Availability).</p></li></ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-012">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-012</span><span class="subdomain-pill">Node Performance Governance</span></div>
+<h2>System Reserved Resources and Node Stability</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>System Reserved Resources and Node Stability</strong> validates that each worker node reserves enough CPU and memory for the operating system, kubelet, CRI-O, and platform services. This prevents application workloads from starving node-level components and causing NodePressure, evictions, or instability.</p>
+<h4>Key Aspects of Node Resource Reservation:</h4>
+<ul>
+<li><p><strong>systemReserved:</strong> Reserves CPU and memory for node system daemons and platform processes using supported OpenShift configuration.</p></li>
+<li><p><strong>AutoSizingReserved:</strong> Uses OpenShift automatic reservation behaviour where available to calculate suitable reserved resources for worker nodes.</p></li>
+<li><p><strong>Eviction Thresholds:</strong> Defines when kubelet should evict pods to protect node health during memory, disk, or inode pressure.</p></li>
+<li><p><strong>Performance Profile Interaction:</strong> Ensures reserved CPUs in PerformanceProfile nodes are handled separately and intentionally.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul><li><p><strong>Reservation Configuration:</strong> Verify supported system resource reservation is enabled or explicitly configured for each relevant MachineConfigPool.</p></li><li><p><strong>Unsupported Settings Review:</strong> Confirm the design does not rely on unsupported kubeReserved configuration for OpenShift nodes.</p></li><li><p><strong>Node Pressure Monitoring:</strong> Review alerts and events for MemoryPressure, DiskPressure, PIDPressure, and frequent pod evictions.</p></li><li><p><strong>Eviction Thresholds:</strong> Confirm eviction settings protect node stability without causing unnecessary workload disruption.</p></li><li><p><strong>Specialized Node Handling:</strong> Validate that performance-profile, infra, and storage nodes have reservation values appropriate to their workload type.</p></li></ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><ul><li><p>Node-level daemons must remain healthy for the platform to schedule, start, stop, monitor, and recover workloads.</p></li><li><p>If applications consume all available CPU or memory, kubelet and CRI-O can become unstable, leading to pod evictions or node NotReady conditions.</p></li><li><p>Automatic or explicitly governed reservations provide a safer baseline for shared worker nodes.</p></li><li><p>Reservation settings must be aligned with pod density, workload type, and performance tuning profiles.</p></li></ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p><strong>Validation Method:</strong> Kubelet configuration, node condition, and event review.</p><p><strong>Verification Steps:</strong></p><ol class="verification-steps"><li><p><strong>Review KubeletConfig resources:</strong></p><pre class="cli"><code>oc get kubeletconfig -o yaml</code></pre></li><li><p><strong>Check MachineConfigPools:</strong></p><pre class="cli"><code>oc get mcp</code></pre></li><li><p><strong>Review node pressure conditions:</strong></p><pre class="cli"><code>oc get nodes -o custom-columns=NAME:.metadata.name,STATUS:.status.conditions[-1].type</code></pre></li><li><p><strong>Check recent eviction or pressure events:</strong></p><pre class="cli"><code>oc get events -A | grep -Ei "Evicted|MemoryPressure|DiskPressure|PIDPressure"</code></pre></li><li><p><strong>Inspect node allocatable resources:</strong></p><pre class="cli"><code>oc describe node &lt;node-name&gt; | grep -A 8 Allocatable</code></pre></li></ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul><li><p><strong>KubeletConfig or cluster configuration showing supported systemReserved / automatic reservation settings.:</strong>KubeletConfig or cluster configuration showing supported systemReserved / automatic reservation settings.</p></li><li><p><strong>Node allocatable report showing reserved capacity has been accounted for.:</strong>Node allocatable report showing reserved capacity has been accounted for.</p></li><li><p><strong>Node pressure event history demonstrating whether resource pressure is recurring.:</strong>Node pressure event history demonstrating whether resource pressure is recurring.</p></li><li><p><strong>Prometheus or Grafana graph showing node CPU, memory, disk pressure, and eviction trends.:</strong>Prometheus or Grafana graph showing node CPU, memory, disk pressure, and eviction trends.</p></li><li><p><strong>Exception or design note for performance-profile nodes where reservedSystemCPUs is used.:</strong>Exception or design note for performance-profile nodes where reservedSystemCPUs is used.</p></li></ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul><li><p><strong>High Risk (Node Instability):</strong> Insufficient reserved resources can cause kubelet, CRI-O, and system daemons to become resource-starved.</p></li><li><p><strong>Operational Risk:</strong> Frequent evictions and NodePressure events can create unstable application behaviour and difficult troubleshooting.</p></li><li><p><strong>Capacity Risk:</strong> Over-reservation reduces usable application capacity, while under-reservation increases the risk of platform instability.</p></li></ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul><li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity and Performance Management); Section 10.3 (Availability and Resilience).</p></li><li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li><li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability); SI-4 (System Monitoring).</p></li></ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-013">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-013</span><span class="subdomain-pill">Scalability &amp; Resource Elasticity</span></div>
+<h2>Pod Density and Cluster Sizing</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Pod Density and Cluster Sizing</strong> validates that worker-node sizing, pod density, control-plane capacity, network ranges, and object growth remain within supported OpenShift scalability boundaries. This prevents clusters from becoming unstable as workload count and API object volume increase.</p>
+<h4>Key Aspects of Pod Density and Sizing:</h4>
+<ul>
+<li><p><strong>maxPods:</strong> Defines how many pods can run on each node before scheduler placement is restricted.</p></li>
+<li><p><strong>Node Sizing:</strong> Aligns CPU, memory, storage, and network capacity to the expected number and type of workloads.</p></li>
+<li><p><strong>Control Plane Load:</strong> Considers API object count, namespace growth, event volume, and etcd pressure as scalability factors.</p></li>
+<li><p><strong>Network Capacity:</strong> Ensures clusterNetwork and serviceNetwork ranges are sized to support expected pod and service growth.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul><li><p><strong>Pod Density Settings:</strong> Verify maxPods and related kubelet settings are appropriate for node size and workload profile.</p></li><li><p><strong>Cluster Object Growth:</strong> Review namespace, pod, service, route, secret, ConfigMap, and CRD object counts for growth trends.</p></li><li><p><strong>Control Plane Capacity:</strong> Validate that API server and etcd metrics remain healthy under expected object and request volume.</p></li><li><p><strong>Network Range Capacity:</strong> Confirm pod and service CIDR ranges are sufficient for expected cluster growth.</p></li><li><p><strong>Density Testing:</strong> Review performance or scale-test results proving that the selected pod density does not create node pressure or excessive API load.</p></li></ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><ul><li><p>Scaling a cluster is not only about adding nodes; excessive pod density or object count can overload kubelet, API server, networking, and etcd.</p></li><li><p>A pod density value that works for small stateless containers may not be suitable for heavier workloads, service mesh sidecars, or high-log-volume applications.</p></li><li><p>Sizing should account for current demand, expected growth, failure capacity, and upgrade behaviour.</p></li><li><p>Validated density limits reduce the risk of performance degradation caused by uncontrolled platform growth.</p></li></ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p><strong>Validation Method:</strong> Kubelet configuration, object count, and cluster capacity review.</p><p><strong>Verification Steps:</strong></p><ol class="verification-steps"><li><p><strong>Check maxPods configuration:</strong></p><pre class="cli"><code>oc get kubeletconfig -o yaml | grep -i maxPods</code></pre></li><li><p><strong>Count pods by node:</strong></p><pre class="cli"><code>oc get pods -A -o wide | awk '{print $8}' | sort | uniq -c | sort -nr</code></pre></li><li><p><strong>Review node allocatable and usage:</strong></p><pre class="cli"><code>oc adm top nodes</code></pre></li><li><p><strong>Review API object counts:</strong></p><pre class="cli"><code>oc get ns --no-headers | wc -l &amp;&amp; oc get pods -A --no-headers | wc -l</code></pre></li><li><p><strong>Check cluster network sizing:</strong></p><pre class="cli"><code>oc get network.config/cluster -o yaml | grep -A 10 clusterNetwork</code></pre></li></ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul><li><p><strong>KubeletConfig YAML showing maxPods or related pod density configuration.:</strong>KubeletConfig YAML showing maxPods or related pod density configuration.</p></li><li><p><strong>Pod distribution report showing pods per node and density hot spots.:</strong>Pod distribution report showing pods per node and density hot spots.</p></li><li><p><strong>Cluster object inventory report showing namespace, pod, service, route, and secret counts.:</strong>Cluster object inventory report showing namespace, pod, service, route, and secret counts.</p></li><li><p><strong>Prometheus / Grafana dashboards showing API server latency, etcd metrics, and node pressure under normal and peak load.:</strong>Prometheus / Grafana dashboards showing API server latency, etcd metrics, and node pressure under normal and peak load.</p></li><li><p><strong>Capacity forecast showing expected pod, node, and object growth over the planning horizon.:</strong>Capacity forecast showing expected pod, node, and object growth over the planning horizon.</p></li></ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul><li><p><strong>High Risk (Cluster Degradation):</strong> Excessive pod density can overload kubelet, CRI-O, node networking, and logging pipelines.</p></li><li><p><strong>Control Plane Risk:</strong> Rapid object growth increases API and etcd load, affecting cluster responsiveness and upgrade stability.</p></li><li><p><strong>Operational Risk:</strong> Poorly sized CIDR ranges or node pools can require disruptive reconfiguration when the cluster grows.</p></li></ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul><li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management and Performance); Section 10.1 (Operations Management).</p></li><li><p><strong>CIS Benchmarks v8:</strong> Control 1 (Inventory and Control of Enterprise Assets); Control 18 (Service Software Continuity).</p></li><li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability); CP-2 (Contingency Planning).</p></li></ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-014">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-014</span><span class="subdomain-pill">Performance Assurance</span></div>
+<h2>Performance Baseline and Load Testing</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Performance Baseline and Load Testing</strong> validates that the platform and critical workloads have measurable baseline performance, tested scaling behaviour, and documented capacity forecasts. This converts performance tuning from a configuration exercise into an evidence-backed assurance practice.</p>
+<h4>Key Aspects of Performance Assurance:</h4>
+<ul>
+<li><p><strong>Baseline Metrics:</strong> Establishes normal CPU, memory, storage I/O, network throughput, API latency, and application response-time baselines.</p></li>
+<li><p><strong>Load and Stress Testing:</strong> Tests the platform under expected peak, burst, failure, and recovery scenarios.</p></li>
+<li><p><strong>p95/p99 Latency:</strong> Measures tail latency rather than relying only on averages.</p></li>
+<li><p><strong>Capacity Forecasting:</strong> Uses historical trends and load-test results to forecast hardware, storage, and network growth.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul><li><p><strong>Baseline Coverage:</strong> Verify baseline metrics exist for platform components, worker nodes, storage, networking, and critical application services.</p></li><li><p><strong>Load-Test Evidence:</strong> Confirm load tests cover normal peak, burst, failover, node maintenance, and recovery scenarios.</p></li><li><p><strong>Latency and Throughput Targets:</strong> Validate p95/p99 latency, throughput, error rate, and saturation targets are defined and monitored.</p></li><li><p><strong>Scaling Behaviour:</strong> Review whether HPA, VPA, ClusterAutoscaler, and MachineAutoscaler behaviour has been tested rather than only configured.</p></li><li><p><strong>Capacity Forecast:</strong> Confirm forecast reports use historical metrics and expected demand growth to guide hardware and subscription planning.</p></li></ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><ul><li><p>Configuration alone does not prove that a platform can meet performance and scalability expectations under real load.</p></li><li><p>Baselines help teams detect performance regression after upgrades, tuning changes, application releases, or infrastructure refreshes.</p></li><li><p>Load testing exposes bottlenecks in scheduling, storage, network, ingress, API server, and application dependencies before production incidents occur.</p></li><li><p>Capacity forecasting supports planned expansion rather than emergency procurement.</p></li></ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p><strong>Validation Method:</strong> Performance evidence review and metric validation.</p><p><strong>Verification Steps:</strong></p><ol class="verification-steps"><li><p><strong>Review node utilization:</strong></p><pre class="cli"><code>oc adm top nodes</code></pre></li><li><p><strong>Review pod utilization:</strong></p><pre class="cli"><code>oc adm top pods -A</code></pre></li><li><p><strong>Query historical metrics in Prometheus:</strong></p><pre class="cli"><code>histogram_quantile(0.99, sum(rate(http_request_duration_seconds_bucket[5m])) by (le))</code></pre></li><li><p><strong>Check HPA behaviour during test:</strong></p><pre class="cli"><code>oc describe hpa &lt;name&gt;</code></pre></li><li><p><strong>Review cluster events during load test:</strong></p><pre class="cli"><code>oc get events -A --sort-by=.lastTimestamp | tail -50</code></pre></li></ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul><li><p><strong>Performance baseline report covering CPU, memory, network, storage, API latency, and application response time.:</strong>Performance baseline report covering CPU, memory, network, storage, API latency, and application response time.</p></li><li><p><strong>Load-test report showing test profile, concurrency, throughput, error rate, p95/p99 latency, and saturation points.:</strong>Load-test report showing test profile, concurrency, throughput, error rate, p95/p99 latency, and saturation points.</p></li><li><p><strong>Autoscaling test evidence showing pod and node scaling behaviour under controlled load.:</strong>Autoscaling test evidence showing pod and node scaling behaviour under controlled load.</p></li><li><p><strong>Regression comparison showing current performance against previous release or infrastructure baseline.:</strong>Regression comparison showing current performance against previous release or infrastructure baseline.</p></li><li><p><strong>Capacity forecast showing expected growth and recommended scaling actions.:</strong>Capacity forecast showing expected growth and recommended scaling actions.</p></li></ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul><li><p><strong>High Risk (Unproven Scalability):</strong> The platform may appear healthy during normal operation but fail during peak demand or failure scenarios.</p></li><li><p><strong>Performance Risk:</strong> Hidden bottlenecks can remain undetected until users experience slow response times or failed transactions.</p></li><li><p><strong>Planning Risk:</strong> Lack of baseline and forecast data leads to reactive capacity decisions and avoidable procurement urgency.</p></li></ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul><li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity and Performance Management); Section 10.3 (Availability and Resilience).</p></li><li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li><li><p><strong>NIST SP 800-53:</strong> SI-4 (System Monitoring); CP-4 (Contingency Plan Testing).</p></li></ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section></article></div><footer class="footer">Prepared as a structured HTML view of Pillar 3: Performance &amp; Scalability for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>
