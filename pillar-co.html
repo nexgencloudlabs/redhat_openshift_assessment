@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pillar 6: Cost Optimization | Red Hat OpenShift Assessment Framework</title>
+<style>
+:root { --bg:#0b1020; --panel:#ffffff; --ink:#172033; --muted:#637083; --line:#dce3ee; --redhat:#ee0000; --redhat-dark:#b00000; --code-bg:#0b1220; --shadow:0 12px 30px rgba(15,23,42,.08); --shadow-soft:0 8px 18px rgba(15,23,42,.05); }
+* { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:linear-gradient(135deg,#f4f7fb 0%,#edf2f9 44%,#ffffff 100%); line-height:1.6; } a { color:inherit; }
+.skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; } .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; background:#fff; padding:.75rem 1rem; border-radius:.5rem; z-index:999; }
+.page-shell { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:100vh; }
+.sidebar { position:sticky; top:0; height:100vh; overflow-y:auto; background:radial-gradient(circle at top left,rgba(238,0,0,.20),transparent 36%),linear-gradient(180deg,#0b1020,#151f36); color:#fff; padding:1.45rem 1.05rem; border-right:1px solid rgba(255,255,255,.08); }
+.brand { display:flex; gap:14px; align-items:center; margin-bottom:1.2rem; padding:1rem; border-radius:14px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10); box-shadow:0 10px 28px rgba(0,0,0,.28); } .brand-logo-wrap { width:148px; height:92px; border-radius:16px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 28px rgba(0,0,0,.30); display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:8px; } .brand-logo { width:100%; height:100%; object-fit:contain; object-position:center; display:block; } .brand-copy h1 { margin:0; font-size:1rem; line-height:1.35; letter-spacing:.01em; color:#fff; } .brand-copy p { margin:4px 0 0; color:#bbc8d9; font-size:.84rem; line-height:1.45; } .sidebar .label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:#98a8bf; margin:1.1rem .45rem .65rem; } .nav-link { display:block; padding:.62rem .72rem; border-radius:.85rem; text-decoration:none; color:#e9eef8; border:1px solid transparent; margin:.18rem 0; } .nav-link:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); } .nav-link span { display:block; font-weight:800; color:#fff; font-size:.85rem; } .nav-link small { display:block; font-size:.73rem; color:#bbc8d9; line-height:1.35; margin-top:.12rem; } .nav-link.is-primary { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); }
+.hero { color:#fff; padding:2.75rem clamp(1.2rem,4vw,4rem) 2.15rem; background:radial-gradient(circle at 18% 12%,rgba(22,163,168,.35),transparent 32%),radial-gradient(circle at 78% 0%,rgba(238,0,0,.28),transparent 30%),linear-gradient(135deg,#101827,#1a2540 58%,#0b1020); } .eyebrow { display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border:1px solid rgba(255,255,255,.18); border-radius:999px; color:#dfe8f7; font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; background:rgba(255,255,255,.06); } .hero h2 { font-size:clamp(2rem,4vw,3.6rem); line-height:1.05; max-width:1000px; margin:1rem 0 .8rem; } .hero p { max-width:1060px; color:#dbe6f5; font-size:1rem; margin:0; }
+.content-wrap { padding:1.6rem clamp(1.1rem,4vw,4rem) 4rem; } .notice { background:#fff; border:1px solid var(--line); border-left:6px solid var(--redhat); border-radius:1rem; padding:1rem 1.15rem; box-shadow:var(--shadow-soft); margin-bottom:1.25rem; } .intro-card { background:#fff; border:1px solid var(--line); border-radius:1rem; padding:1.05rem 1.2rem; box-shadow:var(--shadow-soft); margin:0 0 1.35rem; } .intro-card p { margin:.2rem 0; color:#0f172a; line-height:1.7; font-size:.98rem; }
+
+.summary-panel { background:#fff; border:1px solid var(--line); border-radius:1rem; box-shadow:var(--shadow-soft); margin:0 0 1.45rem; overflow:hidden; }
+.summary-panel-header { padding:1rem 1.15rem; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); }
+.summary-panel-header h2 { margin:0; font-size:1.25rem; color:#0f172a; }
+.summary-panel-header p { margin:.35rem 0 0; color:#64748b; font-size:.92rem; }
+.summary-metrics { display:grid; grid-template-columns:repeat(2,minmax(180px,1fr)); gap:.8rem; padding:1rem 1.15rem .4rem; max-width:650px; }
+.summary-metric { border:1px solid #dbe4f0; border-radius:.9rem; padding:.85rem .95rem; background:linear-gradient(180deg,#ffffff,#f9fbff); }
+.summary-metric strong { display:block; font-size:1.7rem; line-height:1; color:#0f172a; }
+.summary-metric span { display:block; margin-top:.35rem; color:#475569; font-size:.85rem; font-weight:700; }
+.category-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; padding:.75rem 1.15rem 1.15rem; }
+.category-card { border:1px solid #dbe4f0; border-radius:.9rem; background:#fff; padding:.9rem; }
+.category-top { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.55rem; }
+.category-top h3 { margin:0; font-size:.95rem; color:#0f172a; }
+.count-badge { display:inline-flex; min-width:2.1rem; height:2.1rem; align-items:center; justify-content:center; border-radius:999px; font-weight:800; background:#e9f0ff; color:#1d4ed8; border:1px solid #c8d8ff; }
+.control-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+.control-tags a { text-decoration:none; font-size:.74rem; font-weight:800; color:#b00000; background:#fff1f1; border:1px solid #ffd2d2; border-radius:999px; padding:.18rem .45rem; }
+.control-tags a:hover { background:#ffe2e2; }
+@media (max-width: 1120px) { .summary-metrics { grid-template-columns:repeat(2,minmax(150px,1fr)); } .category-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 680px) { .summary-metrics, .category-grid { grid-template-columns:1fr; } }
+
+.index-section { margin-bottom:1.5rem; } .index-section h2 { margin:0 0 .8rem; font-size:1.3rem; color:#0f172a; } .control-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.75rem; width:100%; } .control-chip { display:flex; gap:.75rem; align-items:flex-start; width:100%; min-height:80px; padding:.8rem .9rem; border:1px solid var(--line); border-radius:1rem; background:#fff; text-decoration:none; box-shadow:var(--shadow-soft); } .control-chip:hover { transform:translateY(-1px); border-color:rgba(238,0,0,.35); box-shadow:var(--shadow); } .control-chip strong { flex:0 0 auto; color:var(--redhat-dark); font-size:.86rem; } .control-chip span { color:#334155; font-size:.88rem; line-height:1.35; }
+.article { max-width:none; width:100%; } .control-card { width:100%; background:var(--panel); border:1px solid var(--line); border-radius:1.1rem; box-shadow:var(--shadow-soft); margin:1rem 0 1.25rem; padding:.9rem; scroll-margin-top:1rem; } .control-head { width:100%; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; border:1px solid var(--line); border-radius:.95rem; padding:.9rem 1rem; background:linear-gradient(180deg,#fbfdff,#f7faff); } .control-title-wrap h2 { margin:.32rem 0 0; font-size:1.34rem; line-height:1.25; color:#0f172a; } .control-kicker-row { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; } .control-code { display:inline-flex; align-items:center; justify-content:center; padding:.22rem .55rem; border-radius:999px; background:#e9f0ff; color:#1d4ed8; font-weight:800; font-size:.75rem; border:1px solid #c8d8ff; } .subdomain-pill { display:inline-flex; align-items:center; padding:.24rem .58rem; border-radius:999px; background:#eef2f7; color:#334155; font-size:.75rem; font-weight:700; border:1px solid #d6deea; }
+.risk-pill { display:inline-flex; align-items:center; justify-content:center; padding:.26rem .62rem; border-radius:999px; font-size:.73rem; font-weight:800; border:1px solid transparent; white-space:nowrap; } .risk-pill.critical { background:#fee2e2; color:#7f1d1d; border-color:#fca5a5; } .risk-pill.high { background:#fee2e2; color:#b91c1c; border-color:#fecaca; } .risk-pill.moderate { background:#fef3c7; color:#b45309; border-color:#fde68a; } .risk-pill.low { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+.field-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.85rem; margin-top:.9rem; width:100%; align-items:start; } .field-box { border:1px solid var(--line); border-radius:.85rem; background:#fff; overflow:hidden; min-width:0; } .field-box h3 { margin:0; padding:.72rem .86rem; font-size:.76rem; line-height:1.2; text-transform:uppercase; letter-spacing:.04em; color:#1f3b5d; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); } .field-body { padding:.85rem .95rem; font-size:.92rem; color:#172033; } .field-body > :first-child { margin-top:0; } .field-body > :last-child { margin-bottom:0; } .field-box-full { grid-column:1/-1; } .risk-box.critical { border-left:4px solid #b91c1c; background:#fff5f5; } .risk-box.high { border-left:4px solid #ef4444; background:#fff8f8; } .risk-box.moderate { border-left:4px solid #f59e0b; background:#fffdf5; } .risk-box.low { border-left:4px solid #22c55e; background:#f7fff8; }
+.field-body ul,.field-body ol { margin:.3rem 0 .6rem 1.1rem; padding:0; } .field-body li { margin:.35rem 0; } .field-body p { margin:.45rem 0; } .field-body strong { color:#0f172a; } .field-body code { background:#eef2f7; color:#9f1239; padding:.12rem .32rem; border-radius:.35rem; font-size:.9em; }
+.field-body pre, pre.cli { background:#0b1220; color:#f8fafc; border-radius:.75rem; padding:1rem 1.1rem; overflow:auto; border:1px solid #111827; white-space:pre-wrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); margin:.75rem 0; } .field-body pre code, pre.cli code { background:transparent!important; color:#f8fafc!important; padding:0; font-family:Consolas,'Courier New',monospace; font-size:.88rem; font-weight:700; line-height:1.45; } .verification-steps li pre.cli { margin:.35rem 0 .2rem; }
+.control-links { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem .3rem .15rem; } .control-links a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:.85rem; } .control-links a:hover { text-decoration:underline; } .empty-note { color:var(--muted); font-style:italic; } .footer { padding:1.4rem clamp(1.1rem,4vw,4rem); color:#64748b; border-top:1px solid var(--line); background:#fff; }
+@media (max-width:1120px) { .field-grid { grid-template-columns:1fr; } .field-box-full { grid-column:auto; } } @media (max-width:980px) { .page-shell { grid-template-columns:1fr; } .sidebar { position:relative; height:auto; max-height:420px; } .control-head { flex-direction:column; } } @media print { .sidebar,.control-grid,.control-links,.notice { display:none!important; } .page-shell { display:block; } .hero { color:#111; background:#fff; padding:1rem 0; } .content-wrap { padding:0; } .control-card { box-shadow:none; break-inside:avoid; } }
+
+.cross-control-link { color:#1d4ed8; text-decoration:none; font-weight:700; border-bottom:1px dotted rgba(29,78,216,.45); }
+.cross-control-link:hover { color:#b00000; border-bottom-color:#b00000; }
+</style>
+</head>
+<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label" data-cross-pillar-nav="true">Assessment pillars</div><nav data-cross-pillar-nav="true"><a class="nav-link" href="pillar-ar.html"><span>Pillar 1: Availability &amp; Resilience</span><small>Open AR pillar</small></a><a class="nav-link" href="pillar-rc.html"><span>Pillar 2: Recoverability / Disaster Recovery</span><small>Open RC pillar</small></a><a class="nav-link" href="pillar-ps.html"><span>Pillar 3: Performance &amp; Scalability</span><small>Open PS pillar</small></a><a class="nav-link" href="pillar-sc.html"><span>Pillar 4: Security &amp; Compliance</span><small>Open SC pillar</small></a><a class="nav-link" href="pillar-mo.html"><span>Pillar 5: Monitoring &amp; Observability</span><small>Open MO pillar</small></a><a aria-current="page" class="nav-link is-primary" href="pillar-co.html"><span>Pillar 6: Cost Optimization</span><small>CO controls — current page</small></a></nav><div class="label">Pillar 6 controls</div><nav><a class="nav-link" href="#control-id-co-001"><span>CO-001</span><small>Cost Management and Showback (FinOps)</small></a>
+<a class="nav-link" href="#control-id-co-002"><span>CO-002</span><small>Virtual Machine Right-Sizing</small></a>
+<a class="nav-link" href="#control-id-co-003"><span>CO-003</span><small>Idle Resource and Sprawl Management</small></a>
+<a class="nav-link" href="#control-id-co-004"><span>CO-004</span><small>Automated Image and Snapshot Pruning</small></a>
+<a class="nav-link" href="#control-id-co-005"><span>CO-005</span><small>Hypervisor Consolidation and Migration Strategy (MTV)</small></a>
+<a class="nav-link" href="#control-id-co-006"><span>CO-006</span><small>Storage Tiering and Class Optimization</small></a>
+<a class="nav-link" href="#control-id-co-007"><span>CO-007</span><small>OpenShift Subscription and Core Optimization (Infra Node Licensing)</small></a>
+<a class="nav-link" href="#control-id-co-008"><span>CO-008</span><small>Energy Consumption and Power Optimization (Kepler)</small></a></nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 6</span><h2>Pillar 6: Cost Optimization</h2><p>Architecture assessment page for validating OpenShift financial governance, FinOps showback, VM right-sizing, idle resource cleanup, image and snapshot pruning, hypervisor consolidation, storage tiering, subscription optimization, and energy consumption management controls.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Cost Optimization defines the platform's capability to maximize the financial value of OpenShift by aligning physical infrastructure, subscriptions, storage tiers, virtual machine footprints, idle resources, and energy consumption with real workload demand. For OpenShift environments supporting containerized workloads and OpenShift Virtualization, these controls validate that cost allocation, right-sizing, sprawl reduction, pruning, migration strategy, storage class selection, licensing segregation, and power-efficiency practices are implemented through measured, automated, and evidence-backed operational governance.</p>
+</div><section aria-labelledby="control-summary" class="summary-panel">
+<div class="summary-panel-header">
+<h2 id="control-summary">Summary of Controls</h2>
+<p>Pillar 6 contains 8 assessment controls grouped by cost optimization domain to support FinOps accountability, resource efficiency, storage optimization, licensing control, virtualization consolidation, capacity discipline, and ESG-aligned infrastructure management.</p>
+</div>
+<div class="summary-metrics">
+<div class="summary-metric"><strong>8</strong><span>Total controls</span></div>
+<div class="summary-metric"><strong>5</strong><span>Cost Optimization domains</span></div>
+</div>
+<div class="category-grid">
+<div class="category-card"><div class="category-top"><h3>Financial Governance</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-co-001">CO-001</a><a href="#control-id-co-007">CO-007</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Resource Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-co-002">CO-002</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Infrastructure Efficiency</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-co-003">CO-003</a><a href="#control-id-co-005">CO-005</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Storage Optimization</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-co-004">CO-004</a><a href="#control-id-co-006">CO-006</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Environmental, Social, and Governance (ESG)</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-co-008">CO-008</a></div></div>
+</div>
+</section><section aria-labelledby="controls-index" class="index-section"><h2 id="controls-index">Assessment Controls Index</h2><div class="control-grid"><a class="control-chip" href="#control-id-co-001"><strong>CO-001</strong><span>Cost Management and Showback (FinOps)</span></a>
+<a class="control-chip" href="#control-id-co-002"><strong>CO-002</strong><span>Virtual Machine Right-Sizing</span></a>
+<a class="control-chip" href="#control-id-co-003"><strong>CO-003</strong><span>Idle Resource and Sprawl Management</span></a>
+<a class="control-chip" href="#control-id-co-004"><strong>CO-004</strong><span>Automated Image and Snapshot Pruning</span></a>
+<a class="control-chip" href="#control-id-co-005"><strong>CO-005</strong><span>Hypervisor Consolidation and Migration Strategy (MTV)</span></a>
+<a class="control-chip" href="#control-id-co-006"><strong>CO-006</strong><span>Storage Tiering and Class Optimization</span></a>
+<a class="control-chip" href="#control-id-co-007"><strong>CO-007</strong><span>OpenShift Subscription and Core Optimization (Infra Node Licensing)</span></a>
+<a class="control-chip" href="#control-id-co-008"><strong>CO-008</strong><span>Energy Consumption and Power Optimization (Kepler)</span></a></div></section><article class="article">
+<section class="control-card" id="control-id-co-001">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-001</span><span class="subdomain-pill">Financial Governance</span></div>
+<h2>Cost Management and Showback (FinOps)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>In a shared bare-metal environment, calculating the true cost of an application requires attributing physical hardware, power, and licensing costs to specific logical workloads. Cost Management and Showback (FinOps) utilizes OpenShift Cost Management (or KubeCost) to translate cluster metrics (CPU, RAM, Storage) into a specific currency (e.g., MYR) based on an internal rate card.</p>
+<h4>Key Aspects of Cost Management:</h4>
+<ul>
+<li><p><strong>Mandatory Tagging:</strong> Enforcing the presence of financial labels (e.g., cost-center, business-unit) on all namespaces and workloads using admission controllers (Kyverno/OPA).</p></li>
+<li><p><strong>Rate Card Configuration:</strong> Defining the amortized cost of the bare-metal servers, storage arrays, and Red Hat subscriptions within the cost tool.</p></li>
+<li><p><strong>Showback Dashboards:</strong> Providing business units with visibility into their specific infrastructure consumption costs.</p></li>
+<li><p><strong>Idle Cost Allocation:</strong> Identifying the cost of unallocated or idle hardware and distributing it across tenants or flagging it as overhead.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Label Enforcement Policy:</strong> Verify that an admission policy automatically blocks the creation of namespaces lacking the required financial taxonomy.</p></li>
+<li><p><strong>Operator Status:</strong> Confirm the Cost Management Metrics Operator (or KubeCost) is installed and successfully exporting data.</p></li>
+<li><p><strong>Tag Compliance:</strong> Audit production namespaces to ensure 100% compliance with the financial tagging model.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Bare-metal data centers represent massive upfront capital expenditures (CapEx).</p>
+<ul>
+<li><p><strong>Financial Accountability:</strong> Prevents the "Tragedy of the Commons" where development teams hoard resources because they perceive the internal infrastructure as "free."</p></li>
+<li><p><strong>Budget Forecasting:</strong> Allows the CTO to justify hardware expansions by directly tying bare-metal utilization to the growth of specific revenue-generating banking applications.</p></li>
+<li><p><strong>Optimization Incentive:</strong> When teams see the monthly Ringgit value of their requested resources, they are strongly incentivized to right-size their applications.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Label audit and admission controller test.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check for enforced labels:</strong></p><pre class="cli"><code>oc get namespaces --show-labels | grep cost-center</code></pre></li>
+<li><p><strong>Negative Test:</strong> Attempt to create an untagged namespace to ensure the admission webhook rejects it.</p></li>
+<li><p><strong>Verify metrics collection:</strong></p><pre class="cli"><code>oc get pods -n costmanagement-metrics-operator (Ensure pods are Running).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Admission Policy YAML:</strong> Snippet of the Kyverno or OPA Gatekeeper policy enforcing the labels.</p></li>
+<li><p><strong>Cost Management Dashboard:</strong> A PDF or screenshot showing a monthly "Showback" report broken down by business unit in MYR.</p></li>
+<li><p><strong>Namespace Audit Report:</strong> Data showing 100% label compliance across the cluster.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Financial Opacity):</strong> Without a FinOps model, the IT department appears as a monolithic cost center, making it difficult to allocate budgets accurately or recover costs from business units.</p></li>
+<li><p><strong>Efficiency Risk:</strong> Uncontrolled resource hoarding by development teams leads to artificial cluster exhaustion and premature hardware purchases.</p></li>
+<li><p><strong>Operational Risk:</strong> Inability to identify the owning business unit of a rogue or abandoned workload during an incident.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 1 (Inventory and Control of Enterprise Assets).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> PM-3 (Information Security Resources).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-co-002">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-002</span><span class="subdomain-pill">Resource Optimization</span></div>
+<h2>Virtual Machine Right-Sizing</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>When migrating legacy workloads to OpenShift Virtualization on bare metal, teams often perform a "Lift and Shift," bringing over heavily over-provisioned specifications from the old VMware environment. Virtual Machine Right-Sizing involves actively monitoring the actual CPU and memory utilization of OpenShift VMs and shrinking their allocations to match real-world demand.</p>
+<h4>Key Aspects of VM Right-Sizing:</h4>
+<ul>
+<li><p><strong>Baseline Monitoring:</strong> Using Prometheus and Grafana to track the kubevirt_vmi_memory_used_bytes and kubevirt_vmi_cpu_usage_seconds metrics over a 30-day period.</p></li>
+<li><p><strong>Eliminating Legacy Slack:</strong> Identifying VMs that were allocated 16 vCPUs and 64GB of RAM but consistently average less than 10% utilization.</p></li>
+<li><p><strong>Live/Cold Resizing:</strong> Utilizing OpenShift's capabilities to adjust VM specifications, applying the changes during routine maintenance windows.</p></li>
+<li><p><strong>Approval Workflows:</strong> Requiring app owners to justify requests for large VM footprints based on actual metric data rather than vendor estimates.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Utilization Dashboards:</strong> Verify the existence of a Grafana dashboard specifically built to track the "Requested vs. Actual" utilization of VirtualMachineInstances (VMIs).</p></li>
+<li><p><strong>Sizing Policy:</strong> Confirm there is an operational policy mandating the review and down-sizing of VMs showing &lt; 20% utilization over a 30-day period.</p></li>
+<li><p><strong>VMI Manifests:</strong> Audit the spec.domain.resources.requests of running VMs against their historical usage.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>VMs are significantly "heavier" than containers; oversized VMs rapidly degrade the density of a bare-metal OpenShift cluster.</p>
+<ul>
+<li><p><strong>Maximum Hardware ROI:</strong> Reclaiming 100GB of RAM from oversized VMs allows the cluster to host dozens of new containerized microservices on the exact same physical node.</p></li>
+<li><p><strong>Avoiding Kubelet Starvation:</strong> VMs that aggressively lock physical memory can trigger Kubelet memory pressure, destabilizing the entire bare-metal host (<a class="cross-control-link" href="pillar-co.html#control-id-co-007" title="Open CO-007">CO-007</a>).</p></li>
+<li><p><strong>Modernization Catalyst:</strong> Forcing teams to right-size their VMs often accelerates their transition to lighter, containerized microservices.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Metric analysis and VMI configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>List all VMs and their requested memory:</strong></p><pre class="cli"><code>oc get vm -A -o custom-columns=NAME:.metadata.name,MEMORY:.spec.template.spec.domain.resources.requests.memory</code></pre></li>
+<li><p><strong>Query Prometheus:</strong></p><pre class="cli"><code>Use avg_over_time(kubevirt_vmi_memory_used_bytes[30d]) to find the true usage.</code></pre></li>
+<li><p><strong>Identify discrepancies:</strong> Compare the output of Step 1 against Step 2.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Grafana Right-Sizing Report:</strong> A screenshot showing the "Top 10 Oversized VMs" in the cluster.</p></li>
+<li><p><strong>Capacity Reclamation Log:</strong> An operational report documenting the total CPU cores and RAM reclaimed through VM resizing efforts in a given quarter.</p></li>
+<li><p><strong>VMI YAML Snippet:</strong> Showing a VM that has been successfully adjusted to a lower memory footprint.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Artificial Capacity Exhaustion):</strong> Oversized VMs trick the Kubernetes scheduler into believing the bare-metal nodes are full, blocking new deployments while physical silicon sits idle.</p></li>
+<li><p><strong>Cost Risk:</strong> Forcing the bank into emergency procurement of expensive new physical servers to support "ghost" workloads.</p></li>
+<li><p><strong>Performance Risk:</strong> Massive VM memory allocations can lead to NUMA misalignment (<a class="cross-control-link" href="pillar-ps.html#control-id-ps-002" title="Open PS-002">PS-002</a>), degrading the performance of the VM itself.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management and Performance).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-co-003">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-003</span><span class="subdomain-pill">Infrastructure Efficiency</span></div>
+<h2>Idle Resource and Sprawl Management</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Over time, OpenShift clusters accumulate "Sprawl"—abandoned namespaces from completed POCs, unattached Persistent Volumes, unused Routes, and deployments scaled to zero that still hold IP addresses. Idle Resource and Sprawl Management establishes automated garbage collection and lifecycle policies to keep the cluster lean.</p>
+<h4>Key Aspects of Sprawl Management:</h4>
+<ul>
+<li><p><strong>Stale Namespace Deletion:</strong> Automating the deletion of development namespaces that have seen no activity (no deployments or API updates) for more than 45 days.</p></li>
+<li><p><strong>Unbound PVC Cleanup:</strong> Identifying Persistent Volume Claims (PVCs) that are no longer attached to any running pod and safely archiving/deleting the underlying ODF storage.</p></li>
+<li><p><strong>Route/Service Grooming:</strong> Removing Routes and LoadBalancer Services that point to non-existent or zero-replica deployments, freeing up valuable internal IP addresses and external VIPs.</p></li>
+<li><p><strong>Environment Expirations:</strong> Mandating that all short-lived test environments include a "Time to Live" (TTL) annotation for automated teardown.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Cleanup Automation:</strong> Verify the existence of scripts, CronJobs, or controllers (like Janitor) that actively scan for and report/delete stale resources.</p></li>
+<li><p><strong>Storage Audit:</strong> Check the cluster for PVCs with an Available or Released status (rather than Bound).</p></li>
+<li><p><strong>Namespace Lifecycles:</strong> Review the SOPs for decommissioning projects and tearing down associated OpenShift infrastructure.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>A bare-metal cluster is a finite ecosystem; digital "rot" slows down the entire control plane.</p>
+<ul>
+<li><p><strong>etcd Performance:</strong> Every unused object, secret, and route adds weight to the etcd database. Cleaning them up ensures the API server responds rapidly (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-002" title="Open AR-002">AR-002</a>).</p></li>
+<li><p><strong>Storage Recovery:</strong> Fast enterprise NVMe storage is a premium asset. Reclaiming gigabytes from abandoned PVCs prevents the ODF cluster from hitting its read-only threshold.</p></li>
+<li><p><strong>Network IP Exhaustion:</strong> Unused LoadBalancer services tie up physical IP addresses in the data center's subnet. Sprawl management ensures IPs are returned to the available pool.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Object state audit and script review.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check for unbound PVCs:</strong></p><pre class="cli"><code>oc get pvc -A | grep -v Bound</code></pre></li>
+<li><p><strong>Check for orphaned Routes:</strong> Query for Routes where the backend Service has 0 endpoints.</p></li>
+<li><p><strong>Review automation:</strong></p><pre class="cli"><code>oc get cronjob -n openshift-automation (Look for namespace or resource cleanup jobs).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Sprawl Audit Report:</strong> A generated list of resources flagged for deletion (e.g., 50 unattached PVCs, 12 stale namespaces).</p></li>
+<li><p><strong>Garbage Collection Log:</strong> Evidence of the automated system successfully deleting expired POC environments.</p></li>
+<li><p><strong>Storage Metrics:</strong> A Grafana chart showing a drop in total storage consumed following a sprawl cleanup cycle.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Storage Lockup):</strong> Unbound PVCs slowly consume the physical ODF storage. If it hits 100%, the storage layer freezes, taking down production databases.</p></li>
+<li><p><strong>Operational Risk:</strong> IP address exhaustion in the bare-metal subnet prevents new, critical applications from being exposed to the network.</p></li>
+<li><p><strong>Security Risk:</strong> Abandoned applications are rarely patched, presenting easy targets for attackers seeking a foothold in the cluster (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-017" title="Open SC-017">SC-017</a>).</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.1 (Operations Management); Section 10.5 (Capacity).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 1 (Inventory and Control of Enterprise Assets); Control 3.</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CM-8 (Information System Component Inventory); MP-6 (Media Sanitization).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-co-004">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-004</span><span class="subdomain-pill">Storage Optimization</span></div>
+<h2>Automated Image and Snapshot Pruning</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>The OpenShift internal Image Registry and the ODF Storage layer (CSI Snapshots) will grow infinitely if left unmanaged. Automated Image and Snapshot Pruning ensures that aggressive retention policies are enforced, deleting old image layers and stale storage snapshots to preserve physical disk space.</p>
+<h4>Key Aspects of Automated Pruning:</h4>
+<ul>
+<li><p><strong>Image Registry Pruner:</strong> Configuring the native imagepruner cluster operator to automatically delete image streams, tags, and layers that have not been used by a running pod in a specified time (e.g., 30 days).</p></li>
+<li><p><strong>CSI Snapshot Expiration:</strong> Ensuring that VolumeSnapshots (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-003" title="Open RC-003">RC-003</a>) used for backups or rollbacks are automatically aged out (e.g., keeping only the last 5 days of snapshots).</p></li>
+<li><p><strong>Successful Job Deletion:</strong> Automating the cleanup of Completed or Failed Kubernetes Job pods, which consume etcd space and clutter the UI.</p></li>
+<li><p><strong>Local Node Cleanup:</strong> Relying on the Kubelet's internal garbage collection to delete unused container images cached on the physical worker nodes.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Image Pruner Configuration:</strong> Verify the imagepruners.imageregistry.operator.openshift.io/cluster object is active and scheduled (e.g., running nightly).</p></li>
+<li><p><strong>Job Cleanup Policy:</strong> Confirm that the ttlSecondsAfterFinished field is used in CronJobs to clean up their own pods.</p></li>
+<li><p><strong>Snapshot Limits:</strong> Audit the OADP or snapshot controller settings to ensure retention limits are actively pruning old volume copies.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Without pruning, container registries and snapshot trees become the fastest consumers of bare-metal storage.</p>
+<ul>
+<li><p><strong>Protecting Critical Storage:</strong> Prevents the internal registry's PVC from filling up, which would immediately halt all new application deployments and CI/CD pipelines (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-007" title="Open RC-007">RC-007</a>).</p></li>
+<li><p><strong>Bandwidth and CPU Efficiency:</strong> A leaner registry responds faster to node image-pull requests, speeding up cluster scaling and node recovery times.</p></li>
+<li><p><strong>Security Hygiene:</strong> Automatically removes old, vulnerable images (with known CVEs) from the registry, reducing the chance that an outdated image is accidentally deployed.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Operator config audit and log verification.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Image Pruner config:</strong></p><pre class="cli"><code>oc get imagepruner cluster -o yaml (Check the schedule and keepTagRevisions values).</code></pre></li>
+<li><p><strong>Check Image Pruner jobs:</strong></p><pre class="cli"><code>oc get jobs -n openshift-image-registry | grep pruner</code></pre></li>
+<li><p><strong>Verify Job TTL:</strong></p><pre class="cli"><code>oc get cronjob &lt;name&gt; -o yaml | grep ttlSecondsAfterFinished</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>ImagePruner YAML:</strong> Export showing the automated schedule and retention rules.</p></li>
+<li><p><strong>Pruner Execution Log:</strong> Logs from the image-pruner pod showing exactly how many gigabytes of orphaned layers were deleted in the last run.</p></li>
+<li><p><strong>Snapshot Inventory:</strong> A list of CSI snapshots proving that none exist older than the mandated retention policy.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Deployment Blackout):</strong> If the image registry storage fills to 100%, OpenShift cannot accept new images, bringing the entire bank's software delivery pipeline to a halt.</p></li>
+<li><p><strong>Cost Risk:</strong> Unnecessary expansion of the ODF storage cluster to accommodate dead image layers and obsolete data backups.</p></li>
+<li><p><strong>Operational Risk:</strong> "DiskPressure" alerts on worker nodes if local image caches are not aggressively garbage collected by the Kubelet.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-4 (Information System Monitoring); MP-6 (Media Sanitization).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-co-005">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-005</span><span class="subdomain-pill">Infrastructure Efficiency</span></div>
+<h2>Hypervisor Consolidation and Migration Strategy (MTV)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Traditional banking infrastructure relies heavily on expensive, standalone virtualization platforms (e.g., VMware vSphere). Hypervisor Consolidation leverages OpenShift Virtualization on bare metal to run both containers and legacy Virtual Machines side-by-side on the same physical nodes. The Migration Toolkit for Virtualization (MTV) is the mandated tool to execute this transition at scale.</p>
+<h4>Key Aspects of Consolidation:</h4>
+<ul>
+<li><p><strong>Unified Infrastructure:</strong> Eliminating the silo between the "VM Data Center" and the "Container Data Center," placing both workloads on a single, unified OpenShift bare-metal fabric.</p></li>
+<li><p><strong>MTV Orchestration:</strong> Using the Migration Toolkit to perform warm/cold migrations directly from VMware vCenter to OpenShift, automatically converting VMDK disks and network settings.</p></li>
+<li><p><strong>License Retirement:</strong> Systematically decommissioning legacy hypervisor hosts and retiring their associated, expensive enterprise licensing agreements.</p></li>
+<li><p><strong>Operational Convergence:</strong> Training the operations team to manage VM lifecycles using Kubernetes-native YAML, GitOps (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-006" title="Open RC-006">RC-006</a>), and standard OpenShift RBAC (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-001" title="Open SC-001">SC-001</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>MTV Operator Status:</strong> Verify that the Migration Toolkit for Virtualization operator is installed and healthy.</p></li>
+<li><p><strong>Provider Connections:</strong> Check the configured Providers within MTV to ensure secure, read-only connectivity to the legacy vCenter environment.</p></li>
+<li><p><strong>Migration Plans:</strong> Audit the active and historical MigrationPlans to ensure VMs are being systematically moved according to the decommissioning schedule.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Maintaining two separate infrastructure stacks (VMware + OpenShift) doubles the hardware footprint, power consumption, and administrative overhead.</p>
+<ul>
+<li><p><strong>Massive Cost Avoidance:</strong> OpenShift Virtualization is included in the base OpenShift entitlement. Moving VMs to OpenShift eliminates "VMware Tax" and hypervisor renewal costs.</p></li>
+<li><p><strong>Modernization Pathway:</strong> Placing legacy VMs on the same network overlay (OVN-Kubernetes) as modern microservices eliminates internal latency and makes it easier to gradually strangle/refactor the legacy app into containers.</p></li>
+<li><p><strong>Bare-Metal Performance:</strong> VMs running via KVM on bare-metal OpenShift often experience lower I/O latency compared to traditional nested hypervisors, particularly when paired with SR-IOV (<a class="cross-control-link" href="pillar-ps.html#control-id-ps-003" title="Open PS-003">PS-003</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Operator audit and virtualization resource check.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Virtualization status:</strong></p><pre class="cli"><code>oc get hyperconverged kubevirt-hyperconverged -n openshift-cnv</code></pre></li>
+<li><p><strong>Check MTV Providers:</strong></p><pre class="cli"><code>oc get providers -n openshift-mtv</code></pre></li>
+<li><p><strong>Verify running VMs:</strong></p><pre class="cli"><code>oc get virtualmachine -A (Ensure migrated VMs are operating normally).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>MTV Dashboard Report:</strong> A screenshot showing a successful batch migration of legacy VMs into the cluster.</p></li>
+<li><p><strong>Hypervisor Decommissioning Log:</strong> A project management document showing the physical power-down and license retirement of legacy VMware hosts.</p></li>
+<li><p><strong>VM Resource YAML:</strong> Snippet showing a running VM managed natively via the OpenShift API.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Cost Risk:</strong> Continuing to pay dual licensing and hardware maintenance for both OpenShift bare metal and a legacy hypervisor farm significantly degrades the ROI of the OpenShift investment.</p></li>
+<li><p><strong>Operational Risk:</strong> Managing VMs with Kubernetes tools requires a paradigm shift for traditional sysadmins; lack of training can lead to misconfigured VMs.</p></li>
+<li><p><strong>Performance Risk:</strong> Failing to properly map legacy VM storage tiers to appropriate ODF storage classes during migration.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.1 (Operations Management); Section 10.5 (Capacity Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 1 (Inventory and Control of Enterprise Assets).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SA-3 (System Development Life Cycle).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-co-006">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-006</span><span class="subdomain-pill">Storage Optimization</span></div>
+<h2>Storage Tiering and Class Optimization</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Not all banking data requires expensive, high-speed NVMe storage. Storage Tiering optimizes cost by utilizing OpenShift Data Foundation (ODF) to create multiple StorageClasses backed by different physical media, and enforcing policies that match the workload's performance requirements to the cheapest appropriate tier.</p>
+<h4>Key Aspects of Storage Tiering:</h4>
+<ul>
+<li><p><strong>Tier Definition:</strong></p></li>
+<li><p><strong>Tier 1 (NVMe/SSD):</strong> Low latency, high IOPS (Core databases, payment gateways).</p></li>
+<li><p><strong>Tier 2 (HDD):</strong> High capacity, moderate IOPS (Log aggregators, document stores).</p></li>
+<li><p><strong>Tier 3 (Object/S3):</strong> Cheap, immutable cold storage (Backups, long-term metrics, registry blobs).</p></li>
+<li><p><strong>Default Class Enforcement:</strong> Setting Tier 2 or Tier 3 as the cluster's default StorageClass to prevent developers from accidentally provisioning premium Tier 1 storage for test applications.</p></li>
+<li><p><strong>Dynamic Provisioning:</strong> Ensuring all storage is provisioned dynamically via PVCs, avoiding manual LUN mapping.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>StorageClass Audit:</strong> Verify the existence of multiple StorageClasses mapping to the different physical ODF device sets.</p></li>
+<li><p><strong>Default Configuration:</strong> Confirm which StorageClass has the storageclass.kubernetes.io/is-default-class: "true" annotation.</p></li>
+<li><p><strong>Workload Mapping:</strong> Audit Tier 1 (NVMe) PVCs to ensure they belong exclusively to applications that justify the premium cost.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Storage costs scale exponentially with performance.</p>
+<ul>
+<li><p><strong>Cost Efficiency:</strong> Forcing a 5TB archive volume onto spinning HDDs or S3 object storage instead of NVMe saves tens of thousands of Ringgit per bare-metal node.</p></li>
+<li><p><strong>Performance Protection:</strong> Keeping low-priority data off the NVMe tier prevents "noisy neighbors" from degrading the I/O of critical financial databases.</p></li>
+<li><p><strong>Lifecycle Management:</strong> Aligns the physical infrastructure with the data lifecycle—hot data stays fast, cold data moves to cheap, dense storage.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> StorageClass and PVC distribution audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>List storage classes:</strong></p><pre class="cli"><code>oc get sc (Verify diverse tiers exist).</code></pre></li>
+<li><p><strong>Check default class:</strong></p><pre class="cli"><code>oc get sc -o custom-columns=NAME:.metadata.name,DEFAULT:.metadata.annotations."storageclass\.kubernetes\.io/is-default-class"</code></pre></li>
+<li><p><strong>Audit premium usage:</strong></p><pre class="cli"><code>oc get pvc -A --field-selector spec.storageClassName=&lt;tier-1-class&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>StorageClass YAML:</strong> Export showing the provisioner and physical device pool mapping.</p></li>
+<li><p><strong>Storage Distribution Report:</strong> A Grafana pie chart showing the percentage of total capacity consumed by NVMe vs. HDD vs. Object storage.</p></li>
+<li><p><strong>Cost Avoidance Log:</strong> A calculation showing the savings achieved by routing 100TB of log data to HDD instead of NVMe.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Cost Risk:</strong> Treating all storage as equal and placing everything on NVMe rapidly exhausts the most expensive hardware in the data center, triggering premature expansion costs.</p></li>
+<li><p><strong>Performance Risk:</strong> Placing a high-speed database on a default Tier 2 (HDD) storage class will cause massive transaction latency and API timeouts.</p></li>
+<li><p><strong>Operational Risk:</strong> Difficulty in migrating massive data sets between tiers later if the architecture is not properly segregated from day one.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management); Section 11.1 (Data Integrity).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-4 (Information in Shared Resources).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-co-007">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-007</span><span class="subdomain-pill">Financial Governance</span></div>
+<h2>OpenShift Subscription and Core Optimization (Infra Node Licensing)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Red Hat OpenShift is licensed per physically active CPU core. Subscription Optimization leverages Red Hat's licensing terms, which state that nodes dedicated exclusively to infrastructure services (Ingress, Registry, Monitoring, Logging) do not require billable OpenShift entitlements.</p>
+<h4>Key Aspects of Core Optimization:</h4>
+<ul>
+<li><p><strong>Infra Node Exemption:</strong> Applying the node-role.kubernetes.io/infra label to specific bare-metal nodes.</p></li>
+<li><p><strong>Taint Enforcement:</strong> Applying the NoSchedule taint to infra nodes to cryptographically guarantee that no business/user logic runs on them (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-021" title="Open AR-021">AR-021</a>).</p></li>
+<li><p><strong>Storage Node Exemption:</strong> Ensuring dedicated ODF storage nodes are similarly labeled and tainted to avoid compute licensing fees.</p></li>
+<li><p><strong>Automated Tracking:</strong> Using Red Hat Subscription Management (RHSM) or Red Hat Satellite to continuously reconcile the physical core count against purchased contracts.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Node Label Verification:</strong> Audit the labels on non-billable nodes to ensure they precisely match the approved infrastructure taxonomy.</p></li>
+<li><p><strong>Pod Placement Audit:</strong> Verify that absolutely no application pods are scheduled on the Infra or Storage nodes.</p></li>
+<li><p><strong>Subscription Dashboard:</strong> Review the OpenShift Cluster Manager (OCM) to confirm the reported billable core count matches the expected footprint.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Software licensing is the dominant recurring OpEx cost in an enterprise OpenShift deployment.</p>
+<ul>
+<li><p><strong>Massive Cost Avoidance:</strong> Removing 3 Infra nodes and 3 Storage nodes (e.g., 64 physical cores each) from the billable inventory saves hundreds of thousands of Ringgit annually.</p></li>
+<li><p><strong>Audit Readiness:</strong> Red Hat requires strict technical proof that "free" infrastructure nodes are fully isolated. Taints provide this proof.</p></li>
+<li><p><strong>Financial Predictability:</strong> Ensures the bank only purchases subscriptions for cores actively generating business value, preventing "True-Up" shock during vendor audits.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node taint audit and Subscription reporting.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Identify Infra nodes:</strong></p><pre class="cli"><code>oc get nodes -l node-role.kubernetes.io/infra=""</code></pre></li>
+<li><p><strong>Check for rogue pods:</strong></p><pre class="cli"><code>oc adm top nodes (Ensure no unexpected CPU spikes from user pods on Infra nodes).</code></pre></li>
+<li><p><strong>Verify strict taints:</strong></p><pre class="cli"><code>oc describe node &lt;infra-node&gt; | grep Taints (Must show NoSchedule).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Taint and Toleration Export:</strong> A cluster-wide report proving the strict logical segregation of billable and non-billable workloads.</p></li>
+<li><p><strong>RHSM Core Count Report:</strong> A screenshot from the Red Hat Customer Portal showing "Subscribed Cores" is mathematically lower than the total physical hardware cores.</p></li>
+<li><p><strong>Architecture Diagram:</strong> A formal document presented to licensing auditors showing the physical separation of roles.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Cost Risk:</strong> Accidentally scheduling a single banking application pod on a 64-core infrastructure node instantly converts all 64 cores into billable inventory, generating an unbudgeted invoice.</p></li>
+<li><p><strong>Compliance Risk:</strong> Failing a software vendor audit can result in severe financial penalties.</p></li>
+<li><p><strong>Operational Risk:</strong> Platform teams may hesitate to scale out the Ingress or Monitoring tiers due to perceived licensing costs, inadvertently starving the cluster of essential routing capacity.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.6 (System Software Maintenance).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 2 (Inventory and Control of Software Assets).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CM-8 (Information System Component Inventory).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-co-008">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">CO-008</span><span class="subdomain-pill">Environmental, Social, and Governance (ESG)</span></div>
+<h2>Energy Consumption and Power Optimization (Kepler)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>As banks face stricter regulatory requirements for sustainability, data center power consumption must be quantified and optimized. Kepler (Kubernetes-based Efficient Power Level Exporter) uses eBPF to capture CPU performance counters and machine learning to estimate the power consumption (in Watts) of individual pods, namespaces, and bare-metal nodes.</p>
+<h4>Key Aspects of Power Optimization:</h4>
+<ul>
+<li><p><strong>eBPF Instrumentation:</strong> Low-overhead tracing of process-level energy metrics without requiring specialized hardware power meters on every server.</p></li>
+<li><p><strong>Granular Attribution:</strong> Breaking down the total PDU (Power Distribution Unit) draw into specific workloads (e.g., "The Payment Gateway consumes 45 Watts on average").</p></li>
+<li><p><strong>Carbon Footprint Reporting:</strong> Translating energy consumption (kWh) into carbon emission metrics for corporate ESG reporting.</p></li>
+<li><p><strong>Energy-Aware Scheduling:</strong> Future-proofing the cluster to allow the scheduler to place non-critical batch jobs on nodes with the most power-efficient CPUs or during off-peak energy pricing hours.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Kepler Operator Status:</strong> Verify that the Kepler Operator is installed and the kepler-exporter daemonset is running on all bare-metal nodes.</p></li>
+<li><p><strong>Prometheus Integration:</strong> Confirm that Kepler metrics (e.g., kepler_container_joules_total) are being successfully scraped by the cluster monitoring stack.</p></li>
+<li><p><strong>Reporting Dashboards:</strong> Audit the Grafana dashboards to ensure power metrics are aggregated by namespace/business unit.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Power is a finite and expensive resource in physical data centers, and corporate sustainability is a Board-level mandate.</p>
+<ul>
+<li><p><strong>ESG Compliance:</strong> Provides the empirical data required for the bank's annual sustainability reports and regulatory carbon disclosures.</p></li>
+<li><p><strong>Code Efficiency:</strong> Exposes inefficiently written code (e.g., tight CPU loops) that burns excessive power, allowing developers to optimize their algorithms.</p></li>
+<li><p><strong>OpEx Reduction:</strong> Highlights which bare-metal nodes are running hot and inefficiently, guiding hardware refresh cycles to more power-efficient silicon architectures.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Operator audit and PromQL verification.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Kepler daemonset:</strong></p><pre class="cli"><code>oc get ds -n kepler-operator</code></pre></li>
+<li><p><strong>PromQL Test:</strong></p><pre class="cli"><code>In the OpenShift Console, execute the query sum by (namespace) (rate(kepler_container_joules_total[5m])) to see power draw by project.</code></pre></li>
+<li><p><strong>Verify eBPF health:</strong> Check the logs of a Kepler pod to ensure it successfully attached to the kernel tracepoints.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Kepler Dashboard Screenshot:</strong> A Grafana dashboard displaying the cluster's energy footprint over a 30-day period, broken down by banking application.</p></li>
+<li><p><strong>ESG Report Extract:</strong> A sample report showing how OpenShift metrics were translated into carbon tracking data.</p></li>
+<li><p><strong>Kepler Configuration YAML:</strong> Showing the machine learning models enabled for power estimation on the specific bare-metal CPU architecture.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Compliance Risk (ESG):</strong> Inability to accurately report IT infrastructure carbon emissions as required by emerging financial and environmental regulations.</p></li>
+<li><p><strong>Cost Risk:</strong> "Blindness" to energy waste, resulting in higher-than-necessary data center electricity and cooling bills.</p></li>
+<li><p><strong>Operational Risk:</strong> Difficulty in identifying aging hardware that consumes disproportionate amounts of power relative to its compute output.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management - Hardware Efficiency).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 1 (Inventory of Enterprise Assets).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> PM-3 (Information Security Resources).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+</article></div><footer class="footer">Prepared as a structured HTML view of Pillar 6: Cost Optimization for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>

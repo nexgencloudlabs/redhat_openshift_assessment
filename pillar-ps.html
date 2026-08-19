@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pillar 3: Performance &amp; Scalability | Red Hat OpenShift Assessment Framework</title>
+<style>
+:root { --bg:#0b1020; --panel:#ffffff; --ink:#172033; --muted:#637083; --line:#dce3ee; --redhat:#ee0000; --redhat-dark:#b00000; --code-bg:#0b1220; --shadow:0 12px 30px rgba(15,23,42,.08); --shadow-soft:0 8px 18px rgba(15,23,42,.05); }
+* { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:linear-gradient(135deg,#f4f7fb 0%,#edf2f9 44%,#ffffff 100%); line-height:1.6; } a { color:inherit; }
+.skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; } .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; background:#fff; padding:.75rem 1rem; border-radius:.5rem; z-index:999; }
+.page-shell { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:100vh; }
+.sidebar { position:sticky; top:0; height:100vh; overflow-y:auto; background:radial-gradient(circle at top left,rgba(238,0,0,.20),transparent 36%),linear-gradient(180deg,#0b1020,#151f36); color:#fff; padding:1.45rem 1.05rem; border-right:1px solid rgba(255,255,255,.08); }
+.brand { display:flex; gap:14px; align-items:center; margin-bottom:1.2rem; padding:1rem; border-radius:14px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10); box-shadow:0 10px 28px rgba(0,0,0,.28); } .brand-logo-wrap { width:148px; height:92px; border-radius:16px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 28px rgba(0,0,0,.30); display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:8px; } .brand-logo { width:100%; height:100%; object-fit:contain; object-position:center; display:block; } .brand-copy h1 { margin:0; font-size:1rem; line-height:1.35; letter-spacing:.01em; color:#fff; } .brand-copy p { margin:4px 0 0; color:#bbc8d9; font-size:.84rem; line-height:1.45; } .sidebar .label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:#98a8bf; margin:1.1rem .45rem .65rem; } .nav-link { display:block; padding:.62rem .72rem; border-radius:.85rem; text-decoration:none; color:#e9eef8; border:1px solid transparent; margin:.18rem 0; } .nav-link:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); } .nav-link span { display:block; font-weight:800; color:#fff; font-size:.85rem; } .nav-link small { display:block; font-size:.73rem; color:#bbc8d9; line-height:1.35; margin-top:.12rem; } .nav-link.is-primary { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); }
+.hero { color:#fff; padding:2.75rem clamp(1.2rem,4vw,4rem) 2.15rem; background:radial-gradient(circle at 18% 12%,rgba(22,163,168,.35),transparent 32%),radial-gradient(circle at 78% 0%,rgba(238,0,0,.28),transparent 30%),linear-gradient(135deg,#101827,#1a2540 58%,#0b1020); } .eyebrow { display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border:1px solid rgba(255,255,255,.18); border-radius:999px; color:#dfe8f7; font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; background:rgba(255,255,255,.06); } .hero h2 { font-size:clamp(2rem,4vw,3.6rem); line-height:1.05; max-width:1000px; margin:1rem 0 .8rem; } .hero p { max-width:1060px; color:#dbe6f5; font-size:1rem; margin:0; }
+.content-wrap { padding:1.6rem clamp(1.1rem,4vw,4rem) 4rem; } .notice { background:#fff; border:1px solid var(--line); border-left:6px solid var(--redhat); border-radius:1rem; padding:1rem 1.15rem; box-shadow:var(--shadow-soft); margin-bottom:1.25rem; } .intro-card { background:#fff; border:1px solid var(--line); border-radius:1rem; padding:1.05rem 1.2rem; box-shadow:var(--shadow-soft); margin:0 0 1.35rem; } .intro-card p { margin:.2rem 0; color:#0f172a; line-height:1.7; font-size:.98rem; }
+
+.summary-panel { background:#fff; border:1px solid var(--line); border-radius:1rem; box-shadow:var(--shadow-soft); margin:0 0 1.45rem; overflow:hidden; }
+.summary-panel-header { padding:1rem 1.15rem; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); }
+.summary-panel-header h2 { margin:0; font-size:1.25rem; color:#0f172a; }
+.summary-panel-header p { margin:.35rem 0 0; color:#64748b; font-size:.92rem; }
+.summary-metrics { display:grid; grid-template-columns:repeat(2,minmax(180px,1fr)); gap:.8rem; padding:1rem 1.15rem .4rem; max-width:650px; }
+.summary-metric { border:1px solid #dbe4f0; border-radius:.9rem; padding:.85rem .95rem; background:linear-gradient(180deg,#ffffff,#f9fbff); }
+.summary-metric strong { display:block; font-size:1.7rem; line-height:1; color:#0f172a; }
+.summary-metric span { display:block; margin-top:.35rem; color:#475569; font-size:.85rem; font-weight:700; }
+.category-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; padding:.75rem 1.15rem 1.15rem; }
+.category-card { border:1px solid #dbe4f0; border-radius:.9rem; background:#fff; padding:.9rem; }
+.category-top { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.55rem; }
+.category-top h3 { margin:0; font-size:.95rem; color:#0f172a; }
+.count-badge { display:inline-flex; min-width:2.1rem; height:2.1rem; align-items:center; justify-content:center; border-radius:999px; font-weight:800; background:#e9f0ff; color:#1d4ed8; border:1px solid #c8d8ff; }
+.control-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+.control-tags a { text-decoration:none; font-size:.74rem; font-weight:800; color:#b00000; background:#fff1f1; border:1px solid #ffd2d2; border-radius:999px; padding:.18rem .45rem; }
+.control-tags a:hover { background:#ffe2e2; }
+@media (max-width: 1120px) { .summary-metrics { grid-template-columns:repeat(2,minmax(150px,1fr)); } .category-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 680px) { .summary-metrics, .category-grid { grid-template-columns:1fr; } }
+
+.index-section { margin-bottom:1.5rem; } .index-section h2 { margin:0 0 .8rem; font-size:1.3rem; color:#0f172a; } .control-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.75rem; width:100%; } .control-chip { display:flex; gap:.75rem; align-items:flex-start; width:100%; min-height:80px; padding:.8rem .9rem; border:1px solid var(--line); border-radius:1rem; background:#fff; text-decoration:none; box-shadow:var(--shadow-soft); } .control-chip:hover { transform:translateY(-1px); border-color:rgba(238,0,0,.35); box-shadow:var(--shadow); } .control-chip strong { flex:0 0 auto; color:var(--redhat-dark); font-size:.86rem; } .control-chip span { color:#334155; font-size:.88rem; line-height:1.35; }
+.article { max-width:none; width:100%; } .control-card { width:100%; background:var(--panel); border:1px solid var(--line); border-radius:1.1rem; box-shadow:var(--shadow-soft); margin:1rem 0 1.25rem; padding:.9rem; scroll-margin-top:1rem; } .control-head { width:100%; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; border:1px solid var(--line); border-radius:.95rem; padding:.9rem 1rem; background:linear-gradient(180deg,#fbfdff,#f7faff); } .control-title-wrap h2 { margin:.32rem 0 0; font-size:1.34rem; line-height:1.25; color:#0f172a; } .control-kicker-row { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; } .control-code { display:inline-flex; align-items:center; justify-content:center; padding:.22rem .55rem; border-radius:999px; background:#e9f0ff; color:#1d4ed8; font-weight:800; font-size:.75rem; border:1px solid #c8d8ff; } .subdomain-pill { display:inline-flex; align-items:center; padding:.24rem .58rem; border-radius:999px; background:#eef2f7; color:#334155; font-size:.75rem; font-weight:700; border:1px solid #d6deea; }
+.risk-pill { display:inline-flex; align-items:center; justify-content:center; padding:.26rem .62rem; border-radius:999px; font-size:.73rem; font-weight:800; border:1px solid transparent; white-space:nowrap; } .risk-pill.critical { background:#fee2e2; color:#7f1d1d; border-color:#fca5a5; } .risk-pill.high { background:#fee2e2; color:#b91c1c; border-color:#fecaca; } .risk-pill.moderate { background:#fef3c7; color:#b45309; border-color:#fde68a; } .risk-pill.low { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+.field-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.85rem; margin-top:.9rem; width:100%; align-items:start; } .field-box { border:1px solid var(--line); border-radius:.85rem; background:#fff; overflow:hidden; min-width:0; } .field-box h3 { margin:0; padding:.72rem .86rem; font-size:.76rem; line-height:1.2; text-transform:uppercase; letter-spacing:.04em; color:#1f3b5d; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); } .field-body { padding:.85rem .95rem; font-size:.92rem; color:#172033; } .field-body > :first-child { margin-top:0; } .field-body > :last-child { margin-bottom:0; } .field-box-full { grid-column:1/-1; } .risk-box.critical { border-left:4px solid #b91c1c; background:#fff5f5; } .risk-box.high { border-left:4px solid #ef4444; background:#fff8f8; } .risk-box.moderate { border-left:4px solid #f59e0b; background:#fffdf5; } .risk-box.low { border-left:4px solid #22c55e; background:#f7fff8; }
+.field-body ul,.field-body ol { margin:.3rem 0 .6rem 1.1rem; padding:0; } .field-body li { margin:.35rem 0; } .field-body p { margin:.45rem 0; } .field-body strong { color:#0f172a; } .field-body code { background:#eef2f7; color:#9f1239; padding:.12rem .32rem; border-radius:.35rem; font-size:.9em; }
+.field-body pre, pre.cli { background:#0b1220; color:#f8fafc; border-radius:.75rem; padding:1rem 1.1rem; overflow:auto; border:1px solid #111827; white-space:pre-wrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); margin:.75rem 0; } .field-body pre code, pre.cli code { background:transparent!important; color:#f8fafc!important; padding:0; font-family:Consolas,'Courier New',monospace; font-size:.88rem; font-weight:700; line-height:1.45; } .verification-steps li pre.cli { margin:.35rem 0 .2rem; }
+.control-links { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem .3rem .15rem; } .control-links a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:.85rem; } .control-links a:hover { text-decoration:underline; } .empty-note { color:var(--muted); font-style:italic; } .footer { padding:1.4rem clamp(1.1rem,4vw,4rem); color:#64748b; border-top:1px solid var(--line); background:#fff; }
+@media (max-width:1120px) { .field-grid { grid-template-columns:1fr; } .field-box-full { grid-column:auto; } } @media (max-width:980px) { .page-shell { grid-template-columns:1fr; } .sidebar { position:relative; height:auto; max-height:420px; } .control-head { flex-direction:column; } } @media print { .sidebar,.control-grid,.control-links,.notice { display:none!important; } .page-shell { display:block; } .hero { color:#111; background:#fff; padding:1rem 0; } .content-wrap { padding:0; } .control-card { box-shadow:none; break-inside:avoid; } }
+
+.cross-control-link { color:#1d4ed8; text-decoration:none; font-weight:700; border-bottom:1px dotted rgba(29,78,216,.45); }
+.cross-control-link:hover { color:#b00000; border-bottom-color:#b00000; }
+</style>
+</head>
+<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label" data-cross-pillar-nav="true">Assessment pillars</div><nav data-cross-pillar-nav="true"><a class="nav-link" href="pillar-ar.html"><span>Pillar 1: Availability &amp; Resilience</span><small>Open AR pillar</small></a><a class="nav-link" href="pillar-rc.html"><span>Pillar 2: Recoverability / Disaster Recovery</span><small>Open RC pillar</small></a><a aria-current="page" class="nav-link is-primary" href="pillar-ps.html"><span>Pillar 3: Performance &amp; Scalability</span><small>PS controls — current page</small></a><a class="nav-link" href="pillar-sc.html"><span>Pillar 4: Security &amp; Compliance</span><small>Open SC pillar</small></a><a class="nav-link" href="pillar-mo.html"><span>Pillar 5: Monitoring &amp; Observability</span><small>Open MO pillar</small></a><a class="nav-link" href="pillar-co.html"><span>Pillar 6: Cost Optimization</span><small>Open CO pillar</small></a></nav><div class="label">Pillar 3 controls</div><nav><a class="nav-link" href="#control-id-ps-001"><span>PS-001</span><small>CPU Manager (Static Policy)</small></a>
+<a class="nav-link" href="#control-id-ps-002"><span>PS-002</span><small>Topology Manager (NUMA Alignment)</small></a>
+<a class="nav-link" href="#control-id-ps-003"><span>PS-003</span><small>SR-IOV for High-Performance Networking</small></a>
+<a class="nav-link" href="#control-id-ps-004"><span>PS-004</span><small>HugePages Allocation</small></a>
+<a class="nav-link" href="#control-id-ps-005"><span>PS-005</span><small>Node Feature Discovery (NFD) and Specialized Hardware</small></a>
+<a class="nav-link" href="#control-id-ps-006"><span>PS-006</span><small>Real-Time Kernel for Latency-Sensitive Workloads</small></a>
+<a class="nav-link" href="#control-id-ps-007"><span>PS-007</span><small>Vertical &amp; Horizontal Pod Autoscaling (VPA/HPA)</small></a>
+<a class="nav-link" href="#control-id-ps-008"><span>PS-008</span><small>I/O Priority and Bandwidth Management (cgroup v2)</small></a></nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 3</span><h2>Pillar 3: Performance &amp; Scalability</h2><p>Architecture assessment page for validating bare-metal compute optimization, NUMA alignment, high-performance networking, memory tuning, hardware-aware scheduling, real-time processing, autoscaling, and storage I/O controls.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Performance and Scalability define the platform's capability to deliver predictable transaction latency, efficient resource utilization, and elastic capacity under changing workload demand. For OpenShift environments supporting containerized workloads and OpenShift Virtualization on bare-metal infrastructure, these controls validate that CPU, memory, NUMA topology, network acceleration, specialized hardware, autoscaling, and storage I/O are configured through tested, policy-driven, and evidence-backed performance practices.</p>
+</div><section aria-labelledby="control-summary" class="summary-panel">
+<div class="summary-panel-header">
+<h2 id="control-summary">Summary of Controls</h2>
+<p>Pillar 3 contains 8 assessment controls grouped by performance and scalability domain to support deterministic compute behavior, network acceleration, memory optimization, hardware-aware scheduling, workload elasticity, and storage performance isolation.</p>
+</div>
+<div class="summary-metrics">
+<div class="summary-metric"><strong>8</strong><span>Total controls</span></div>
+<div class="summary-metric"><strong>6</strong><span>Performance &amp; Scalability domains</span></div>
+</div>
+<div class="category-grid">
+<div class="category-card"><div class="category-top"><h3>Compute Optimization</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-ps-001">PS-001</a><a href="#control-id-ps-002">PS-002</a><a href="#control-id-ps-006">PS-006</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Network Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-003">PS-003</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Memory Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-004">PS-004</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Hardware Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-005">PS-005</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Scalability &amp; Resource Elasticity</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-007">PS-007</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Storage Optimization</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ps-008">PS-008</a></div></div>
+</div>
+</section><section aria-labelledby="controls-index" class="index-section"><h2 id="controls-index">Assessment Controls Index</h2><div class="control-grid"><a class="control-chip" href="#control-id-ps-001"><strong>PS-001</strong><span>CPU Manager (Static Policy)</span></a>
+<a class="control-chip" href="#control-id-ps-002"><strong>PS-002</strong><span>Topology Manager (NUMA Alignment)</span></a>
+<a class="control-chip" href="#control-id-ps-003"><strong>PS-003</strong><span>SR-IOV for High-Performance Networking</span></a>
+<a class="control-chip" href="#control-id-ps-004"><strong>PS-004</strong><span>HugePages Allocation</span></a>
+<a class="control-chip" href="#control-id-ps-005"><strong>PS-005</strong><span>Node Feature Discovery (NFD) and Specialized Hardware</span></a>
+<a class="control-chip" href="#control-id-ps-006"><strong>PS-006</strong><span>Real-Time Kernel for Latency-Sensitive Workloads</span></a>
+<a class="control-chip" href="#control-id-ps-007"><strong>PS-007</strong><span>Vertical &amp; Horizontal Pod Autoscaling (VPA/HPA)</span></a>
+<a class="control-chip" href="#control-id-ps-008"><strong>PS-008</strong><span>I/O Priority and Bandwidth Management (cgroup v2)</span></a></div></section><article class="article">
+<section class="control-card" id="control-id-ps-001">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-001</span><span class="subdomain-pill">Compute Optimization</span></div>
+<h2>CPU Manager (Static Policy)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>By default, the Kubernetes scheduler and Linux kernel share CPU resources across all running pods, leading to frequent context switching. The CPU Manager with a static policy allows for the allocation of exclusive, dedicated CPU cores to specific high-performance containers.</p>
+<h4>Key Aspects of CPU Manager:</h4>
+<ul>
+<li><p><strong>Core Pinning:</strong> Ensures that a container’s threads are pinned to specific physical CPU cores (pCPUs).</p></li>
+<li><p><strong>Isolation:</strong> Prevents other pods from using the cores assigned to a "guaranteed" pod, eliminating resource contention.</p></li>
+<li><p><strong>Static Policy:</strong> Once a pod is assigned cores, they are reserved for the duration of the pod's lifecycle.</p></li>
+<li><p><strong>Guaranteed QoS:</strong> Only pods with specific CPU requests and limits that are equal (integers) will be granted exclusive cores.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Kubelet Configuration:</strong> Verify the cpuManagerPolicy is set to static in the KubeletConfig resource.</p></li>
+<li><p><strong>QoS Class:</strong> Confirm that critical application pods are assigned the Guaranteed Quality of Service (QoS) class (CPU request = CPU limit).</p></li>
+<li><p><strong>Node Status:</strong> Verify that nodes have recognized the static policy and are reporting "pinned" cores.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment, latency-sensitive applications (like payment gateways or high-speed messaging) cannot tolerate the "jitter" caused by CPU context switching.</p>
+<ul>
+<li><p><strong>Predictable Latency:</strong> Reducing context switches significantly improves the p99 latency for transaction processing.</p></li>
+<li><p><strong>L1/L2 Cache Efficiency:</strong> Pinning a process to a core ensures it can fully utilize the local CPU cache, preventing "cache thrashing" from other applications.</p></li>
+<li><p><strong>Bare-Metal Performance:</strong> Directly leverages the raw power of the physical CPU without the overhead of a hypervisor.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Kubelet configuration audit and pod-level verification.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Kubelet config:</strong></p><pre class="cli"><code>oc get kubeletconfig -o yaml | grep cpuManagerPolicy</code></pre></li>
+<li><p><strong>Check pod QoS:</strong></p><pre class="cli"><code>oc get pod &lt;pod-name&gt; -o jsonpath='{.status.qosClass}' (Must be Guaranteed).</code></pre></li>
+<li><p><strong>Verify pinning on node:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /var/lib/kubelet/cpu_manager_state</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Kubelet Config YAML:</strong> Export showing the static policy definition.</p></li>
+<li><p><strong>Pod Manifest Snippet:</strong> Showing identical CPU requests and limits.</p></li>
+<li><p><strong>CPU Manager State File:</strong> A snippet from the master/worker node proving core reservation is active.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Performance Jitter):</strong> Without core pinning, high-transaction apps may experience random latency spikes, leading to timed-out banking sessions.</p></li>
+<li><p><strong>Operational Risk:</strong> Performance becomes unpredictable during peak hours as different pods fight for the same CPU cycles.</p></li>
+<li><p><strong>Efficiency Risk:</strong> Sub-optimal use of expensive bare-metal high-frequency processors.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Performance Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-002">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-002</span><span class="subdomain-pill">Compute Optimization</span></div>
+<h2>Topology Manager (NUMA Alignment)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Modern multi-socket bare-metal servers use Non-Uniform Memory Access (NUMA). The Topology Manager coordinates the alignment of CPU, Memory, and PCI devices (like NICs or GPUs) so they all reside on the same NUMA node (the same physical CPU socket).</p>
+<h4>Key Aspects of Topology Manager:</h4>
+<ul>
+<li><p><strong>NUMA Affinity:</strong> Ensures a pod's CPU and Memory are allocated from the same socket to avoid the "cross-socket" latency penalty.</p></li>
+<li><p><strong>Device Alignment:</strong> If a pod uses an SR-IOV NIC (<a class="cross-control-link" href="pillar-ps.html#control-id-ps-003" title="Open PS-003">PS-003</a>), the Topology Manager ensures the CPU cores assigned to that pod are the ones directly connected to that NIC.</p></li>
+<li><p><strong>Scope:</strong> Operates at the container or pod level.</p></li>
+<li><p><strong>Policy Types:</strong> single-numa-node (strict) or best-effort.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Kubelet Config:</strong> Verify topologyManagerPolicy is set to single-numa-node.</p></li>
+<li><p><strong>Node Hardware:</strong> Confirm nodes are multi-socket or have multi-NUMA configurations.</p></li>
+<li><p><strong>Pod Alignment:</strong> Audit high-performance pods to see if they are successfully aligned to a single NUMA zone.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Data traveling across the QPI/UPI link between sockets can double the latency.</p>
+<ul>
+<li><p><strong>Maximum Throughput:</strong> Critical for 25Gbps/100Gbps networking and high-speed local AI processing.</p></li>
+<li><p><strong>Eliminating Bottlenecks:</strong> Prevents "memory starvation" that occurs when a CPU is waiting for data from a remote NUMA node.</p></li>
+<li><p><strong>Optimization for Bare Metal:</strong> Essential for clusters running heavy database workloads or virtualization.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Kubelet and Node status audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Topology policy:</strong></p><pre class="cli"><code>oc get kubeletconfig -o yaml | grep topologyManagerPolicy</code></pre></li>
+<li><p><strong>Check NUMA nodes:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host lscpu | grep NUMA</code></pre></li>
+<li><p><strong>Verify alignment in logs:</strong></p><pre class="cli"><code>Check journalctl -u kubelet for Topology Manager admission successes/failures.</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>KubeletConfig YAML:</strong> Showing the single-numa-node policy.</p></li>
+<li><p><strong>Node lscpu Output:</strong> Proving the hardware has multiple NUMA nodes to manage.</p></li>
+<li><p><strong>Alignment Log:</strong> Snippet from the Kubelet log showing a pod successfully admitted with NUMA alignment.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Latency Penalty):</strong> Misaligned pods will suffer from sub-optimal performance, adding 10–30% latency to every memory operation.</p></li>
+<li><p><strong>Performance Risk:</strong> High-speed network interfaces (SR-IOV) will not reach their rated speeds if CPU cores are on a different NUMA node than the NIC.</p></li>
+<li><p><strong>Efficiency Risk:</strong> Inconsistent application performance that is difficult for developers to troubleshoot.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Performance Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-003">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-003</span><span class="subdomain-pill">Network Optimization</span></div>
+<h2>SR-IOV for High-Performance Networking</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>SR-IOV (Single Root I/O Virtualization) allows a single physical network card (NIC) to appear as multiple virtual functions (VFs). This allows pods to bypass the standard OpenShift software switch (OVS) and connect directly to the hardware for near-line-speed performance.</p>
+<h4>Key Aspects of SR-IOV:</h4>
+<ul>
+<li><p><strong>Kernel Bypass:</strong> Data packets go directly from the physical NIC to the container's memory, bypassing the host's Linux kernel.</p></li>
+<li><p><strong>Virtual Functions (VFs):</strong> Each pod is assigned a dedicated "slice" of the NIC hardware.</p></li>
+<li><p><strong>Deterministic Latency:</strong> Eliminates the CPU overhead and jitter associated with software-based packet processing.</p></li>
+<li><p><strong>Multus Integration:</strong> Often used as a secondary network (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-023" title="Open AR-023">AR-023</a>) for high-speed database replication or storage traffic.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>SR-IOV Operator:</strong> Confirm the SR-IOV Network Operator is installed and healthy.</p></li>
+<li><p><strong>Network Policy:</strong> Verify SriovNetworkNodePolicy exists for the relevant worker nodes.</p></li>
+<li><p><strong>VFs Count:</strong> Confirm that sufficient Virtual Functions are created to accommodate the number of pods requiring high-speed networking.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Standard software-defined networking (SDN) can consume up to 20% of a node's CPU just for packet processing under high load.</p>
+<ul>
+<li><p><strong>Throughput for AI/Data:</strong> Essential for local AI workloads and high-performance Proxmox/OpenShift clusters.</p></li>
+<li><p><strong>Reduced CPU Overhead:</strong> Frees up CPU cycles for banking logic rather than network routing.</p></li>
+<li><p><strong>Low Latency:</strong> Critical for time-sensitive financial transactions where microsecond delays matter.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Operator and Network resource audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check operator status:</strong></p><pre class="cli"><code>oc get pods -n openshift-sriov-network-operator</code></pre></li>
+<li><p><strong>Check node policy:</strong></p><pre class="cli"><code>oc get sriovnetworknodepolicies -n openshift-sriov-network-operator</code></pre></li>
+<li><p><strong>Verify VF creation:</strong></p><pre class="cli"><code>oc get sriovnetworknodestates -n openshift-sriov-network-operator -o yaml</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>SR-IOV Node State YAML:</strong> Export showing the physical NICs and their available VFs.</p></li>
+<li><p><strong>Pod Interface List:</strong> oc exec &lt;pod&gt; -- ip addr showing an interface with a high-speed driver (e.g., iavf or mlx5_core).</p></li>
+<li><p><strong>Performance Benchmark:</strong> Results from an iperf test showing line-rate (25Gbps/50Gbps) performance.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Network Bottlenecks):</strong> Without SR-IOV, high-traffic apps will hit the "CPU Wall" of the software switch, causing dropped packets and high latency.</p></li>
+<li><p><strong>Performance Risk:</strong> Inability to fully utilize 25GbE+ hardware investments.</p></li>
+<li><p><strong>Operational Risk:</strong> Resource contention between networking and application logic on the same CPU cores.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.3 (Resilience); Section 10.5 (Performance).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 12 (Network Infrastructure Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-004">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-004</span><span class="subdomain-pill">Memory Optimization</span></div>
+<h2>HugePages Allocation</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>By default, Linux uses a 4KB memory page size. For memory-intensive applications (like databases or Java-based banking engines), managing millions of 4KB pages creates significant overhead in the Translation Lookaside Buffer (TLB). HugePages increases the page size to 2MB or 1GB, drastically reducing the number of page table entries.</p>
+<h4>Key Aspects of HugePages:</h4>
+<ul>
+<li><p><strong>Pre-allocation:</strong> HugePages must be pre-allocated at the node level via the MachineConfig.</p></li>
+<li><p><strong>Non-swappable:</strong> HugePages are locked in physical RAM and cannot be swapped to disk, ensuring consistent performance.</p></li>
+<li><p><strong>Pod Requests:</strong> Applications must explicitly request HugePages in their container resource specifications.</p></li>
+<li><p><strong>Efficiency:</strong> Reduces TLB misses, which is a major source of hidden latency in large-scale applications.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Node Configuration:</strong> Verify that HugePages are allocated in the MachineConfig or KubeletConfig.</p></li>
+<li><p><strong>Pod Requests:</strong> Audit application manifests for hugepages-2Mi or hugepages-1Gi resource requests.</p></li>
+<li><p><strong>Memory Availability:</strong> Confirm that HugePages haven't consumed so much RAM that the node's OS is starved.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Large applications like Oracle, SQL Server, or large JBoss instances perform significantly better with HugePages.</p>
+<ul>
+<li><p><strong>Reduced Memory Management Overhead:</strong> Decreases the CPU cycles the kernel spends managing memory addresses.</p></li>
+<li><p><strong>Consistent Response Times:</strong> Prevents the latency spikes associated with page faults and memory swapping.</p></li>
+<li><p><strong>Bare-Metal Advantage:</strong> Provides direct control over memory architecture that is often obscured in virtualized environments.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node and Pod resource audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check HugePage allocation:</strong></p><pre class="cli"><code>oc describe node &lt;node-name&gt; | grep -i hugepages</code></pre></li>
+<li><p><strong>Check pod request:</strong></p><pre class="cli"><code>oc get pod &lt;pod&gt; -o yaml | grep hugepages</code></pre></li>
+<li><p><strong>Verify on host:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /proc/meminfo | grep Huge</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>MachineConfig YAML:</strong> Showing the kernel arguments used to pre-allocate HugePages.</p></li>
+<li><p><strong>Pod Resource YAML:</strong> Snippet showing the limits and requests for HugePages.</p></li>
+<li><p><strong>Meminfo Report:</strong> Output from a production node proving HugePages are active and being used by the application.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Performance Sluggishness):</strong> Memory-heavy apps will run slower due to TLB misses, impacting transaction throughput.</p></li>
+<li><p><strong>Efficiency Risk:</strong> Higher CPU usage by the kernel to manage memory, leaving less room for application business logic.</p></li>
+<li><p><strong>Operational Risk:</strong> If HugePages are requested but not pre-allocated, pods will fail to schedule with an OutOfhugepages error.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Performance Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-005">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-005</span><span class="subdomain-pill">Hardware Optimization</span></div>
+<h2>Node Feature Discovery (NFD) and Specialized Hardware</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Node Feature Discovery (NFD) is an operator that detects specialized hardware capabilities on bare-metal nodes (e.g., AVX instructions, GPUs, FPGA, or specific NIC drivers) and exposes them as labels on the Kubernetes node objects.</p>
+<h4>Key Aspects of NFD:</h4>
+<ul>
+<li><p><strong>Automated Labeling:</strong> Scans the physical hardware and adds labels like feature.node.kubernetes.io/cpu-cpuid.AVX512F=true.</p></li>
+<li><p><strong>Targeted Scheduling:</strong> Allows developers to use nodeSelector or affinity (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-015" title="Open AR-015">AR-015</a>) to ensure their app runs on the specific hardware it was optimized for.</p></li>
+<li><p><strong>GPU Integration:</strong> Essential for AI/ML workloads where pods must land on nodes with specific NVIDIA or AMD GPU hardware.</p></li>
+<li><p><strong>Precision:</strong> Ensures that software compiled for specific CPU instructions (like AES-NI for encryption) is never scheduled on a node that doesn't support them.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>NFD Operator:</strong> Verify the Node Feature Discovery Operator is installed and running.</p></li>
+<li><p><strong>Node Labels:</strong> Audit node objects to see if they are populated with feature.node.kubernetes.io labels.</p></li>
+<li><p><strong>Scheduling Logic:</strong> Check critical application manifests for nodeSelector requirements that match NFD labels.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In 2026, heterogeneous hardware is common in high-performance clusters.</p>
+<ul>
+<li><p><strong>Hardware Acceleration:</strong> Ensures that encryption-heavy or AI-driven banking tasks are hardware-accelerated by landing on nodes with the correct chipsets.</p></li>
+<li><p><strong>Operational Intelligence:</strong> Provides the platform team with a clear inventory of what hardware capabilities are available across the data center.</p></li>
+<li><p><strong>Security Performance:</strong> Automatically routes encryption tasks to nodes with AES-NI instructions, improving speed and security.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node label and Operator audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check NFD pods:</strong></p><pre class="cli"><code>oc get pods -n openshift-nfd</code></pre></li>
+<li><p><strong>Review node labels:</strong></p><pre class="cli"><code>oc get nodes --show-labels | grep feature.node</code></pre></li>
+<li><p><strong>Verify application affinity:</strong></p><pre class="cli"><code>oc describe deployment &lt;app-name&gt; (Check for node selectors).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>NFD Resource YAML:</strong> Showing the configuration for the feature discovery.</p></li>
+<li><p><strong>Node Label Export:</strong> A list of nodes showing the detected hardware features (e.g., AVX, SR-IOV, GPU).</p></li>
+<li><p><strong>Deployment YAML:</strong> Snippet showing a pod correctly targeting a specific hardware feature.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Sub-optimal Placement):</strong> Applications may land on hardware that doesn't support their optimizations, leading to slow performance or crashes.</p></li>
+<li><p><strong>Operational Risk:</strong> Manually labeling nodes for hardware features is error-prone and doesn't scale; NFD automates this and removes human error.</p></li>
+<li><p><strong>Performance Risk:</strong> Failure to utilize available hardware accelerators (like encryption or AI chips) leads to inefficient software processing.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Performance Management); Section 10.1 (Operations Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-006">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-006</span><span class="subdomain-pill">Compute Optimization</span></div>
+<h2>Real-Time Kernel for Latency-Sensitive Workloads</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For workloads that require deterministic response times—such as high-frequency trading engines or real-time payment validation—standard Linux kernel scheduling can introduce unpredictable "micro-latencies." This control involves deploying worker nodes with the Red Hat Enterprise Linux (RHEL) Real-Time Kernel.</p>
+<h4>Key Aspects of Real-Time Kernel:</h4>
+<ul>
+<li><p><strong>Preemptible Kernel:</strong> Allows the kernel to be interrupted by high-priority tasks even when executing system calls.</p></li>
+<li><p><strong>Deterministic Scheduling:</strong> Replaces the "Completely Fair Scheduler" (CFS) with a scheduler that prioritizes task completion timing over overall throughput.</p></li>
+<li><p><strong>Reduced Jitter:</strong> Minimizes the variance in execution time, ensuring that a task taking 1ms usually takes 1ms every time.</p></li>
+<li><p><strong>MachineConfig Deployment:</strong> Applied via the PerformanceProfile where the realTimeKernel: enabled: true flag is set.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Performance Profile:</strong> Verify that a PerformanceProfile resource is active and targeting the specific high-performance worker nodes.</p></li>
+<li><p><strong>Kernel Version:</strong> Check the running kernel on the target nodes to ensure it contains the rt suffix (e.g., 5.14.0-xxx.rt.el9).</p></li>
+<li><p><strong>Node Labels:</strong> Confirm that real-time nodes are correctly labeled to prevent non-RT workloads from consuming their specialized resources.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Standard kernels optimize for "fairness," which can cause a critical banking transaction to wait behind a background log-rotation task.</p>
+<ul>
+<li><p><strong>Hard Real-Time Requirements:</strong> Essential for applications where missing a processing window (e.g., a sub-millisecond timeout) results in a transaction failure.</p></li>
+<li><p><strong>Eliminating Spikes:</strong> Reduces the "long tail" of latency (p99.9), ensuring consistent performance regardless of system background load.</p></li>
+<li><p><strong>Bare-Metal Synergy:</strong> The real-time kernel is most effective on bare metal where it has direct control over physical hardware interrupts without hypervisor interference.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node-level kernel audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Performance Profile:</strong></p><pre class="cli"><code>oc get performanceprofiles</code></pre></li>
+<li><p><strong>Check Kernel status:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host uname -a (Look for PREEMPT_RT).</code></pre></li>
+<li><p><strong>Verify RT scheduling:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /sys/kernel/realtime (Should return 1).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>PerformanceProfile YAML:</strong> Export showing the realTimeKernel activation.</p></li>
+<li><p><strong>Uname Output:</strong> Proof of the RT kernel string from a production node.</p></li>
+<li><p><strong>Latency Benchmark:</strong> A report showing reduced p99.9 jitter compared to standard worker nodes.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Transaction Timeouts):</strong> Critical real-time tasks may be delayed by standard kernel house-keeping, leading to failed banking operations.</p></li>
+<li><p><strong>Operational Risk:</strong> Real-time kernels have lower overall throughput; applying them to nodes running "batch" or "web" workloads may actually decrease their performance.</p></li>
+<li><p><strong>Compliance Risk:</strong> Inability to meet strict RTOs for high-speed transaction processing as specified in the service design.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Performance Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-007">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-007</span><span class="subdomain-pill">Scalability &amp; Resource Elasticity</span></div>
+<h2>Vertical &amp; Horizontal Pod Autoscaling (VPA/HPA)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Autoscaling ensures that applications can handle sudden bursts in banking traffic without manual intervention. Horizontal Pod Autoscaling (HPA) scales the number of instances, while Vertical Pod Autoscaling (VPA) adjusts the CPU and Memory requests of existing instances.</p>
+<h4>Key Aspects of Autoscaling:</h4>
+<ul>
+<li><p><strong>HPA (Scale Out):</strong> Monitors metrics like CPU utilization or custom transaction-per-second (TPS) counts to add more replicas (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-014" title="Open AR-014">AR-014</a>) when load increases.</p></li>
+<li><p><strong>VPA (Scale Up):</strong> Automatically recommends and applies the "Right-Size" for container resources based on historical usage patterns, preventing "OOM" (Out of Memory) kills.</p></li>
+<li><p><strong>Metrics Server Integration:</strong> Both depend on the metrics-server or Prometheus to provide real-time resource data.</p></li>
+<li><p><strong>Cooldown Periods:</strong> Ensuring the cluster doesn't "thrash" by scaling up and down too rapidly.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>HPA/VPA Presence:</strong> Verify that all critical banking APIs have an HPA or VPA resource defined.</p></li>
+<li><p><strong>Threshold Settings:</strong> Confirm that the target utilization (e.g., 70% CPU) is high enough to be efficient but low enough to allow for burst room.</p></li>
+<li><p><strong>Limit Alignment:</strong> For VPA, ensure it does not exceed the physical capacity of the bare-metal nodes.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Banking traffic is rarely flat; it spikes during payday, holiday seasons, or marketing campaigns.</p>
+<ul>
+<li><p><strong>Dynamic Response:</strong> Ensures that customer-facing portals remain responsive during peak load by automatically deploying more capacity.</p></li>
+<li><p><strong>Resource Efficiency:</strong> Automatically scales down during off-peak hours (e.g., 2 AM), freeing up bare-metal resources for batch processing or backups.</p></li>
+<li><p><strong>Cost Management:</strong> Prevents over-provisioning of expensive RAM and CPU by only using what the application actually needs.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Resource check and scaling test.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>List HPAs:</strong></p><pre class="cli"><code>oc get hpa -A</code></pre></li>
+<li><p><strong>Check HPA status:</strong></p><pre class="cli"><code>oc describe hpa &lt;name&gt; (Look for AbleToScale and ScalingActive).</code></pre></li>
+<li><p><strong>Review VPA recommendations:</strong></p><pre class="cli"><code>oc get vpa -n &lt;namespace&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>HPA Resource YAML:</strong> Showing the min/max replicas and target metrics.</p></li>
+<li><p><strong>Prometheus Graph:</strong> A screenshot showing pod counts increasing in direct correlation with CPU/Traffic spikes.</p></li>
+<li><p><strong>VPA Output:</strong> Showing the "Recommended" vs "Actual" resource usage.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Capacity Exhaustion):</strong> Without autoscaling, a sudden spike in users will crash the application, leading to a service outage.</p></li>
+<li><p><strong>Operational Risk:</strong> Manual scaling is too slow to react to real-time traffic spikes, leading to "firefighting" by the operations team.</p></li>
+<li><p><strong>Performance Risk:</strong> If HPA is set too aggressively without enough node capacity, it can trigger "Node Pressure," impacting other apps.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Performance Management); Section 10.3 (Resilience).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ps-008">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">PS-008</span><span class="subdomain-pill">Storage Optimization</span></div>
+<h2>I/O Priority and Bandwidth Management (cgroup v2)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>On bare-metal nodes with shared storage (ODF), different applications often compete for disk I/O. Using cgroup v2 (the default in OpenShift 4.x), this control allows for the enforcement of I/O limits and weights to ensure that high-priority database containers are not "starved" by low-priority logging or backup tasks.</p>
+<h4>Key Aspects of I/O Management:</h4>
+<ul>
+<li><p><strong>I/O Weight:</strong> Assigning a relative priority (e.g., 1–1000) to pods. High-priority pods get a larger "slice" of the disk's bandwidth during contention.</p></li>
+<li><p><strong>IOPS/Bandwidth Limits:</strong> Hard caps on the number of Read/Write operations or Megabytes per second a specific pod can consume.</p></li>
+<li><p><strong>cgroup v2 Hierarchy:</strong> Provides a unified controller for CPU, Memory, and I/O, allowing for more granular resource "fairness."</p></li>
+<li><p><strong>Storage Class Interaction:</strong> Can be integrated with specific ODF profiles to prioritize different types of application data.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Cgroup Version:</strong> Confirm the nodes are running cgroup v2 (stat -fc %T /sys/fs/cgroup returns cgroup2fs).</p></li>
+<li><p><strong>Resource Stanza:</strong> Review pod manifests for io.weight or specific annotations used by the storage provisioner to limit bandwidth.</p></li>
+<li><p><strong>Contention Monitoring:</strong> Check for I/O Wait metrics in Prometheus to identify unmanaged contention.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>"Noisy Neighbor" syndrome on a disk is a major cause of database latency.</p>
+<ul>
+<li><p><strong>Protecting Core Services:</strong> Ensures that a massive batch export or log-rotation on one pod doesn't cause a "freeze" in the core banking database.</p></li>
+<li><p><strong>Predictable Disk Performance:</strong> Provides the same level of I/O isolation on bare metal that users expect from premium cloud storage tiers.</p></li>
+<li><p><strong>SLA Enforcement:</strong> Allows the platform team to guarantee a specific number of IOPS to critical transactional services.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node-level cgroup audit and manifest review.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Verify cgroup v2:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- stat -fc %T /sys/fs/cgroup</code></pre></li>
+<li><p><strong>Check for I/O limits in pods:</strong></p><pre class="cli"><code>oc describe pod &lt;pod-name&gt; (Look for resource limits).</code></pre></li>
+<li><p><strong>Monitor disk latency:</strong></p><pre class="cli"><code>Check irate(node_disk_io_time_seconds_total[5m]).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Pod Manifest Snippet:</strong> Showing I/O weight or limit configurations.</p></li>
+<li><p><strong>Cgroup Status Output:</strong> Proof that the unified cgroup v2 controller is active.</p></li>
+<li><p><strong>Prometheus IOPS Graph:</strong> Showing a "flat" I/O curve for a pod that has reached its configured limit, protecting the rest of the node.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Database Stalls):</strong> A rogue pod consuming 100% of the disk's I/O will cause the banking database to hang, resulting in timed-out transactions.</p></li>
+<li><p><strong>Operational Risk:</strong> Difficult to troubleshoot "intermittent" database slowness that is actually caused by unrelated background tasks.</p></li>
+<li><p><strong>Performance Risk:</strong> Inefficient use of high-speed NVMe storage by allowing "unrestricted" access to all workloads.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity); Section 10.5 (Performance Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-6 (Resource Availability).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+</article></div><footer class="footer">Prepared as a structured HTML view of Pillar 3: Performance &amp; Scalability for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>

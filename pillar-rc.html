@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pillar 2: Recoverability / Disaster Recovery | Red Hat OpenShift Assessment Framework</title>
+<style>
+:root { --bg:#0b1020; --panel:#ffffff; --ink:#172033; --muted:#637083; --line:#dce3ee; --redhat:#ee0000; --redhat-dark:#b00000; --code-bg:#0b1220; --shadow:0 12px 30px rgba(15,23,42,.08); --shadow-soft:0 8px 18px rgba(15,23,42,.05); }
+* { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:linear-gradient(135deg,#f4f7fb 0%,#edf2f9 44%,#ffffff 100%); line-height:1.6; } a { color:inherit; }
+.skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; } .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; background:#fff; padding:.75rem 1rem; border-radius:.5rem; z-index:999; }
+.page-shell { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:100vh; }
+.sidebar { position:sticky; top:0; height:100vh; overflow-y:auto; background:radial-gradient(circle at top left,rgba(238,0,0,.20),transparent 36%),linear-gradient(180deg,#0b1020,#151f36); color:#fff; padding:1.45rem 1.05rem; border-right:1px solid rgba(255,255,255,.08); }
+.brand { display:flex; gap:14px; align-items:center; margin-bottom:1.2rem; padding:1rem; border-radius:14px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10); box-shadow:0 10px 28px rgba(0,0,0,.28); } .brand-logo-wrap { width:148px; height:92px; border-radius:16px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 28px rgba(0,0,0,.30); display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:8px; } .brand-logo { width:100%; height:100%; object-fit:contain; object-position:center; display:block; } .brand-copy h1 { margin:0; font-size:1rem; line-height:1.35; letter-spacing:.01em; color:#fff; } .brand-copy p { margin:4px 0 0; color:#bbc8d9; font-size:.84rem; line-height:1.45; } .sidebar .label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:#98a8bf; margin:1.1rem .45rem .65rem; } .nav-link { display:block; padding:.62rem .72rem; border-radius:.85rem; text-decoration:none; color:#e9eef8; border:1px solid transparent; margin:.18rem 0; } .nav-link:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); } .nav-link span { display:block; font-weight:800; color:#fff; font-size:.85rem; } .nav-link small { display:block; font-size:.73rem; color:#bbc8d9; line-height:1.35; margin-top:.12rem; } .nav-link.is-primary { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); }
+.hero { color:#fff; padding:2.75rem clamp(1.2rem,4vw,4rem) 2.15rem; background:radial-gradient(circle at 18% 12%,rgba(22,163,168,.35),transparent 32%),radial-gradient(circle at 78% 0%,rgba(238,0,0,.28),transparent 30%),linear-gradient(135deg,#101827,#1a2540 58%,#0b1020); } .eyebrow { display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border:1px solid rgba(255,255,255,.18); border-radius:999px; color:#dfe8f7; font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; background:rgba(255,255,255,.06); } .hero h2 { font-size:clamp(2rem,4vw,3.6rem); line-height:1.05; max-width:1000px; margin:1rem 0 .8rem; } .hero p { max-width:1060px; color:#dbe6f5; font-size:1rem; margin:0; }
+.content-wrap { padding:1.6rem clamp(1.1rem,4vw,4rem) 4rem; } .notice { background:#fff; border:1px solid var(--line); border-left:6px solid var(--redhat); border-radius:1rem; padding:1rem 1.15rem; box-shadow:var(--shadow-soft); margin-bottom:1.25rem; } .intro-card { background:#fff; border:1px solid var(--line); border-radius:1rem; padding:1.05rem 1.2rem; box-shadow:var(--shadow-soft); margin:0 0 1.35rem; } .intro-card p { margin:.2rem 0; color:#0f172a; line-height:1.7; font-size:.98rem; }
+
+.summary-panel { background:#fff; border:1px solid var(--line); border-radius:1rem; box-shadow:var(--shadow-soft); margin:0 0 1.45rem; overflow:hidden; }
+.summary-panel-header { padding:1rem 1.15rem; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); }
+.summary-panel-header h2 { margin:0; font-size:1.25rem; color:#0f172a; }
+.summary-panel-header p { margin:.35rem 0 0; color:#64748b; font-size:.92rem; }
+.summary-metrics { display:grid; grid-template-columns:repeat(2,minmax(180px,1fr)); gap:.8rem; padding:1rem 1.15rem .4rem; max-width:650px; }
+.summary-metric { border:1px solid #dbe4f0; border-radius:.9rem; padding:.85rem .95rem; background:linear-gradient(180deg,#ffffff,#f9fbff); }
+.summary-metric strong { display:block; font-size:1.7rem; line-height:1; color:#0f172a; }
+.summary-metric span { display:block; margin-top:.35rem; color:#475569; font-size:.85rem; font-weight:700; }
+.category-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; padding:.75rem 1.15rem 1.15rem; }
+.category-card { border:1px solid #dbe4f0; border-radius:.9rem; background:#fff; padding:.9rem; }
+.category-top { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.55rem; }
+.category-top h3 { margin:0; font-size:.95rem; color:#0f172a; }
+.count-badge { display:inline-flex; min-width:2.1rem; height:2.1rem; align-items:center; justify-content:center; border-radius:999px; font-weight:800; background:#e9f0ff; color:#1d4ed8; border:1px solid #c8d8ff; }
+.control-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+.control-tags a { text-decoration:none; font-size:.74rem; font-weight:800; color:#b00000; background:#fff1f1; border:1px solid #ffd2d2; border-radius:999px; padding:.18rem .45rem; }
+.control-tags a:hover { background:#ffe2e2; }
+@media (max-width: 1120px) { .summary-metrics { grid-template-columns:repeat(2,minmax(150px,1fr)); } .category-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 680px) { .summary-metrics, .category-grid { grid-template-columns:1fr; } }
+
+.index-section { margin-bottom:1.5rem; } .index-section h2 { margin:0 0 .8rem; font-size:1.3rem; color:#0f172a; } .control-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.75rem; width:100%; } .control-chip { display:flex; gap:.75rem; align-items:flex-start; width:100%; min-height:80px; padding:.8rem .9rem; border:1px solid var(--line); border-radius:1rem; background:#fff; text-decoration:none; box-shadow:var(--shadow-soft); } .control-chip:hover { transform:translateY(-1px); border-color:rgba(238,0,0,.35); box-shadow:var(--shadow); } .control-chip strong { flex:0 0 auto; color:var(--redhat-dark); font-size:.86rem; } .control-chip span { color:#334155; font-size:.88rem; line-height:1.35; }
+.article { max-width:none; width:100%; } .control-card { width:100%; background:var(--panel); border:1px solid var(--line); border-radius:1.1rem; box-shadow:var(--shadow-soft); margin:1rem 0 1.25rem; padding:.9rem; scroll-margin-top:1rem; } .control-head { width:100%; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; border:1px solid var(--line); border-radius:.95rem; padding:.9rem 1rem; background:linear-gradient(180deg,#fbfdff,#f7faff); } .control-title-wrap h2 { margin:.32rem 0 0; font-size:1.34rem; line-height:1.25; color:#0f172a; } .control-kicker-row { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; } .control-code { display:inline-flex; align-items:center; justify-content:center; padding:.22rem .55rem; border-radius:999px; background:#e9f0ff; color:#1d4ed8; font-weight:800; font-size:.75rem; border:1px solid #c8d8ff; } .subdomain-pill { display:inline-flex; align-items:center; padding:.24rem .58rem; border-radius:999px; background:#eef2f7; color:#334155; font-size:.75rem; font-weight:700; border:1px solid #d6deea; }
+.risk-pill { display:inline-flex; align-items:center; justify-content:center; padding:.26rem .62rem; border-radius:999px; font-size:.73rem; font-weight:800; border:1px solid transparent; white-space:nowrap; } .risk-pill.critical { background:#fee2e2; color:#7f1d1d; border-color:#fca5a5; } .risk-pill.high { background:#fee2e2; color:#b91c1c; border-color:#fecaca; } .risk-pill.moderate { background:#fef3c7; color:#b45309; border-color:#fde68a; } .risk-pill.low { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+.field-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.85rem; margin-top:.9rem; width:100%; align-items:start; } .field-box { border:1px solid var(--line); border-radius:.85rem; background:#fff; overflow:hidden; min-width:0; } .field-box h3 { margin:0; padding:.72rem .86rem; font-size:.76rem; line-height:1.2; text-transform:uppercase; letter-spacing:.04em; color:#1f3b5d; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); } .field-body { padding:.85rem .95rem; font-size:.92rem; color:#172033; } .field-body > :first-child { margin-top:0; } .field-body > :last-child { margin-bottom:0; } .field-box-full { grid-column:1/-1; } .risk-box.critical { border-left:4px solid #b91c1c; background:#fff5f5; } .risk-box.high { border-left:4px solid #ef4444; background:#fff8f8; } .risk-box.moderate { border-left:4px solid #f59e0b; background:#fffdf5; } .risk-box.low { border-left:4px solid #22c55e; background:#f7fff8; }
+.field-body ul,.field-body ol { margin:.3rem 0 .6rem 1.1rem; padding:0; } .field-body li { margin:.35rem 0; } .field-body p { margin:.45rem 0; } .field-body strong { color:#0f172a; } .field-body code { background:#eef2f7; color:#9f1239; padding:.12rem .32rem; border-radius:.35rem; font-size:.9em; }
+.field-body pre, pre.cli { background:#0b1220; color:#f8fafc; border-radius:.75rem; padding:1rem 1.1rem; overflow:auto; border:1px solid #111827; white-space:pre-wrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); margin:.75rem 0; } .field-body pre code, pre.cli code { background:transparent!important; color:#f8fafc!important; padding:0; font-family:Consolas,'Courier New',monospace; font-size:.88rem; font-weight:700; line-height:1.45; } .verification-steps li pre.cli { margin:.35rem 0 .2rem; }
+.control-links { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem .3rem .15rem; } .control-links a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:.85rem; } .control-links a:hover { text-decoration:underline; } .empty-note { color:var(--muted); font-style:italic; } .footer { padding:1.4rem clamp(1.1rem,4vw,4rem); color:#64748b; border-top:1px solid var(--line); background:#fff; }
+@media (max-width:1120px) { .field-grid { grid-template-columns:1fr; } .field-box-full { grid-column:auto; } } @media (max-width:980px) { .page-shell { grid-template-columns:1fr; } .sidebar { position:relative; height:auto; max-height:420px; } .control-head { flex-direction:column; } } @media print { .sidebar,.control-grid,.control-links,.notice { display:none!important; } .page-shell { display:block; } .hero { color:#111; background:#fff; padding:1rem 0; } .content-wrap { padding:0; } .control-card { box-shadow:none; break-inside:avoid; } }
+
+.cross-control-link { color:#1d4ed8; text-decoration:none; font-weight:700; border-bottom:1px dotted rgba(29,78,216,.45); }
+.cross-control-link:hover { color:#b00000; border-bottom-color:#b00000; }
+</style>
+</head>
+<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label" data-cross-pillar-nav="true">Assessment pillars</div><nav data-cross-pillar-nav="true"><a class="nav-link" href="pillar-ar.html"><span>Pillar 1: Availability &amp; Resilience</span><small>Open AR pillar</small></a><a aria-current="page" class="nav-link is-primary" href="pillar-rc.html"><span>Pillar 2: Recoverability / Disaster Recovery</span><small>RC controls — current page</small></a><a class="nav-link" href="pillar-ps.html"><span>Pillar 3: Performance &amp; Scalability</span><small>Open PS pillar</small></a><a class="nav-link" href="pillar-sc.html"><span>Pillar 4: Security &amp; Compliance</span><small>Open SC pillar</small></a><a class="nav-link" href="pillar-mo.html"><span>Pillar 5: Monitoring &amp; Observability</span><small>Open MO pillar</small></a><a class="nav-link" href="pillar-co.html"><span>Pillar 6: Cost Optimization</span><small>Open CO pillar</small></a></nav><div class="label">Pillar 2 controls</div><nav><a class="nav-link" href="#control-id-rc-001"><span>RC-001</span><small>etcd Database Backup and Encryption</small></a>
+<a class="nav-link" href="#control-id-rc-002"><span>RC-002</span><small>Workload Data Protection (VMs &amp; PVCs)</small></a>
+<a class="nav-link" href="#control-id-rc-003"><span>RC-003</span><small>CSI Volume Snapshots</small></a>
+<a class="nav-link" href="#control-id-rc-004"><span>RC-004</span><small>Node Recovery Strategy (Pets vs. Cattle)</small></a>
+<a class="nav-link" href="#control-id-rc-005"><span>RC-005</span><small>Multi-Cluster / Site-to-Site DR</small></a>
+<a class="nav-link" href="#control-id-rc-006"><span>RC-006</span><small>GitOps Application Recovery</small></a>
+<a class="nav-link" href="#control-id-rc-007"><span>RC-007</span><small>Image Registry Protection</small></a>
+<a class="nav-link" href="#control-id-rc-008"><span>RC-008</span><small>Automated Multi-Cluster Failover (RHACM Orchestration)</small></a>
+<a class="nav-link" href="#control-id-rc-009"><span>RC-009</span><small>Registry Geo-Replication (Red Hat Quay synchronization)</small></a></nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 2</span><h2>Pillar 2: Recoverability / Disaster Recovery</h2><p>Architecture assessment page for validating the platform capability to protect cluster state, preserve workload data, orchestrate disaster recovery, and restore business services predictably after infrastructure, storage, application, or site-level failures.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Recovery and Continuity define the platform's capability to protect cluster state, preserve workload data, orchestrate disaster recovery, and restore business services predictably after infrastructure, storage, application, or site-level failures. For OpenShift environments supporting containerized workloads and OpenShift Virtualization, these controls validate that etcd, persistent volumes, virtual machine disks, registries, GitOps configuration, and multi-cluster recovery mechanisms are protected through tested, automated, and evidence-backed recovery practices.</p>
+</div><section aria-labelledby="control-summary" class="summary-panel">
+<div class="summary-panel-header">
+<h2 id="control-summary">Summary of Controls</h2>
+<p>Pillar 2 contains 9 assessment controls grouped by recovery and continuity domain to support cluster-state restoration, workload data protection, disaster recovery readiness, registry continuity, and automated application recovery.</p>
+</div>
+<div class="summary-metrics">
+<div class="summary-metric"><strong>9</strong><span>Total controls</span></div>
+<div class="summary-metric"><strong>5</strong><span>Recoverability / Disaster Recovery domains</span></div>
+</div>
+<div class="category-grid">
+<div class="category-card"><div class="category-top"><h3>Backup and Recovery</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-rc-001">RC-001</a><a href="#control-id-rc-002">RC-002</a><a href="#control-id-rc-003">RC-003</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Infrastructure Resilience</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-rc-004">RC-004</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Disaster Recovery</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-rc-005">RC-005</a><a href="#control-id-rc-008">RC-008</a><a href="#control-id-rc-009">RC-009</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Recovery Orchestration</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-rc-006">RC-006</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Data Resilience</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-rc-007">RC-007</a></div></div>
+</div>
+</section><section aria-labelledby="controls-index" class="index-section"><h2 id="controls-index">Assessment Controls Index</h2><div class="control-grid"><a class="control-chip" href="#control-id-rc-001"><strong>RC-001</strong><span>etcd Database Backup and Encryption</span></a>
+<a class="control-chip" href="#control-id-rc-002"><strong>RC-002</strong><span>Workload Data Protection (VMs &amp; PVCs)</span></a>
+<a class="control-chip" href="#control-id-rc-003"><strong>RC-003</strong><span>CSI Volume Snapshots</span></a>
+<a class="control-chip" href="#control-id-rc-004"><strong>RC-004</strong><span>Node Recovery Strategy (Pets vs. Cattle)</span></a>
+<a class="control-chip" href="#control-id-rc-005"><strong>RC-005</strong><span>Multi-Cluster / Site-to-Site DR</span></a>
+<a class="control-chip" href="#control-id-rc-006"><strong>RC-006</strong><span>GitOps Application Recovery</span></a>
+<a class="control-chip" href="#control-id-rc-007"><strong>RC-007</strong><span>Image Registry Protection</span></a>
+<a class="control-chip" href="#control-id-rc-008"><strong>RC-008</strong><span>Automated Multi-Cluster Failover (RHACM Orchestration)</span></a>
+<a class="control-chip" href="#control-id-rc-009"><strong>RC-009</strong><span>Registry Geo-Replication (Red Hat Quay synchronization)</span></a></div></section><article class="article">
+<section class="control-card" id="control-id-rc-001">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-001</span><span class="subdomain-pill">Backup and Recovery</span></div>
+<h2>etcd Database Backup and Encryption</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>The etcd backup is a snapshot of the entire OpenShift cluster state, including all configurations, secrets, and metadata. In the event of a catastrophic control plane failure or data corruption, this backup is the only way to restore the cluster to a functional state.</p>
+<h4>Key Aspects of etcd Backup:</h4>
+<ul>
+<li><p><strong>Encryption at Rest:</strong> Ensuring the backup file itself is encrypted to prevent sensitive data (like kubeconfig or credentials) from being exposed if the storage media is compromised.</p></li>
+<li><p><strong>Automated Scheduling:</strong> Utilizing a CronJob or a dedicated operator to perform daily snapshots of the etcd database.</p></li>
+<li><p><strong>Off-Node Storage:</strong> Moving the backup files off the master nodes and into a secure, immutable storage location (e.g., S3-compatible storage or a hardened backup server).</p></li>
+<li><p><strong>Snapshot Validation:</strong> Periodically testing the integrity of the backup files to ensure they are not corrupted.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Backup Frequency:</strong> Verify that backups are occurring at least once every 24 hours.</p></li>
+<li><p><strong>Encryption Status:</strong> Confirm that the etcd encryption is enabled within the cluster (<pre class="cli"><code>oc get apiserver cluster -o yaml</code></pre></p></li>
+<li><p><strong>Storage Location:</strong> Verify the secure, external destination where the backup files are being pushed.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>For regulated financial services compliance, "Recovery of Critical Data" is non-negotiable.</p>
+<ul>
+<li><p><strong>Disaster Recovery Foundation:</strong> If the etcd quorum is lost (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-001" title="Open AR-001">AR-001</a>) and cannot be recovered, the etcd backup is the "Point of No Return" for cluster reconstruction.</p></li>
+<li><p><strong>Regulatory Compliance:</strong> Financial regulations mandate that system state and configuration be backed up and stored securely to ensure business continuity.</p></li>
+<li><p><strong>Protection Against Ransomware:</strong> Having an encrypted, off-site backup protects the cluster's "DNA" from being encrypted or deleted by a malicious actor.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Resource check and script audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check encryption configuration:</strong> <span>(Should be aescbc).</span></p><pre class="cli"><code>oc get apiserver cluster -o jsonpath='{.spec.encryption.type}'</code></pre></li>
+<li><p><strong>Verify backup script existence:</strong> Inspect the etcd-backup CronJob or script in the openshift-etcd namespace.</p></li>
+<li><p><strong>Check backup logs:</strong></p><pre class="cli"><code>oc logs -n openshift-etcd &lt;backup-pod-name&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>etcd Backup Log:</strong> A success log from the most recent backup job.</p></li>
+<li><p><strong>Encryption YAML:</strong> Export of the apiserver resource showing active encryption.</p></li>
+<li><p><strong>Sample Backup Artefact:</strong> A directory listing from the external storage showing timestamped .db files.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Permanent Cluster Loss):</strong> Without an etcd backup, a total control plane failure requires a manual, from-scratch rebuild of the cluster, losing all configuration and history.</p></li>
+<li><p><strong>High Risk (Security Breach):</strong> Unencrypted backups on insecure storage allow anyone with access to the file to extract every secret and password in the cluster.</p></li>
+<li><p><strong>Operational Risk:</strong> Massive increase in recovery time (MTTR) during a crisis.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity); Section 15.1 (Backup and Recovery).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 11 (Data Recovery).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CP-9 (System Backup).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-002">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-002</span><span class="subdomain-pill">Backup and Recovery</span></div>
+<h2>Workload Data Protection (VMs &amp; PVCs)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>While etcd backs up the cluster state, Workload Data Protection focuses on the persistent data stored by applications (Persistent Volumes) and Virtual Machines. This is typically implemented using the OpenShift API for Data Protection (OADP) and the Velero plugin.</p>
+<h4>Key Aspects of Workload Protection:</h4>
+<ul>
+<li><p><strong>Application Consistency:</strong> Using "Hooks" to freeze a database or flush a filesystem before a snapshot is taken to ensure data is consistent.</p></li>
+<li><p><strong>PVC Backups:</strong> Taking snapshots of the underlying ODF (Ceph) or SAN storage.</p></li>
+<li><p><strong>VM Awareness:</strong> Backing up both the VM's disk (PVC) and its metadata (VirtualMachine instance config) so it can be restored as a functioning unit.</p></li>
+<li><p><strong>Cross-Namespace Restore:</strong> The ability to restore an application to a different namespace or even a different cluster for DR testing.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>OADP Status:</strong> Verify the OADP Operator is installed and the DataProtectionApplication (DPA) is healthy.</p></li>
+<li><p><strong>Backup Schedule:</strong> Check the Schedule resources to confirm critical applications are being backed up regularly.</p></li>
+<li><p><strong>Storage Location:</strong> Ensure backups are stored in a separate, resilient location (e.g., MinIO or S3).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Application data is the lifeblood of the bank.</p>
+<ul>
+<li><p><strong>Transactional Integrity:</strong> Ensures that databases can be recovered to a specific point in time without data corruption.</p></li>
+<li><p><strong>Operational Flexibility:</strong> Allows for the "Cloning" of production environments into UAT for troubleshooting or testing.</p></li>
+<li><p><strong>Bare-Metal Resilience:</strong> In a bare-metal environment, if a local disk fails, this control provides the path to restore the app to a new node.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> OADP resource inspection.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check DPA health:</strong></p><pre class="cli"><code>oc get dpa -n openshift-adp</code></pre></li>
+<li><p><strong>List current backups:</strong></p><pre class="cli"><code>oc get backup -n openshift-adp</code></pre></li>
+<li><p><strong>Verify restore test:</strong> Review records of the most recent successful restore test.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>OADP DPA YAML:</strong> The configuration for the data protection application.</p></li>
+<li><p><strong>Backup Completion Report:</strong> Output of<pre class="cli"><code>velero backup get</code></pre></p></li>
+<li><p><strong>Restore Log:</strong> A log showing a successful test restore of a sample application.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Total Data Loss):</strong> In the event of a storage-level disaster, without application-level backups, customer transaction data is permanently lost.</p></li>
+<li><p><strong>High Risk (Recovery Failure):</strong> Backups that are not application-consistent may result in corrupted databases that cannot be started after restore.</p></li>
+<li><p><strong>Compliance Risk:</strong> May result in non-compliance with regulatory requirements for business continuity management.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 15.1 (Backup and Recovery).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 11 (Data Recovery).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CP-9 (System Backup).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-003">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-003</span><span class="subdomain-pill">Backup and Recovery</span></div>
+<h2>CSI Volume Snapshots</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>CSI (Container Storage Interface) Volume Snapshots provide a rapid, storage-level point-in-time copy of a Persistent Volume. Unlike a full backup (which moves data to an external site), a snapshot is typically stored on the same storage system (e.g., ODF/Ceph) for near-instant recovery.</p>
+<h4>Key Aspects of CSI Snapshots:</h4>
+<ul>
+<li><p><strong>VolumeSnapshotClass:</strong> A declarative template that defines how snapshots are created on the specific storage hardware.</p></li>
+<li><p><strong>Incremental Efficiency:</strong> Snapshots are usually incremental, meaning they only consume additional space for data that has changed.</p></li>
+<li><p><strong>Self-Service Recovery:</strong> Allows application owners to revert their own data to a previous state without involving the storage administrator.</p></li>
+<li><p><strong>Snapshot Content:</strong> Represents the raw block-level state of the volume at a specific second.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>SnapshotClass:</strong> Verify a VolumeSnapshotClass exists and is correctly mapped to the ODF or SAN provisioner.</p></li>
+<li><p><strong>Snapshot Usage:</strong> Audit if critical applications are actually utilizing VolumeSnapshot resources before high-risk changes.</p></li>
+<li><p><strong>Retention Policy:</strong> Ensure that old snapshots are automatically pruned to prevent storage exhaustion (<a class="cross-control-link" href="pillar-co.html#control-id-co-004" title="Open CO-004">CO-004</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Time-to-recovery (TTO) is critical during operational errors.</p>
+<ul>
+<li><p><strong>Instant Rollback:</strong> If a software update corrupts a database, a CSI snapshot allows the team to roll back the disk in seconds, rather than waiting hours for a full backup restore.</p></li>
+<li><p><strong>Foundation for Backup:</strong> OADP (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-002" title="Open RC-002">RC-002</a>) uses CSI snapshots as the primary mechanism to "freeze" data before moving it to long-term storage.</p></li>
+<li><p><strong>Reduced Performance Impact:</strong> Because they happen at the storage layer, CSI snapshots have minimal impact on application performance compared to file-based backups.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Resource check.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check snapshot classes:</strong></p><pre class="cli"><code>oc get volumesnapshotclass</code></pre></li>
+<li><p><strong>View active snapshots:</strong></p><pre class="cli"><code>oc get volumesnapshot -A</code></pre></li>
+<li><p><strong>Verify snapshot readiness:</strong> <span>(Check for ReadyToUse: true).</span></p><pre class="cli"><code>oc describe volumesnapshot &lt;name&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>VolumeSnapshotClass YAML:</strong> The definition of the snapshot class.</p></li>
+<li><p><strong>VolumeSnapshot Snapshot:</strong> A listing of active snapshots with timestamps.</p></li>
+<li><p><strong>Recovery Test Report:</strong> Documentation showing a successful volume restoration from a snapshot.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Delayed Recovery):</strong> Without snapshots, the only path to recovery is a full restore from off-site storage, which may take hours, violating RTO targets.</p></li>
+<li><p><strong>Operational Risk:</strong> Lack of "safety nets" during application upgrades or patching cycles.</p></li>
+<li><p><strong>Storage Risk:</strong> Unmanaged snapshots can fill up the storage cluster, triggering a "Read-Only" state for the whole cluster.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.4 (Recovery Time Objective).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 11 (Data Recovery).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CP-9 (System Backup); CP-10 (System Recovery).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-004">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-004</span><span class="subdomain-pill">Infrastructure Resilience</span></div>
+<h2>Node Recovery Strategy (Pets vs. Cattle)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>This control defines the operational procedure for recovering a bare-metal node. In a "Well-Architected" OpenShift environment, nodes should be treated as Cattle, meaning they are disposable and can be automatically re-provisioned from a known image, rather than being manually repaired like Pets.</p>
+<h4>Key Aspects of Node Recovery:</h4>
+<ul>
+<li><p><strong>Infrastructure-as-Code (IaC):</strong> Ensuring the node's physical configuration (PXE boot, BIOS settings) is automated via tools like Ironic (Machine API) or Ansible.</p></li>
+<li><p><strong>Fast Re-imaging:</strong> The ability to wipe a failing node and have it rejoin the cluster with all security and networking configurations (NMState - <a class="cross-control-link" href="pillar-ar.html#control-id-ar-024" title="Open AR-024">AR-024</a>) applied automatically.</p></li>
+<li><p><strong>Disposable OS:</strong> Utilizing Red Hat Enterprise Linux CoreOS (RHCOS) which is immutable and designed for "replace rather than repair" operations.</p></li>
+<li><p><strong>Hardware Standardization:</strong> Ensuring all nodes in a pool are identical to make the "Cattle" model predictable.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Provisioning Automation:</strong> Verify the method used to install the nodes (e.g., Assisted Installer, PXE/Ironic).</p></li>
+<li><p><strong>Node Immutability:</strong> Confirm that no manual changes (e.g., manual SSH edits to /etc) are being performed on the nodes.</p></li>
+<li><p><strong>Recovery Time:</strong> Assess the time it takes for a node to be re-imaged and marked as Ready.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Bare-metal hardware will eventually fail.</p>
+<ul>
+<li><p><strong>Elimination of Configuration Drift:</strong> Re-imaging a node ensures it is 100% clean and matches the cluster's current security baseline.</p></li>
+<li><p><strong>Simplified Maintenance:</strong> If a node has a mysterious kernel error, the solution is a 10-minute automated re-image rather than 4 hours of manual troubleshooting.</p></li>
+<li><p><strong>Scalability:</strong> The same process used for recovery is used to add new capacity to the cluster.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Process audit and Machine API inspection.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Machine status:</strong></p><pre class="cli"><code>oc get machines -n openshift-machine-api</code></pre></li>
+<li><p><strong>Verify RHCOS Version:</strong> <span>(Should show identical OS versions).</span></p><pre class="cli"><code>oc get nodes -o wide</code></pre></li>
+<li><p><strong>Review provisioning logs:</strong> Check the logs of the machine-api-operator during a node replacement.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>MachineSet YAML:</strong> The template used to generate new nodes.</p></li>
+<li><p><strong>Ignition Configs:</strong> The configuration files used during node boot-up to set up networking and security.</p></li>
+<li><p><strong>Provisioning Success Report:</strong> Documentation showing a node being replaced automatically.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Operational Slowness):</strong> Treating bare-metal nodes as "Pets" leads to long recovery times and inconsistent configurations.</p></li>
+<li><p><strong>Security Risk:</strong> Manually repaired nodes may contain "residue" or unpatched configurations that don't match the rest of the cluster.</p></li>
+<li><p><strong>Operational Risk:</strong> Increases the burden on sysadmins and makes the cluster difficult to scale.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.1 (Operations Management); Section 10.6 (Maintenance).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-2 (Flaw Remediation); CM-3 (Configuration Change Control).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-005">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-005</span><span class="subdomain-pill">Disaster Recovery</span></div>
+<h2>Multi-Cluster / Site-to-Site DR</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For critical banking services, a single cluster failure (due to a data center outage) must be mitigated by a Multi-Cluster Disaster Recovery strategy. This involves maintaining a second OpenShift cluster at a geographically separate site and orchestrating the failover of data and applications.</p>
+<h4>Key Aspects of Site-to-Site DR:</h4>
+<ul>
+<li><p><strong>Active-Passive vs. Active-Active:</strong> * Active-Passive: The DR site is idle until a failover is triggered.</p></li>
+<li><p><strong>Active-Active:</strong> Both sites serve traffic simultaneously, providing better utilization and zero-second failover.</p></li>
+<li><p><strong>Global Load Balancing (GSLB):</strong> An external mechanism that routes user traffic to Site A or Site B based on health and proximity.</p></li>
+<li><p><strong>Data Mirroring:</strong> Ensuring persistent data is synchronized between sites (e.g., via ODF Regional DR or synchronous storage replication).</p></li>
+<li><p><strong>Governance:</strong> Using Red Hat Advanced Cluster Management (RHACM) to manage policies and applications across both sites from a single pane of glass.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>DR Strategy Documentation:</strong> Confirm the RPO/RTO targets are defined and the architecture (Active-Active/Passive) matches.</p></li>
+<li><p><strong>Data Replication Health:</strong> Verify the status of storage mirroring between sites (e.g., Ceph RBD Mirroring).</p></li>
+<li><p><strong>RHACM Integration:</strong> Confirm both clusters are managed by a central RHACM hub.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Regulatory expectations require critical systems to have an off-site recovery capability.</p>
+<ul>
+<li><p><strong>Survival of Data Center Disaster:</strong> Protects the bank's services from floods, power grid failures, or fires at the primary site.</p></li>
+<li><p><strong>Compliance with RPO/RTO:</strong> Provides the technical framework needed to meet the strict Recovery Point Objective (RPO) and Recovery Time Objective (RTO) targets.</p></li>
+<li><p><strong>Business Continuity:</strong> Ensures that customers can still access banking services even during a major regional infrastructure crisis.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> RHACM and Storage audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Managed Clusters:</strong> <span>(on the RHACM Hub).</span></p><pre class="cli"><code>oc get managedclusters</code></pre></li>
+<li><p><strong>Verify Mirroring:</strong></p><pre class="cli"><code>oc get cephblockpool &lt;name&gt; -n openshift-storage -o jsonpath='{.status.mirroringStatus}'</code></pre></li>
+<li><p><strong>Test Failover:</strong> Review the results of the most recent annual "DR Drill."</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>RHACM Dashboard:</strong> Screenshot showing all clusters as "Ready."</p></li>
+<li><p><strong>Storage Replication Log:</strong> Proof that data is being synchronized within the required RPO time (e.g., every 5 minutes).</p></li>
+<li><p><strong>DR Test Report:</strong> A formal report detailing a successful application failover between sites.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Business Failure):</strong> A total loss of the primary data center without a DR site results in a complete and prolonged shutdown of all banking services.</p></li>
+<li><p><strong>Compliance Risk:</strong> May result in non-compliance with regulatory disaster recovery requirements.</p></li>
+<li><p><strong>Reputational Risk:</strong> Massive loss of customer trust during an extended outage.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 15.2 (Disaster Recovery Site); Section 15.3 (DR Testing).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 11 (Data Recovery).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CP-6 (Alternate Storage Site); CP-7 (Alternate Processing Site).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-006">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-006</span><span class="subdomain-pill">Recovery Orchestration</span></div>
+<h2>GitOps Application Recovery</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>GitOps Application Recovery utilizes OpenShift GitOps (ArgoCD) to maintain the "Desired State" of applications in a Git repository. In a recovery scenario, the cluster does not rely on manual backups of YAML files; instead, ArgoCD automatically synchronizes the cluster state with the configuration stored in Git.</p>
+<h4>Key Aspects of GitOps Recovery:</h4>
+<ul>
+<li><p><strong>Declarative Source of Truth:</strong> Every Deployment, Service, and Route is defined in Git. If a namespace is deleted, ArgoCD detects the "Out of Sync" status and recreates the entire stack.</p></li>
+<li><p><strong>Automated Drift Correction:</strong> Prevents manual, undocumented changes ("Snowflakes") from persisting in the environment, ensuring the recovered application is identical to the original production version.</p></li>
+<li><p><strong>Cluster Bootstrapping:</strong> Allows a brand-new bare-metal cluster to be fully populated with all banking applications in minutes simply by pointing ArgoCD to the "Production" repository.</p></li>
+<li><p><strong>Version Control Recovery:</strong> Allows for "Point-in-Time" recovery of the application configuration by rolling back to a previous Git commit.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>ArgoCD Installation:</strong> Verify the OpenShift GitOps Operator is installed and the ArgoCD instance is healthy.</p></li>
+<li><p><strong>Application Synchronization:</strong> Confirm that critical banking applications are managed as "Application" objects in ArgoCD.</p></li>
+<li><p><strong>Sync Policy:</strong> Verify that automated: selfHeal: true is enabled for production workloads.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Manual recovery is slow and prone to human error during a high-pressure disaster event.</p>
+<ul>
+<li><p><strong>Zero-Knowledge Recovery:</strong> An engineer does not need to remember how an app was configured; they only need to ensure the GitOps controller is running.</p></li>
+<li><p><strong>Rapid MTTR:</strong> Reduces the Mean Time to Recovery from hours (searching for backup tapes/files) to minutes (automated synchronization).</p></li>
+<li><p><strong>Audit Trail:</strong> Provides a complete audit history (via Git logs) of every configuration change leading up to the disaster.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> ArgoCD resource audit and synchronization test.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check ArgoCD status:</strong></p><pre class="cli"><code>oc get argocd -n openshift-gitops</code></pre></li>
+<li><p><strong>List managed applications:</strong> argocd app list (or</p><pre class="cli"><code>oc get applications -n openshift-gitops</code></pre></li>
+<li><p><strong>Verify sync status:</strong> <span>(Should be Synced).</span></p><pre class="cli"><code>oc get application &lt;app-name&gt; -n openshift-gitops -o jsonpath='{.status.sync.status}'</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>ArgoCD Application YAML:</strong> Snippet showing the source Git repo and the automated sync policy.</p></li>
+<li><p><strong>Git Commit History:</strong> Logs showing the "Desired State" changes over time.</p></li>
+<li><p><strong>Synchronization Report:</strong> A screenshot of the ArgoCD dashboard showing all green "Synced" and "Healthy" status for the banking suite.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Configuration Inconsistency):</strong> Without GitOps, a recovered application may have missing environment variables or incorrect secrets, leading to functional failures after "recovery."</p></li>
+<li><p><strong>Operational Risk:</strong> Recovery becomes dependent on specific individuals who "know" how the system was set up, creating a single point of failure in the human team.</p></li>
+<li><p><strong>Compliance Risk:</strong> Lack of a verifiable, automated path from "Source" to "Running State" may result in non-compliance with regulatory expectations for change management and resilience.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.1 (Operations Management); Section 15.3 (DR Testing).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CM-3 (Configuration Change Control); CP-10 (System Recovery).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-007">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-007</span><span class="subdomain-pill">Data Resilience</span></div>
+<h2>Image Registry Protection</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>The Image Registry is a critical component that stores the container images required to boot every application in the cluster. Image Registry Protection ensures that the registry's backend storage is resilient and that the registry service itself can be recovered quickly during a disaster.</p>
+<h4>Key Aspects of Registry Protection:</h4>
+<ul>
+<li><p><strong>Persistent Storage Backend:</strong> Ensuring the registry uses a Persistent Volume (typically ODF/Ceph with RWX) rather than ephemeral local storage.</p></li>
+<li><p><strong>Registry Snapshots:</strong> Taking regular CSI snapshots (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-003" title="Open RC-003">RC-003</a>) of the registry's storage bucket/volume.</p></li>
+<li><p><strong>Read-Only Mode for DR:</strong> The ability to put the registry into a read-only state during a storage migration to prevent data corruption.</p></li>
+<li><p><strong>High Availability:</strong> Running multiple replicas of the registry pod across different infra nodes (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-019" title="Open AR-019">AR-019</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Storage Provider:</strong> Verify the registry is using a supported persistent storage (e.g., registry-storage PVC).</p></li>
+<li><p><strong>Replica Count:</strong> Confirm the registry is running at least 2 replicas.</p></li>
+<li><p><strong>Backup Status:</strong> Ensure the registry's PVC is included in the OADP (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-002" title="Open RC-002">RC-002</a>) backup schedule.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>If the registry is lost, the cluster cannot restart any pods because it cannot pull the underlying images.</p>
+<ul>
+<li><p><strong>Foundation for Recovery:</strong> During a node failure, the new node must pull the image from the registry. If the registry is down, the node stays empty.</p></li>
+<li><p><strong>Internal Dependency Management:</strong> OpenShift relies on the internal registry for build-time artifacts and "ImageStreams."</p></li>
+<li><p><strong>RPO for Software Assets:</strong> Ensures that the specific versions of software currently running in production are preserved and can be redeployed.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Registry operator and storage audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check registry config:</strong> <span>(Check managementState and storage).</span></p><pre class="cli"><code>oc get configs.imageregistry.operator.openshift.io/cluster -o yaml</code></pre></li>
+<li><p><strong>Verify replicas:</strong></p><pre class="cli"><code>oc get deployment image-registry -n openshift-image-registry</code></pre></li>
+<li><p><strong>Confirm PVC:</strong></p><pre class="cli"><code>oc get pvc -n openshift-image-registry</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Registry Configuration YAML:</strong> Export showing managementState: Managed and the pvc storage backend.</p></li>
+<li><p><strong>PVC Snapshot Log:</strong> Proof that the registry storage is being snapshotted daily.</p></li>
+<li><p><strong>Pod Placement Report:</strong> Showing registry replicas distributed across multiple nodes.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Cluster Boot Failure):</strong> If the registry storage is lost, no applications can start after a cluster reboot, leading to a permanent outage until images are manually re-pushed.</p></li>
+<li><p><strong>Operational Risk:</strong> "ImagePullBackOff" errors during node maintenance, preventing the cluster from self-healing.</p></li>
+<li><p><strong>Performance Risk:</strong> Single-replica registries become a bottleneck during large-scale application deployments or scaling events.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.3 (Availability and Resilience); Section 15.1 (Backup and Recovery).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 11 (Data Recovery).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CP-9 (System Backup).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-008">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-008</span><span class="subdomain-pill">Disaster Recovery</span></div>
+<h2>Automated Multi-Cluster Failover (RHACM Orchestration)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Automated Multi-Cluster Failover uses Red Hat Advanced Cluster Management (RHACM) and the DR Policy to orchestrate the movement of workloads between a primary and a secondary site. This control automates the decision and action phase of a disaster recovery event.</p>
+<h4>Key Aspects of RHACM Failover:</h4>
+<ul>
+<li><p><strong>DRPolicy Definition:</strong> A declarative policy that links two clusters and defines the replication schedule, such as synchronous or asynchronous replication.</p></li>
+<li><p><strong>One-Click Failover:</strong> A centralized RHACM console action that triggers workload movement from Site A to Site B in a controlled and repeatable manner.</p></li>
+<li><p><strong>Health Monitoring:</strong> RHACM continuously monitors managed clusters and flags the appropriate recovery posture when the primary site becomes unavailable.</p></li>
+<li><p><strong>Automatic DNS Update:</strong> Integration with external load balancers or DNS automation to redirect application traffic after failover is completed.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>RHACM Hub Health:</strong> Verify that the RHACM hub cluster is running and monitoring both production and DR clusters.</p></li>
+<li><p><strong>DR Policy Status:</strong> Confirm that DRPolicy resources exist and that peer readiness is reported as healthy.</p></li>
+<li><p><strong>Application Placement:</strong> Verify that protected applications are assigned to placements that include both primary and recovery sites.</p></li>
+<li><p><strong>Failover Readiness:</strong> Review whether the failover workflow has been tested and whether required dependencies such as secrets, routes, storage replication, and DNS updates are included.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Manual failover of large application estates across two sites is too complex and error-prone to rely on during a high-pressure disaster event.</p>
+<ul>
+<li><p><strong>Elimination of Human Latency:</strong> Automates the reconfiguration of routes, secrets, volumes, placements, and application activation at the DR site.</p></li>
+<li><p><strong>Predictable RTO:</strong> Provides a consistent and repeatable recovery process, supporting defined Recovery Time Objectives (RTO).</p></li>
+<li><p><strong>DR Drill Simplicity:</strong> Allows DR exercises to be performed with lower manual effort and stronger evidence capture for governance and audit reporting.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> RHACM console review, CLI inspection, and DR drill evidence review.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check DRPolicies:</strong></p><pre class="cli"><code>oc get drpolicies -A</code></pre></li>
+<li><p><strong>Check DRPlacementControl:</strong></p><pre class="cli"><code>oc get drplacementcontrol -n &lt;app-namespace&gt;</code></pre><p>Verify that the phase is available and the current active site is correctly reported.</p></li>
+<li><p><strong>Verify data synchronization:</strong> Review the last schedule time or replication status to confirm that replicated data is within the approved RPO.</p></li>
+<li><p><strong>Review failover test results:</strong> Confirm that a recent DR drill completed successfully and that failback or recovery validation was documented.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>RHACM DR Dashboard:</strong> Screenshot showing protected status for critical applications.</p></li>
+<li><p><strong>DRPlacementControl YAML:</strong> Export showing failover history, current active site, and placement configuration.</p></li>
+<li><p><strong>DRPolicy YAML:</strong> Export showing replication scheduling and cluster pairing.</p></li>
+<li><p><strong>Failover Log:</strong> Report from the most recent DR drill showing the automated sequence of events and recovery outcome.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (RTO Breach):</strong> Manual failover is prone to errors such as missing secrets, incorrect IP addresses, incomplete routes, or failed volume attachments, leading to failed recovery and breach of RTO targets.</p></li>
+<li><p><strong>Operational Risk:</strong> Configuration drift between Site A and Site B may mean the recovery site cannot support the production workload during an actual disaster.</p></li>
+<li><p><strong>Compliance Risk:</strong> Inability to provide automated failover evidence for high-priority critical systems weakens disaster recovery assurance and audit defensibility.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 15.2 (DR Site); Section 15.3 (DR Testing).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 11 (Data Recovery).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CP-7 (Alternate Processing Site).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-rc-009">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">RC-009</span><span class="subdomain-pill">Disaster Recovery</span></div>
+<h2>Registry Geo-Replication (Red Hat Quay synchronization)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>While <a class="cross-control-link" href="pillar-rc.html#control-id-rc-007" title="Open RC-007">RC-007</a> protects the internal registry, Registry Geo-Replication utilizes Red Hat Quay as an enterprise-grade external registry that automatically synchronizes image data across different geographical sites (Primary and DR).</p>
+<h4>Key Aspects of Geo-Replication:</h4>
+<ul>
+<li><p><strong>Bidirectional Sync:</strong> Quay ensures that if an image is pushed to the Primary site, it is automatically replicated to the DR site over the WAN.</p></li>
+<li><p><strong>Global Namespace:</strong> Applications at both sites pull from the same "Logical" registry, ensuring that the image tags and digests match perfectly.</p></li>
+<li><p><strong>Backend Storage Mirroring:</strong> Syncing the underlying S3 or block storage between sites.</p></li>
+<li><p><strong>Site Autonomy:</strong> If the connection between sites is lost, the DR site can still function using its local copy of the images.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Quay Deployment:</strong> Verify Red Hat Quay is installed in a highly available, multi-site configuration.</p></li>
+<li><p><strong>Replication Status:</strong> Confirm that the Quay "Repository Mirroring" or "Geo-replication" logs show success.</p></li>
+<li><p><strong>Storage Provider:</strong> Verify that the underlying storage (e.g., ODF) is configured for inter-site replication (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-005" title="Open RC-005">RC-005</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Image availability is a prerequisite for site failover.</p>
+<ul>
+<li><p><strong>Zero-Download Failover:</strong> During a disaster, the DR cluster doesn't need to pull images from the "dead" primary site or the internet; everything is already local.</p></li>
+<li><p><strong>Consistent Software State:</strong> Guarantees that the exact binary running in Site A is available at Site B, preventing "version mismatch" during recovery.</p></li>
+<li><p><strong>WAN Optimization:</strong> Replication happens in the background, rather than as a burst of traffic during a crisis, protecting the bank's inter-site bandwidth.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Quay Management Console and Storage audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Quay health:</strong></p><pre class="cli"><code>oc get quayregistry -n quay-enterprise</code></pre></li>
+<li><p><strong>Verify replication logs:</strong> Access the Quay UI and check the "Mirroring" tab for critical repositories.</p></li>
+<li><p><strong>Test local pull:</strong> On a node in the DR site, attempt to pull a production image from the local Quay instance.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Quay Registry YAML:</strong> Showing the geo-replication and mirror configurations.</p></li>
+<li><p><strong>Replication Sync Report:</strong> A screenshot or log showing all production images are "In-Sync" across sites.</p></li>
+<li><p><strong>DR Pull Test Log:</strong> Output of a successful<pre class="cli"><code>podman pull from the DR site's registry</code></pre></p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Delayed Site Boot):</strong> Without geo-replication, the DR site must pull thousands of layers from a remote location during a failover, potentially crashing the inter-site link or failing to boot in time.</p></li>
+<li><p><strong>Operational Risk:</strong> Mismatch in image versions between sites can lead to unpredictable application behavior or security vulnerabilities during a DR event.</p></li>
+<li><p><strong>Compliance Risk:</strong> May result in non-compliance with regulatory expectations for data availability and DR site readiness.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.3 (Availability and Resilience); Section 15.2 (DR Site).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 11 (Data Recovery).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CP-6 (Alternate Storage Site).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section></article></div><footer class="footer">Prepared as a structured HTML view of Pillar 2: Recoverability / Disaster Recovery for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>

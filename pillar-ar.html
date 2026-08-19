@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pillar 1: Availability &amp; Resilience | Red Hat OpenShift Assessment Framework</title>
+<style>
+:root { --bg:#0b1020; --panel:#ffffff; --ink:#172033; --muted:#637083; --line:#dce3ee; --redhat:#ee0000; --redhat-dark:#b00000; --code-bg:#0b1220; --shadow:0 12px 30px rgba(15,23,42,.08); --shadow-soft:0 8px 18px rgba(15,23,42,.05); }
+* { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:linear-gradient(135deg,#f4f7fb 0%,#edf2f9 44%,#ffffff 100%); line-height:1.6; } a { color:inherit; }
+.skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; } .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; background:#fff; padding:.75rem 1rem; border-radius:.5rem; z-index:999; }
+.page-shell { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:100vh; }
+.sidebar { position:sticky; top:0; height:100vh; overflow-y:auto; background:radial-gradient(circle at top left,rgba(238,0,0,.20),transparent 36%),linear-gradient(180deg,#0b1020,#151f36); color:#fff; padding:1.45rem 1.05rem; border-right:1px solid rgba(255,255,255,.08); }
+.brand { display:flex; gap:14px; align-items:center; margin-bottom:1.2rem; padding:1rem; border-radius:14px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10); box-shadow:0 10px 28px rgba(0,0,0,.28); } .brand-logo-wrap { width:148px; height:92px; border-radius:16px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 28px rgba(0,0,0,.30); display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:8px; } .brand-logo { width:100%; height:100%; object-fit:contain; object-position:center; display:block; } .brand-copy h1 { margin:0; font-size:1rem; line-height:1.35; letter-spacing:.01em; color:#fff; } .brand-copy p { margin:4px 0 0; color:#bbc8d9; font-size:.84rem; line-height:1.45; } .sidebar .label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:#98a8bf; margin:1.1rem .45rem .65rem; } .nav-link { display:block; padding:.62rem .72rem; border-radius:.85rem; text-decoration:none; color:#e9eef8; border:1px solid transparent; margin:.18rem 0; } .nav-link:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); } .nav-link span { display:block; font-weight:800; color:#fff; font-size:.85rem; } .nav-link small { display:block; font-size:.73rem; color:#bbc8d9; line-height:1.35; margin-top:.12rem; } .nav-link.is-primary { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); }
+.hero { color:#fff; padding:2.75rem clamp(1.2rem,4vw,4rem) 2.15rem; background:radial-gradient(circle at 18% 12%,rgba(22,163,168,.35),transparent 32%),radial-gradient(circle at 78% 0%,rgba(238,0,0,.28),transparent 30%),linear-gradient(135deg,#101827,#1a2540 58%,#0b1020); } .eyebrow { display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border:1px solid rgba(255,255,255,.18); border-radius:999px; color:#dfe8f7; font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; background:rgba(255,255,255,.06); } .hero h2 { font-size:clamp(2rem,4vw,3.6rem); line-height:1.05; max-width:1000px; margin:1rem 0 .8rem; } .hero p { max-width:1060px; color:#dbe6f5; font-size:1rem; margin:0; }
+.content-wrap { padding:1.6rem clamp(1.1rem,4vw,4rem) 4rem; } .notice { background:#fff; border:1px solid var(--line); border-left:6px solid var(--redhat); border-radius:1rem; padding:1rem 1.15rem; box-shadow:var(--shadow-soft); margin-bottom:1.25rem; } .intro-card { background:#fff; border:1px solid var(--line); border-radius:1rem; padding:1.05rem 1.2rem; box-shadow:var(--shadow-soft); margin:0 0 1.35rem; } .intro-card p { margin:.2rem 0; color:#0f172a; line-height:1.7; font-size:.98rem; }
+
+.summary-panel { background:#fff; border:1px solid var(--line); border-radius:1rem; box-shadow:var(--shadow-soft); margin:0 0 1.45rem; overflow:hidden; }
+.summary-panel-header { padding:1rem 1.15rem; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); }
+.summary-panel-header h2 { margin:0; font-size:1.25rem; color:#0f172a; }
+.summary-panel-header p { margin:.35rem 0 0; color:#64748b; font-size:.92rem; }
+.summary-metrics { display:grid; grid-template-columns:repeat(2,minmax(180px,1fr)); gap:.8rem; padding:1rem 1.15rem .4rem; max-width:650px; }
+.summary-metric { border:1px solid #dbe4f0; border-radius:.9rem; padding:.85rem .95rem; background:linear-gradient(180deg,#ffffff,#f9fbff); }
+.summary-metric strong { display:block; font-size:1.7rem; line-height:1; color:#0f172a; }
+.summary-metric span { display:block; margin-top:.35rem; color:#475569; font-size:.85rem; font-weight:700; }
+.category-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; padding:.75rem 1.15rem 1.15rem; }
+.category-card { border:1px solid #dbe4f0; border-radius:.9rem; background:#fff; padding:.9rem; }
+.category-top { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.55rem; }
+.category-top h3 { margin:0; font-size:.95rem; color:#0f172a; }
+.count-badge { display:inline-flex; min-width:2.1rem; height:2.1rem; align-items:center; justify-content:center; border-radius:999px; font-weight:800; background:#e9f0ff; color:#1d4ed8; border:1px solid #c8d8ff; }
+.control-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+.control-tags a { text-decoration:none; font-size:.74rem; font-weight:800; color:#b00000; background:#fff1f1; border:1px solid #ffd2d2; border-radius:999px; padding:.18rem .45rem; }
+.control-tags a:hover { background:#ffe2e2; }
+@media (max-width: 1120px) { .summary-metrics { grid-template-columns:repeat(2,minmax(150px,1fr)); } .category-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 680px) { .summary-metrics, .category-grid { grid-template-columns:1fr; } }
+
+.index-section { margin-bottom:1.5rem; } .index-section h2 { margin:0 0 .8rem; font-size:1.3rem; color:#0f172a; } .control-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.75rem; width:100%; } .control-chip { display:flex; gap:.75rem; align-items:flex-start; width:100%; min-height:80px; padding:.8rem .9rem; border:1px solid var(--line); border-radius:1rem; background:#fff; text-decoration:none; box-shadow:var(--shadow-soft); } .control-chip:hover { transform:translateY(-1px); border-color:rgba(238,0,0,.35); box-shadow:var(--shadow); } .control-chip strong { flex:0 0 auto; color:var(--redhat-dark); font-size:.86rem; } .control-chip span { color:#334155; font-size:.88rem; line-height:1.35; }
+.article { max-width:none; width:100%; } .control-card { width:100%; background:var(--panel); border:1px solid var(--line); border-radius:1.1rem; box-shadow:var(--shadow-soft); margin:1rem 0 1.25rem; padding:.9rem; scroll-margin-top:1rem; } .control-head { width:100%; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; border:1px solid var(--line); border-radius:.95rem; padding:.9rem 1rem; background:linear-gradient(180deg,#fbfdff,#f7faff); } .control-title-wrap h2 { margin:.32rem 0 0; font-size:1.34rem; line-height:1.25; color:#0f172a; } .control-kicker-row { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; } .control-code { display:inline-flex; align-items:center; justify-content:center; padding:.22rem .55rem; border-radius:999px; background:#e9f0ff; color:#1d4ed8; font-weight:800; font-size:.75rem; border:1px solid #c8d8ff; } .subdomain-pill { display:inline-flex; align-items:center; padding:.24rem .58rem; border-radius:999px; background:#eef2f7; color:#334155; font-size:.75rem; font-weight:700; border:1px solid #d6deea; }
+.risk-pill { display:inline-flex; align-items:center; justify-content:center; padding:.26rem .62rem; border-radius:999px; font-size:.73rem; font-weight:800; border:1px solid transparent; white-space:nowrap; } .risk-pill.critical { background:#fee2e2; color:#b91c1c; border-color:#fecaca; } .risk-pill.high { background:#ffedd5; color:#c2410c; border-color:#fed7aa; } .risk-pill.moderate { background:#fef3c7; color:#b45309; border-color:#fde68a; } .risk-pill.low { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+.field-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.85rem; margin-top:.9rem; width:100%; align-items:start; } .field-box { border:1px solid var(--line); border-radius:.85rem; background:#fff; overflow:hidden; min-width:0; } .field-box h3 { margin:0; padding:.72rem .86rem; font-size:.76rem; line-height:1.2; text-transform:uppercase; letter-spacing:.04em; color:#1f3b5d; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); } .field-body { padding:.85rem .95rem; font-size:.92rem; color:#172033; } .field-body > :first-child { margin-top:0; } .field-body > :last-child { margin-bottom:0; } .field-box-full { grid-column:1/-1; } .risk-box.critical { border-left:4px solid #ef4444; background:#fff8f8; } .risk-box.high { border-left:4px solid #f97316; background:#fffaf5; } .risk-box.moderate { border-left:4px solid #f59e0b; background:#fffdf5; } .risk-box.low { border-left:4px solid #22c55e; background:#f7fff8; }
+.field-body ul,.field-body ol { margin:.3rem 0 .6rem 1.1rem; padding:0; } .field-body li { margin:.35rem 0; } .field-body p { margin:.45rem 0; } .field-body strong { color:#0f172a; } .field-body code { background:#eef2f7; color:#9f1239; padding:.12rem .32rem; border-radius:.35rem; font-size:.9em; }
+.field-body pre, pre.cli { background:#0b1220; color:#f8fafc; border-radius:.75rem; padding:1rem 1.1rem; overflow:auto; border:1px solid #111827; white-space:pre-wrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); margin:.75rem 0; } .field-body pre code, pre.cli code { background:transparent!important; color:#f8fafc!important; padding:0; font-family:Consolas,'Courier New',monospace; font-size:.88rem; font-weight:700; line-height:1.45; } .verification-steps li pre.cli { margin:.35rem 0 .2rem; }
+.control-links { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem .3rem .15rem; } .control-links a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:.85rem; } .control-links a:hover { text-decoration:underline; } .empty-note { color:var(--muted); font-style:italic; } .footer { padding:1.4rem clamp(1.1rem,4vw,4rem); color:#64748b; border-top:1px solid var(--line); background:#fff; }
+@media (max-width:1120px) { .field-grid { grid-template-columns:1fr; } .field-box-full { grid-column:auto; } } @media (max-width:980px) { .page-shell { grid-template-columns:1fr; } .sidebar { position:relative; height:auto; max-height:420px; } .control-head { flex-direction:column; } } @media print { .sidebar,.control-grid,.control-links,.notice { display:none!important; } .page-shell { display:block; } .hero { color:#111; background:#fff; padding:1rem 0; } .content-wrap { padding:0; } .control-card { box-shadow:none; break-inside:avoid; } }
+
+.cross-control-link { color:#1d4ed8; text-decoration:none; font-weight:700; border-bottom:1px dotted rgba(29,78,216,.45); }
+.cross-control-link:hover { color:#b00000; border-bottom-color:#b00000; }
+</style>
+</head>
+<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label" data-cross-pillar-nav="true">Assessment pillars</div><nav data-cross-pillar-nav="true"><a aria-current="page" class="nav-link is-primary" href="pillar-ar.html"><span>Pillar 1: Availability &amp; Resilience</span><small>AR controls — current page</small></a><a class="nav-link" href="pillar-rc.html"><span>Pillar 2: Recoverability / Disaster Recovery</span><small>Open RC pillar</small></a><a class="nav-link" href="pillar-ps.html"><span>Pillar 3: Performance &amp; Scalability</span><small>Open PS pillar</small></a><a class="nav-link" href="pillar-sc.html"><span>Pillar 4: Security &amp; Compliance</span><small>Open SC pillar</small></a><a class="nav-link" href="pillar-mo.html"><span>Pillar 5: Monitoring &amp; Observability</span><small>Open MO pillar</small></a><a class="nav-link" href="pillar-co.html"><span>Pillar 6: Cost Optimization</span><small>Open CO pillar</small></a></nav><div class="label">Pillar 1 controls</div><nav><a class="nav-link" href="#control-id-ar-001"><span>AR-001</span><small>Control Plane Quorum in OpenShift Container Platform 4.x</small></a>
+<a class="nav-link" href="#control-id-ar-002"><span>AR-002</span><small>etcd Storage Performance and Latency</small></a>
+<a class="nav-link" href="#control-id-ar-003"><span>AR-003</span><small>Automated Node Remediation (Fencing)</small></a>
+<a class="nav-link" href="#control-id-ar-004"><span>AR-004</span><small>Machine Health Checks</small></a>
+<a class="nav-link" href="#control-id-ar-005"><span>AR-005</span><small>Anti-Affinity Rules</small></a>
+<a class="nav-link" href="#control-id-ar-006"><span>AR-006</span><small>Pod Disruption Budgets (PDB)</small></a>
+<a class="nav-link" href="#control-id-ar-007"><span>AR-007</span><small>Live Migration Storage Readiness</small></a>
+<a class="nav-link" href="#control-id-ar-008"><span>AR-008</span><small>Live Migration Throttling</small></a>
+<a class="nav-link" href="#control-id-ar-009"><span>AR-009</span><small>Automated Workload Rebalancing</small></a>
+<a class="nav-link" href="#control-id-ar-010"><span>AR-010</span><small>Data Replication Factor</small></a>
+<a class="nav-link" href="#control-id-ar-011"><span>AR-011</span><small>Capacity Threshold Alerting</small></a>
+<a class="nav-link" href="#control-id-ar-012"><span>AR-012</span><small>Physical Link Aggregation</small></a>
+<a class="nav-link" href="#control-id-ar-013"><span>AR-013</span><small>Ingress High Availability</small></a>
+<a class="nav-link" href="#control-id-ar-014"><span>AR-014</span><small>Replica Counts (Declarative)</small></a>
+<a class="nav-link" href="#control-id-ar-015"><span>AR-015</span><small>Node Affinity, Placement &amp; Topology Spread Constraints</small></a>
+<a class="nav-link" href="#control-id-ar-016"><span>AR-016</span><small>Advanced Traffic Management &amp; Circuit Breaking (Service Mesh)</small></a>
+<a class="nav-link" href="#control-id-ar-017"><span>AR-017</span><small>Application Health Probes (Liveness, Readiness, Startup)</small></a>
+<a class="nav-link" href="#control-id-ar-018"><span>AR-018</span><small>Graceful Termination and Update Strategies</small></a>
+<a class="nav-link" href="#control-id-ar-019"><span>AR-019</span><small>Infrastructure (Infra) Node Segregation</small></a>
+<a class="nav-link" href="#control-id-ar-020"><span>AR-020</span><small>Dedicated Storage Node Roles (ODF Isolation)</small></a>
+<a class="nav-link" href="#control-id-ar-021"><span>AR-021</span><small>Node Taints &amp; Tolerations Enforcement (Role-Based Repulsion)</small></a>
+<a class="nav-link" href="#control-id-ar-022"><span>AR-022</span><small>OVN-Kubernetes Architecture Standard</small></a>
+<a class="nav-link" href="#control-id-ar-023"><span>AR-023</span><small>Multus Secondary Networking (Physical Network Segmentation)</small></a>
+<a class="nav-link" href="#control-id-ar-024"><span>AR-024</span><small>Declarative Node Networking (NMState) (Host-level Bond/VLAN Management)</small></a></nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 1</span><h2>Pillar 1: Availability &amp; Resilience</h2><p>Architecture assessment page for validating control plane resilience, workload availability, storage readiness, bare-metal networking, OpenShift Virtualization readiness, and operational recovery controls.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Availability and Resilience define a platform's capacity to maintain continuous service uptime and automatically recover from hardware, software, or network disruptions. Unlike legacy virtualization environments that often rely on manual intervention or bolted-on high-availability clusters, Red Hat OpenShift integrates these principles directly into its declarative, Kubernetes-native architecture. Availability ensures that the management control plane, storage foundations, and physical networking lack single points of failure. Resilience goes a step further by introducing automated self-healing mechanisms—such as node fencing, dynamic workload rescheduling, Pod Disruption Budgets, and non-disruptive VM Live Migrations. Together, these controls guarantee that both modern containerized applications and traditional virtual machines can survive unexpected outages and routine maintenance with zero or minimal impact on business operations.</p>
+</div><section aria-labelledby="control-summary" class="summary-panel">
+<div class="summary-panel-header">
+<h2 id="control-summary">Summary of Controls</h2>
+<p>Pillar 1 contains 24 assessment controls grouped by resilience domain to support control-plane stability, infrastructure recovery, workload availability, data protection, network resilience, and architecture/resource isolation.</p>
+</div>
+<div class="summary-metrics">
+<div class="summary-metric"><strong>24</strong><span>Total controls</span></div>
+<div class="summary-metric"><strong>6</strong><span>Architecture &amp; Resilience domains</span></div>
+</div>
+<div class="category-grid">
+<div class="category-card"><div class="category-top"><h3>Infrastructure Resilience</h3><span class="count-badge">7</span></div><div class="control-tags"><a href="#control-id-ar-003">AR-003</a><a href="#control-id-ar-004">AR-004</a><a href="#control-id-ar-007">AR-007</a><a href="#control-id-ar-008">AR-008</a><a href="#control-id-ar-011">AR-011</a><a href="#control-id-ar-012">AR-012</a><a href="#control-id-ar-024">AR-024</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Network Resilience</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-ar-022">AR-022</a><a href="#control-id-ar-023">AR-023</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Data Resilience</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-ar-010">AR-010</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Workload Resilience</h3><span class="count-badge">9</span></div><div class="control-tags"><a href="#control-id-ar-005">AR-005</a><a href="#control-id-ar-006">AR-006</a><a href="#control-id-ar-009">AR-009</a><a href="#control-id-ar-013">AR-013</a><a href="#control-id-ar-014">AR-014</a><a href="#control-id-ar-015">AR-015</a><a href="#control-id-ar-016">AR-016</a><a href="#control-id-ar-017">AR-017</a><a href="#control-id-ar-018">AR-018</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Control Plane Resilience</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-ar-001">AR-001</a><a href="#control-id-ar-002">AR-002</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Architecture</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-ar-019">AR-019</a><a href="#control-id-ar-020">AR-020</a><a href="#control-id-ar-021">AR-021</a></div></div>
+</div>
+</section><section aria-labelledby="controls-index" class="index-section"><h2 id="controls-index">Assessment Controls Index</h2><div class="control-grid"><a class="control-chip" href="#control-id-ar-001"><strong>AR-001</strong><span>Control Plane Quorum in OpenShift Container Platform 4.x</span></a>
+<a class="control-chip" href="#control-id-ar-002"><strong>AR-002</strong><span>etcd Storage Performance and Latency</span></a>
+<a class="control-chip" href="#control-id-ar-003"><strong>AR-003</strong><span>Automated Node Remediation (Fencing)</span></a>
+<a class="control-chip" href="#control-id-ar-004"><strong>AR-004</strong><span>Machine Health Checks</span></a>
+<a class="control-chip" href="#control-id-ar-005"><strong>AR-005</strong><span>Anti-Affinity Rules</span></a>
+<a class="control-chip" href="#control-id-ar-006"><strong>AR-006</strong><span>Pod Disruption Budgets (PDB)</span></a>
+<a class="control-chip" href="#control-id-ar-007"><strong>AR-007</strong><span>Live Migration Storage Readiness</span></a>
+<a class="control-chip" href="#control-id-ar-008"><strong>AR-008</strong><span>Live Migration Throttling</span></a>
+<a class="control-chip" href="#control-id-ar-009"><strong>AR-009</strong><span>Automated Workload Rebalancing</span></a>
+<a class="control-chip" href="#control-id-ar-010"><strong>AR-010</strong><span>Data Replication Factor</span></a>
+<a class="control-chip" href="#control-id-ar-011"><strong>AR-011</strong><span>Capacity Threshold Alerting</span></a>
+<a class="control-chip" href="#control-id-ar-012"><strong>AR-012</strong><span>Physical Link Aggregation</span></a>
+<a class="control-chip" href="#control-id-ar-013"><strong>AR-013</strong><span>Ingress High Availability</span></a>
+<a class="control-chip" href="#control-id-ar-014"><strong>AR-014</strong><span>Replica Counts (Declarative)</span></a>
+<a class="control-chip" href="#control-id-ar-015"><strong>AR-015</strong><span>Node Affinity, Placement &amp; Topology Spread Constraints</span></a>
+<a class="control-chip" href="#control-id-ar-016"><strong>AR-016</strong><span>Advanced Traffic Management &amp; Circuit Breaking (Service Mesh)</span></a>
+<a class="control-chip" href="#control-id-ar-017"><strong>AR-017</strong><span>Application Health Probes (Liveness, Readiness, Startup)</span></a>
+<a class="control-chip" href="#control-id-ar-018"><strong>AR-018</strong><span>Graceful Termination and Update Strategies</span></a>
+<a class="control-chip" href="#control-id-ar-019"><strong>AR-019</strong><span>Infrastructure (Infra) Node Segregation</span></a>
+<a class="control-chip" href="#control-id-ar-020"><strong>AR-020</strong><span>Dedicated Storage Node Roles (ODF Isolation)</span></a>
+<a class="control-chip" href="#control-id-ar-021"><strong>AR-021</strong><span>Node Taints &amp; Tolerations Enforcement (Role-Based Repulsion)</span></a>
+<a class="control-chip" href="#control-id-ar-022"><strong>AR-022</strong><span>OVN-Kubernetes Architecture Standard</span></a>
+<a class="control-chip" href="#control-id-ar-023"><strong>AR-023</strong><span>Multus Secondary Networking (Physical Network Segmentation)</span></a>
+<a class="control-chip" href="#control-id-ar-024"><strong>AR-024</strong><span>Declarative Node Networking (NMState) (Host-level Bond/VLAN Management)</span></a></div></section><article class="article">
+<section class="control-card" id="control-id-ar-001">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-001</span><span class="subdomain-pill">Control Plane</span></div>
+<h2>Control Plane Quorum in OpenShift Container Platform 4.x</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>In OpenShift Container Platform 4.x, <strong>Control Plane Quorum</strong> refers to the mechanism that ensures high availability (HA) and data consistency for <strong>etcd</strong>, the distributed key-value store that maintains the cluster's configuration and state. Quorum represents the minimum number of control plane (master) nodes that must be online and able to communicate for the cluster to make decisions and accept configuration updates.</p>
+<h4>Key Aspects of Control Plane Quorum:</h4>
+<ul>
+<li><p><strong>Etcd-Based:</strong> OpenShift 4.x relies on etcd for cluster state. Quorum ensures that write operations occur only when a majority of members agree, maintaining consistency.</p>
+</li>
+<li><p><strong>Majority Rule:</strong> In a standard 3-node control plane, quorum is 2 ($n/2 + 1$). The cluster remains operational with one node down but loses quorum if two nodes fail.</p>
+</li>
+<li><p><strong>Minimum Nodes:</strong> Although reduced-node topologies exist, a minimum of 3 control plane nodes is required for a highly available production deployment.</p>
+</li>
+<li><p><strong>Even Node Limitation:</strong> Even-numbered control planes (e.g., 4 nodes) offer no HA advantage because quorum still requires more than half (e.g., 3/4). Therefore, an odd number of control plane nodes (3, 5, etc.) is recommended.</p>
+</li>
+<li><p><strong>Split-Brain Prevention:</strong> If network partitions occur, only the partition containing most control plane nodes remains active, preventing conflicting or corrupt cluster state.</p>
+</li>
+<li><p><strong>Operation Halt on Quorum Loss:</strong> If healthy nodes fall below quorum, etcd stops accepting writes and the API server becomes effectively read-only to protect cluster integrity.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Standard HA Requirement:</strong> Verify that a minimum of three control plane nodes is present.</p>
+</li>
+<li><p><strong>Active Majority:</strong> Confirm that at least two of the three nodes (for a 3-node setup) are active and participating in the Raft index.</p>
+</li>
+<li><p><strong>Enhanced Resilience:</strong> For Bare Metal environments requiring higher stability, verify if 5 nodes are used, requiring a minimum of 3 to maintain quorum.</p>
+</li>
+<li><p><strong>Edge Topologies:</strong> If a 2-node edge deployment is used, verify the presence and health of a "lightweight arbiter node" acting as the third etcd member.</p>
+</li>
+<li><p><strong>Operator Status:</strong> Assess the etcd and kube-apiserver Cluster Operators for any "Degraded" or "Unavailable" signals.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Maintaining quorum is the foundation of cluster stability and data integrity, particularly in a <strong>Bare Metal</strong> environment where hardware or power failures are inevitable.</p>
+<ul>
+<li><p><strong>Consensus Integrity:</strong> By requiring a majority for every transaction, the cluster ensures that the "Source of Truth" remains identical across all nodes, even during infrastructure instability.</p>
+</li>
+<li><p><strong>Fault Tolerance:</strong> A 3-node or 5-node configuration allows for "N-1" fault tolerance, ensuring that scheduled maintenance or a single node crash does not halt business operations.</p>
+</li>
+<li><p><strong>CAP Theorem Alignment:</strong> etcd prioritizes <strong>Consistency and Partition Tolerance (CP)</strong>. This is essential for financial institutions (like Agrobank) where an incorrect cluster state could lead to inconsistent application data or security policy bypasses.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Technical verification is performed via the OpenShift CLI and internal etcd diagnostics:</p>
+<ul>
+<li><strong>Validation Method:</strong> Quorum is verified via etcd status. If a majority of nodes are not active, the etcd cluster Operator triggers alerts.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Confirm all master nodes are in Ready status:</strong></p><pre class="cli"><code>oc get nodes -l node-role.kubernetes.io/master</code></pre></li>
+<li><p><strong>Check the health of the etcd operator:</strong></p><pre class="cli"><code>oc get clusteroperators etcd</code></pre></li>
+<li><p><strong>Verify synchronization across the cluster:</strong></p><pre class="cli"><code>oc rsh -n openshift-etcd -c etcd $(oc get pods -n openshift-etcd -l app=etcd -o name | head -1) etcdctl endpoint status --cluster -w table</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Operator Status Log:</strong> A timestamped export of <em>oc get clusteroperators etcd</em>.</p>
+</li>
+<li><p><strong>Member Health Table:</strong> Output of <em>etcdctl</em> member list -w table showing all member IDs and status.</p>
+</li>
+<li><p><strong>Node Role Report:</strong> A list of master nodes showing hostnames and failure domain distribution labels.</p>
+</li>
+<li><p><strong>Dashboard Artefact:</strong> A PDF export of the OpenShift etcd Monitoring Dashboard showing stable quorum and leader presence.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Quorum Loss):</strong> If healthy nodes fall below the majority, the cluster will stop accepting all writes. This results in an immediate halt to all CI/CD pipelines, autoscaling events, and administrative changes.</p>
+</li>
+<li><p><strong>Critical Risk (Data Corruption):</strong> If a "split-brain" occurs (rare but possible without strict quorum enforcement), the etcd database may become inconsistent, necessitating a complex and time-consuming manual restore from backups.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Frequent loss of quorum due to poor hardware or network performance leads to "flapping" services, causing application downtime and inconsistent end-user experiences.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Section 11.1</strong> (Data Integrity).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 11</strong> (Data Recovery).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CP-2</strong> (Contingency Plan); <strong>SC-5</strong> (DoS Protection).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-002">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-002</span><span class="subdomain-pill">Control Plane</span></div>
+<h2>etcd Storage Performance and Latency</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>In a bare-metal OpenShift deployment, <strong>etcd</strong> performance is almost entirely dependent on the I/O characteristics of the underlying storage. Because etcd uses a leader-based consensus protocol, every write must be persisted to a Write-Ahead Log (WAL) and acknowledged by a majority of nodes before it is considered committed.</p>
+<h4>Key Aspects of etcd Storage Performance:</h4>
+<ul>
+<li><p><strong>Fsync Latency:</strong> The primary metric for etcd health is the fsync duration. This is the time it takes to flush data from the kernel's disk cache to the physical storage media.</p>
+</li>
+<li><p><strong>Sequential I/O:</strong> etcd writes to the WAL sequentially. Any interference from other high-I/O processes on the same disk can cause "head contention," significantly increasing latency.</p>
+</li>
+<li><p><strong>Resource Contention:</strong> On bare metal, if the operating system or other containers are competing for disk bandwidth, etcd may miss its internal "heartbeat" intervals.</p>
+</li>
+<li><p><strong>Strict p99 Requirements:</strong> For a "Well-Architected" cluster, the 99th percentile (p99) of disk synchronization should consistently remain below <strong>10ms</strong>.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Storage Media Type:</strong> Confirm that master nodes are utilizing Enterprise-grade SSD or NVMe. Standard HDDs are non-compliant for production control planes.</p>
+</li>
+<li><p><strong>Dedicated Mounts:</strong> Verify if /var/lib/etcd is mounted on a dedicated physical device or high-speed partition to isolate it from OS and container logs.</p>
+</li>
+<li><p><strong>Latency Metrics:</strong> Assess the historical fsync duration over a 24-hour window to ensure no spikes above the 10ms threshold.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>For financial institutions, storage latency isn't just a performance metric; it is a stability requirement.</p>
+<ul>
+<li><p><strong>Stability of the API:</strong> High disk latency causes the etcd leader to step down, triggering constant re-elections that freeze the OpenShift API.</p>
+</li>
+<li><p><strong>Prevention of "Split-Brain":</strong> Fast disk I/O ensures that all members of the quorum stay synchronized in real-time, reducing the risk of data divergence during heavy load.</p>
+</li>
+<li><p><strong>Bare Metal Advantage:</strong> Utilizing local NVMe or Enterprise SSDs on bare metal allows OpenShift to bypass the overhead of virtualized storage layers, provided the disks are correctly optimized.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Technical verification is performed via Prometheus metrics and the etcdctl performance suite:</p>
+<ul>
+<li><strong>Validation Method:</strong> Performance is verified by measuring the time taken for a standardized write load to be committed to disk.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Direct Performance Test:</strong> Run a 60-second performance check:</p><pre class="cli"><code>oc rsh -n openshift-etcd -c etcd $(oc get pods -n openshift-etcd -l app=etcd -o name | head -1) etcdctl check perf</code></pre></li>
+<li><p><strong>Metric Analysis:</strong> Query Prometheus for the p99 WAL sync duration:</p><pre class="cli"><code>histogram_quantile(0.99, sum(rate(etcd_disk_wal_fsync_duration_seconds_bucket[5m])) by (le))</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>etcd Perf Output:</strong> A log of the etcdctl check perf showing a "PASS" status for the defined workload.</p>
+</li>
+<li><p><strong>Storage Configuration:</strong> Output of lsblk or /etc/fstab from a master node showing the mount point for etcd.</p>
+</li>
+<li><p><strong>Prometheus Graph:</strong> A screenshot or PDF export of the "etcd Disk Sync" dashboard showing p99 latency consistently below 10ms.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Cluster Instability):</strong> Latency above 10ms leads to frequent leader re-elections, causing the OpenShift web console and CLI to become intermittently unresponsive.</p>
+</li>
+<li><p><strong>Critical Risk (Cascading Failure):</strong> In high-churn environments (e.g., heavy pod scaling), slow storage can cause the etcd database to fall so far behind that it cannot recover without a manual restoration.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Users will experience "Timeout" errors during deployment, and monitoring systems may trigger false-positive alerts regarding master node health.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.5</strong> (Performance Management); <strong>Section 10.3</strong> (Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 8</strong> (Audit Log Management - ensuring log persistence speed).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CP-9</strong> (System Backup); <strong>SI-13</strong> (Predictable Failure Analysis).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-003">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-003</span><span class="subdomain-pill">Infrastructure Resilience</span></div>
+<h2>Automated Node Remediation (Fencing)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>In a bare-metal environment, if a node becomes unresponsive due to hardware failure, kernel panic, or network isolation, the cluster must ensure the node is truly "dead" before recovering workloads. <strong>Automated Node Remediation (Fencing)</strong> is the mechanism that detects an unhealthy node and "fences" it typically by forcing a reboot—to prevent data corruption and allow for safe workload migration.</p>
+<h4>Key Aspects of Automated Node Remediation:</h4>
+<ul>
+<li><p><strong>Self-Node Remediation:</strong> Utilizing the Self-Node Remediation (SNR) Operator to allow a node to reboot itself if it loses connection to the API server for a specified duration.</p>
+</li>
+<li><p><strong>Fencing Logic:</strong> Ensures that a "zombie" node cannot continue to access shared storage (PVs) or external resources while the cluster attempts to restart those same services on a healthy node.</p>
+</li>
+<li><p><strong>Reboot-Based Recovery:</strong> Prioritizes a hard reboot to clear transient hardware or kernel errors, returning the node to a "Ready" state without manual intervention.</p>
+</li>
+<li><p><strong>Out-of-Band Integration:</strong> In advanced bare-metal setups, this may integrate with the Baseboard Management Controller (BMC) via IPMI or Redfish to power-cycle the server.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Operator Installation:</strong> Confirm the <strong>Node Health Check</strong> and <strong>Self-Node Remediation</strong> operators are installed and in a "Succeeded" state.</p>
+</li>
+<li><p><strong>Health Check Policy:</strong> Verify that a NodeHealthCheck (NHC) resource is defined for both worker and infra roles.</p>
+</li>
+<li><p><strong>Remediation Strategy:</strong> Ensure the remediation strategy is set to SelfNodeRemediation and that the timeout values are tuned to avoid "flapping" during minor network blips.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>For stateful banking applications and Virtual Machines (OpenShift Virtualization), data integrity is paramount.</p>
+<ul>
+<li><p><strong>Prevention of Data Corruption:</strong> Fencing prevents two nodes from simultaneously mounting the same ReadWriteOnce (RWO) volume, which would otherwise result in filesystem corruption.</p>
+</li>
+<li><p><strong>Reduced MTTR:</strong> Automating the reboot of failed hardware significantly reduces the Mean Time to Recovery (MTTR) compared to manual sysadmin intervention.</p>
+</li>
+<li><p><strong>High Availability for VMs:</strong> In a bare-metal context, if a host running a critical database VM hangs, fencing is the only way to safely trigger the VM's restart on a secondary host.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Technical verification confirms the automated policies are active in the cluster:</p>
+<ul>
+<li><strong>Validation Method:</strong> Review the custom resources governing node health and remediation actions.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check NHC status:</p><pre class="cli"><code>oc get nodehealthchecks -A</code></pre></li>
+<li><p>Check SNR status:</p><pre class="cli"><code>oc get selfnoderemediations -n openshift-operators</code></pre></li>
+<li><p>Inspect NHC configuration to confirm it targets the correct nodes:</p><pre class="cli"><code>oc describe nodehealthcheck &lt;name&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>NHC Configuration Log:</strong> Output of oc get nodehealthcheck -o yaml.</p>
+</li>
+<li><p><strong>Operator Pod Status:</strong> A list of pods in the openshift-operators namespace related to remediation.</p>
+</li>
+<li><p><strong>Event Logs:</strong> Historical oc get events -A showing any instances where a node was successfully remediated by the operator.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Data Corruption):</strong> Without fencing, a semi-responsive node may continue writing to storage while a recovered instance of the same app is also writing, leading to catastrophic database failure.</p>
+</li>
+<li><p><strong>Critical Risk (Service Stalls):</strong> Critical workloads (especially VMs) will remain in an "Unknown" state indefinitely if the underlying host hangs, causing prolonged application downtime.</p>
+</li>
+</ul>
+<!-- -->
+<ul>
+<li><strong>Operational Risk:</strong> Increases reliance on 24/7 manual monitoring and manual power-cycling of servers, which is prone to human error.</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Section 10.4</strong> (Recovery Time Objective).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 11</strong> (Data Recovery).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CP-2</strong> (Contingency Plan); <strong>PE-13</strong> (Fire Protection/Power - specifically hardware availability).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-004">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-004</span><span class="subdomain-pill">Infrastructure Resilience</span></div>
+<h2>Machine Health Checks</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Machine Health Checks (MHC)</strong> provide an automated monitoring layer that observes the state of the Machine objects within an OpenShift cluster. While <a class="cross-control-link" href="pillar-ar.html#control-id-ar-003" title="Open AR-003">AR-003</a> focuses on "fencing" a crashed node, MHC focuses on the lifecycle of the machine—identifying nodes that are "NotReady" or meeting specific unhealthy criteria and triggering a replacement or repair.</p>
+<h4>Key Aspects of Machine Health Checks:</h4>
+<ul>
+<li><p><strong>Condition Monitoring:</strong> MHC monitors for specific node conditions such as Ready=False, NetworkUnavailable=True, or DiskPressure=True.</p>
+</li>
+<li><p><strong>Remediation Thresholds:</strong> Allows for a grace period (e.g., 5 minutes). If the condition persists beyond this time, the machine is marked for remediation.</p>
+</li>
+<li><p><strong>MachineSet Integration:</strong> In a bare-metal environment using the Machine API, the MHC can trigger the deletion and re-provisioning of a host if the hardware supports automated provisioning.</p>
+</li>
+<li><p><strong>Short-Circuit Protection:</strong> Prevents the MHC from remediating too many nodes at once (e.g., if more than 40% of the cluster is unhealthy, it stops to prevent a total cluster wipe-out).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>MHC Definitions:</strong> Ensure MachineHealthCheck resources exist for each MachineSet (Master, Worker, Infra).</p>
+</li>
+<li><p><strong>Unhealthy Conditions:</strong> Verify the defined conditions match the criticality of the banking workloads (e.g., monitoring DiskPressure on nodes running high-I/O databases).</p>
+</li>
+<li><p><strong>MaxUnhealthy Limit:</strong> Confirm that the maxUnhealthy parameter is set to a safe percentage to prevent mass-remediation during a top-of-rack switch failure.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Maintaining a healthy fleet of nodes is essential for predictable application performance.</p>
+<ul>
+<li><p><strong>Declarative Infrastructure:</strong> MHC ensures that the actual state of the hardware fleet matches the desired state defined in the MachineSet.</p>
+</li>
+<li><p><strong>Error Isolation:</strong> Automatically removes "gray failure" nodes (nodes that are partially functional but performing poorly) from the active scheduling pool.</p>
+</li>
+<li><p><strong>Auditability:</strong> Provides a clear, automated record of when and why a specific piece of infrastructure was deemed unhealthy and remediated.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is done by inspecting the Machine API resources:</p>
+<ul>
+<li><strong>Validation Method:</strong> Direct inspection of the MachineHealthCheck custom resources.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>List all MHCs:</p><pre class="cli"><code>oc get machinehealthchecks -n openshift-machine-api</code></pre></li>
+<li><p>Verify target selection:</p><pre class="cli"><code>oc describe machinehealthcheck &lt;name&gt; -n openshift-machine-api</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>MHC Resource YAML:</strong> Export of the MachineHealthCheck definitions.</p>
+</li>
+<li><p><strong>Machine Status Log:</strong> Output of oc get machines -n openshift-machine-api showing any machines currently undergoing remediation.</p>
+</li>
+<li><p><strong>Controller Logs:</strong> Logs from the machine-api-operator showing health check evaluations.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Capacity Degradation):</strong> Unhealthy nodes that are not remediated will continue to receive pod assignments, leading to "scheduling loops" where pods constantly fail.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Manual intervention is required for common node failures, increasing the workload on the infrastructure team and slowing down recovery.</p>
+</li>
+<li><p><strong>Compliance Risk:</strong> Failing to maintain the "Desired State" of the cluster may violate internal SLAs and RMiT resilience requirements.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.1</strong> (Operations Management); <strong>Section 10.3</strong> (Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SI-2</strong> (Flaw Remediation); <strong>SI-4</strong> (Information System Monitoring).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-005">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-005</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Anti-Affinity Rules</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Anti-Affinity Rules</strong> are scheduler instructions that ensure redundant instances (replicas) of a critical application or microservice are physically separated across the cluster's infrastructure. In a bare-metal environment, this ensures that a single hardware failure (server, rack, or PDU) does not result in the total loss of an application service.</p>
+<h4>Key Aspects of Anti-Affinity:</h4>
+<ul>
+<li><p><strong>PodAntiAffinity:</strong> Prevents multiple pods of the same application from being scheduled on the same host.</p>
+</li>
+<li><p><strong>Topology Keys:</strong> Uses keys such as kubernetes.io/hostname (node-level) or topology.kubernetes.io/rack (rack-level) to define the boundary of separation.</p>
+</li>
+<li><p><strong>Hard vs. Soft Enforcement:</strong></p>
+<ul>
+<li><p><strong>Required (Hard):</strong> The pod will <em>not</em> schedule unless it can find a unique node. Essential for production databases.</p>
+</li>
+<li><p><strong>Preferred (Soft):</strong> The scheduler will <em>try</em> to separate pods but will co-locate them if the cluster is at capacity.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Workload Diversity:</strong> Ensures that "A" and "B" sides of an active-active banking service never share the same physical silicon.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Deployment Specs:</strong> Review the affinity stanza in application deployment manifests for critical services.</p>
+</li>
+<li><p><strong>Topology Labels:</strong> Confirm that nodes are correctly labeled with their physical locations (rack, room, row) to allow the scheduler to make intelligent decisions.</p>
+</li>
+<li><p><strong>Scheduling Balance:</strong> Assess the actual distribution of pods across nodes to ensure the anti-affinity rules are functioning as expected.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>For critical banking services like payment gateways or core ledgers, local redundancy is not enough if the hardware is shared.</p>
+<ul>
+<li><p><strong>Blast Radius Limitation:</strong> Limits the impact of a single server "Purple Screen of Death" or NIC failure to only one instance of the service.</p>
+</li>
+<li><p><strong>Hardware Maintenance:</strong> Allows for the maintenance of a physical server (e.g., firmware updates) without taking the entire application offline.</p>
+</li>
+<li><p><strong>Compliance with Availability Zones:</strong> Even in a single data center, anti-affinity simulates "Availability Zones" at the rack level.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is performed by auditing workload manifests and current pod distribution:</p>
+<ul>
+<li><strong>Validation Method:</strong> Manifest analysis and pod-to-node mapping.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Inspect deployment affinity:</p><pre class="cli"><code>oc get deployment &lt;name&gt; -o yaml | grep -A 15 affinity</code></pre></li>
+<li><p>Verify pod distribution:</p><pre class="cli"><code>oc get pods -o wide -l app=&lt;label&gt; (Check that NODE names are unique).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Application Manifests:</strong> YAML snippets showing the podAntiAffinity configuration.</p>
+</li>
+<li><p><strong>Pod Placement Report:</strong> A table showing the mapping of critical pods to their respective physical nodes.</p>
+</li>
+<li><p><strong>Node Label Export:</strong> A list of nodes and their topology labels (oc get nodes --show-labels).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Total Service Outage):</strong> If all three replicas of a ledger service are scheduled on one bare-metal host, a single hardware failure results in a 100% service outage.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Hardware upgrades become extremely high-risk "all-or-nothing" events because there is no guarantee that redundant pods are safe on other nodes.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> Co-locating resource-heavy pods on a single host can lead to "noisy neighbor" effects, degrading the performance of the entire service stack.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Appendix 4</strong> (Critical System Design).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability); <strong>CP-2</strong> (Contingency Plan).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-006">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-006</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Pod Disruption Budgets (PDB)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>A <strong>Pod Disruption Budget (PDB)</strong> is a safety guardrail that limits the number of pods of a replicated application that are down simultaneously from voluntary disruptions. Voluntary disruptions include actions like node drains for bare-metal firmware updates, cluster upgrades, or autoscaling events.</p>
+<h4>Key Aspects of Pod Disruption Budgets:</h4>
+<ul>
+<li><p><strong>Minimum Availability:</strong> Ensures a specific number or percentage of pods (e.g., minAvailable: 2 or 80%) remain operational at all times.</p>
+</li>
+<li><p><strong>Maximum Inavailability:</strong> Alternatively, it can specify the maximum number of pods that can be offline (e.g., maxUnavailable: 1).</p>
+</li>
+<li><p><strong>Scheduler Integration:</strong> The oc adm drain command will respect these budgets; it will fail or hang if evacuating a node would violate the PDB, forcing the administrator to intervene or wait.</p>
+</li>
+<li><p><strong>Quorum Protection:</strong> Essential for distributed systems (like clustered databases) that require a specific number of members to maintain their own internal quorum.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>PDB Coverage:</strong> Verify that all "Critical" and "Essential" labeled workloads have an associated PDB resource.</p>
+</li>
+<li><p><strong>Budget Logic:</strong> Confirm that the minAvailable value is not set to the total number of replicas (which would block all maintenance) but is sufficient for the application's performance baseline.</p>
+</li>
+<li><p><strong>Selector Alignment:</strong> Ensure the PDB label selector accurately matches the labels on the application's pods.</p>
+</li>
+<li></li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment where high availability is mandated by RMiT, manual errors during maintenance can be catastrophic.</p>
+<ul>
+<li><p><strong>Prevention of Accidental Outages:</strong> Prevents a platform engineer from accidentally taking down all instances of a service during a routine patch cycle.</p>
+</li>
+<li><p><strong>SLA Enforcement:</strong> Guarantees that the "N-1" or "N-2" redundancy planned in the architecture is physically maintained during cluster operations.</p>
+</li>
+<li><p><strong>Safe Automation:</strong> Allows automated lifecycle tools (like the Machine Config Operator) to safely roll out OS updates to bare-metal nodes without manual supervision for every pod.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification involves auditing the PDB resources against the running workloads:</p>
+<ul>
+<li><strong>Validation Method:</strong> Resource inspection and simulation of a disruption.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>List all PDBs in a namespace:</p><pre class="cli"><code>oc get pdb -n &lt;namespace&gt;</code></pre></li>
+<li><p>Check the "Allowed Disruptions" column:</p><pre class="cli"><code>oc get pdb (A value of 0 indicates no more pods can be safely removed).</code></pre></li>
+<li><p>Inspect a specific PDB:</p><pre class="cli"><code>oc describe pdb &lt;name&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>PDB Resource List:</strong> An export of oc get pdb -A showing all defined budgets.</p>
+</li>
+<li><p><strong>Deployment Mapping:</strong> A report linking specific PDBs to their corresponding Deployments or StatefulSets.</p>
+</li>
+<li><p><strong>Drain Test Log:</strong> A log of a failed oc adm drain command where the PDB correctly blocked the node evacuation to protect application availability.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Service Interruption):</strong> Without PDBs, a simple cluster upgrade could restart all pods of a service at once, causing a total blackout.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Maintenance windows become high-stress events where engineers must manually verify pod counts before every action.</p>
+</li>
+<li><p><strong>Compliance Risk:</strong> Failure to protect critical workloads during maintenance violates the "Continuous Availability" principles of RMiT.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Section 10.1</strong> (Operations Management).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CP-2</strong> (Contingency Plan); <strong>SC-6</strong> (Resource Availability).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-007">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-007</span><span class="subdomain-pill">Infrastructure Resilience (Virtualization)</span></div>
+<h2>Live Migration Storage Readiness</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For workloads running as Virtual Machines via <strong>OpenShift Virtualization</strong>, <strong>Live Migration</strong> is the ability to move a running VM from one bare-metal host to another with zero downtime. This control ensures that the underlying storage architecture is configured to support the high-speed data handoff required for migration.</p>
+<h4>Key Aspects of Storage Readiness:</h4>
+<ul>
+<li><p><strong>Shared Storage Requirement:</strong> VMs must be backed by persistent volumes (PVs) that support ReadWriteMany (RWX) access modes (e.g., via OpenShift Data Foundation).</p>
+</li>
+<li><p><strong>Storage Class Capability:</strong> The storage provider must support the LiveMigration capability, ensuring that locks on the disk can be transitioned between hosts without dropping the filesystem.</p>
+</li>
+<li><p><strong>I/O Consistency:</strong> Ensures that disk writes remain consistent during the "dirty page" transfer phase of the migration.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Access Mode Check:</strong> Verify that VM disks are using ReadWriteMany (RWX) volumes.</p>
+</li>
+<li><p><strong>Storage Class Audit:</strong> Check if the StorageClass used by the VMs is backed by a shared provider like ODF (Ceph), NFS, or an external SAN.</p>
+</li>
+<li><p><strong>Migration Policy:</strong> Ensure evictionStrategy: LiveMigrate is set in the VirtualMachine specification.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Bare-metal nodes require physical maintenance (firmware, hardware replacement).</p>
+<ul>
+<li><p><strong>Zero Downtime Maintenance:</strong> Allows the infrastructure team to evacuate all VMs from a physical server for hardware repair without the application owner noticing a disruption.</p>
+</li>
+<li><p><strong>Load Balancing:</strong> Enables the cluster to move "hot" VMs away from a CPU-congested host to a quieter host dynamically.</p>
+</li>
+<li><p><strong>Data Integrity:</strong> Proper storage readiness ensures that the VM doesn't suffer from "split-brain" where two hosts think they own the virtual disk during the handoff.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is done by checking the VM configuration and testing a migration:</p>
+<ul>
+<li><strong>Validation Method:</strong> Configuration review and live test.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Verify volume access mode:</p><pre class="cli"><code>oc get pvc &lt;vmi-disk-pvc&gt; -o jsonpath='{.spec.accessModes}'</code></pre></li>
+<li><p>Check VM migration strategy:</p><pre class="cli"><code>oc get vm &lt;name&gt; -o yaml | grep evictionStrategy</code></pre></li>
+<li><p>Trigger a test migration:</p><pre class="cli"><code>virtctl migrate &lt;vm-name&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>StorageClass YAML:</strong> Snippet showing the provisioner and parameters.</p>
+</li>
+<li><p><strong>PVC Report:</strong> Output of oc get pvc showing RWX status for VM disks.</p>
+</li>
+<li><p><strong>Migration History:</strong> Output of oc get virtualmachineinstancemigration showing successful historical transitions.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Data Corruption):</strong> If storage is not properly "ReadWriteMany," a migration attempt may fail, or worse, leave the disk in a locked state that requires manual recovery.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> If Live Migration fails, every hardware patch requires a complete shutdown of all hosted VMs, significantly increasing the "Change Window" duration.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> Inadequate storage bandwidth during migration can lead to "migration timeouts," where the VM hangs in a transitional state.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Section 10.5</strong> (Performance Management).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CP-2</strong> (Contingency Plan); <strong>SC-36</strong> (Distributed Processing and Storage).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-008">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-008</span><span class="subdomain-pill">Infrastructure Resilience (Virtualization)</span></div>
+<h2>Live Migration Throttling</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>When a Virtual Machine migrates between bare-metal hosts, its entire memory state (RAM) must be copied over the network. <strong>Live Migration Throttling</strong> (and bandwidth management) controls the speed of this transfer to ensure that migration traffic does not saturate the physical network links and negatively impact application traffic.</p>
+<h4>Key Aspects of Migration Throttling:</h4>
+<ul>
+<li><p><strong>Bandwidth Limits:</strong> Setting a maximum Mbps/Gbps cap on migration traffic per VM.</p>
+</li>
+<li><p><strong>Parallel Migration Limits:</strong> Controlling how many VMs can migrate simultaneously across the cluster or per node.</p>
+</li>
+<li><p><strong>Dedicated Migration Network:</strong> Using a separate physical or VLAN interface for migration traffic to isolate it from the "Front-end" application network.</p>
+</li>
+<li><p><strong>Completion Timeouts:</strong> Defining how long a migration is allowed to stay in the "pre-copy" phase before failing, preventing an endless loop if the VM's memory is changing faster than it can be copied.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Cluster-Wide Configuration:</strong> Verify the KubeVirt object for migrationConfiguration settings.</p>
+</li>
+<li><p><strong>Network Isolation:</strong> Check if a dedicated NetworkAttachmentDefinition (Multus) is assigned for migration traffic.</p>
+</li>
+<li><p><strong>Migration Policies:</strong> Assess if specific MigrationPolicies are applied to high-priority vs. low-priority VMs.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a high-transaction banking environment, "Network Jitter" is a major risk.</p>
+<ul>
+<li><p><strong>Network Stability:</strong> Prevents a large 128GB RAM database migration from "choking" the 10Gbps/25Gbps uplinks and causing latency spikes for the banking API.</p>
+</li>
+<li><p><strong>Predictable Performance:</strong> Ensures that migration is a background task that does not interfere with the primary mission of the cluster: serving application traffic.</p>
+</li>
+<li><p><strong>Resource Fairness:</strong> Prevents a single large migration from consuming all available cluster bandwidth, which could block other critical migrations or health checks.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Audit of the KubeVirt configuration and network traffic monitoring.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>View migration config:</p><pre class="cli"><code>oc get kubevirt -n openshift-cnv virt-kubevirt -o jsonpath='{.spec.configuration.migrations}'</code></pre></li>
+<li><p>Check for bandwidth caps: Look for bandwidthPerMigration in the output above.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>KubeVirt YAML:</strong> The spec.configuration.migrations section of the KubeVirt resource.</p>
+</li>
+<li><p><strong>Network Monitoring Graphs:</strong> Screenshots showing migration traffic staying within the defined bandwidth thresholds.</p>
+</li>
+<li><p><strong>Migration Policy Export:</strong> Output of oc get migrationpolicies.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Application Latency):</strong> Without throttling, a migration could cause a "Network Storm," leading to dropped packets for real-time banking transactions.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Migrations may never complete if the VM is memory-intensive and the network is not optimized, resulting in nodes that cannot be drained.</p>
+</li>
+<li><p><strong>Secondary Risk:</strong> Excessive network load can trigger false "Node NotReady" alerts from the etcd quorum (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-001" title="Open AR-001">AR-001</a>) due to heartbeat delays.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.5</strong> (Performance Management); <strong>Section 10.3</strong> (Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability); <strong>SC-5</strong> (Denial of Service Protection).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-009">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-009</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Automated Workload Rebalancing</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Over time, as pods are created and deleted, an OpenShift cluster can become "unbalanced," with some bare-metal nodes running at 90% utilization while others sit at 20%. <strong>Automated Workload Rebalancing</strong> (via the <strong>Descheduler</strong>) identifies these imbalances and proactively moves pods to ensure even resource distribution.</p>
+<h4>Key Aspects of Rebalancing:</h4>
+<ul>
+<li><p><strong>Descheduler Strategies:</strong> Strategies like LowNodeUtilization, RemoveDuplicates, and RemovePodsViolatingInterPodAntiAffinity.</p>
+</li>
+<li><p><strong>Proactive Eviction:</strong> Unlike the standard scheduler (which only acts when a pod is created), the Descheduler continuously audits the cluster state and evicts pods to better nodes.</p>
+</li>
+<li><p><strong>Soft Rebalancing:</strong> Typically ignores critical system pods and respects Pod Disruption Budgets (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-006" title="Open AR-006">AR-006</a>) to ensure rebalancing doesn't cause an outage.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Operator Presence:</strong> Confirm the <strong>Kube Descheduler Operator</strong> is installed.</p>
+</li>
+<li><p><strong>Strategy Audit:</strong> Review the KubeDescheduler object to see which strategies are enabled (e.g., LowNodeUtilization).</p>
+</li>
+<li><p><strong>Interval Check:</strong> Verify how often the descheduler runs (typically every 2–5 minutes).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>A balanced cluster is a resilient cluster.</p>
+<ul>
+<li><p><strong>Failure Impact Minimization:</strong> If an overloaded node fails, the loss of 100 pods is much harder for the cluster to recover from than the loss of 20 pods on a balanced node.</p>
+</li>
+<li><p><strong>Performance Consistency:</strong> Ensures that no single application suffers from "CPU Steal" because too many intensive pods were packed onto one server.</p>
+</li>
+<li><p><strong>Optimal Hardware Use:</strong> Maximizes the ROI of the bare-metal investment by ensuring all purchased cores and RAM are being utilized effectively across the data center.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Resource check and log audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check Descheduler status:</p><pre class="cli"><code>oc get kubedeschedulers -n openshift-kube-descheduler-operator</code></pre></li>
+<li><p>Review enabled strategies:</p><pre class="cli"><code>oc describe kubedescheduler cluster</code></pre></li>
+<li><p>Check Descheduler logs for recent "Evicting pod" entries.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Descheduler Configuration YAML:</strong> The spec.profiles section of the KubeDescheduler resource.</p>
+</li>
+<li><p><strong>Historical Logs:</strong> Logs showing the Descheduler identifying an unbalanced node and moving a workload.</p>
+</li>
+<li><p><strong>Cluster Utilization Heatmap:</strong> Grafana screenshots showing balanced CPU/RAM across all worker nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Resource Hotspots):</strong> An unbalanced cluster leads to "hotspots" where applications perform inconsistently depending on which node they landed on.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Increases the manual effort for platform teams to manually "re-roll" pods to balance the cluster before a large event or maintenance.</p>
+</li>
+<li><p><strong>Efficiency Risk:</strong> Leads to premature requests for more hardware when current nodes are simply being used inefficiently.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.5</strong> (Performance Management); <strong>Section 10.1</strong> (Operations Management).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-010">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-010</span><span class="subdomain-pill">Data Resilience</span></div>
+<h2>Data Replication Factor</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For clusters utilizing <strong>OpenShift Data Foundation (ODF)</strong> on bare metal, the <strong>Data Replication Factor</strong> defines how many copies of a piece of data are stored across different physical disks and nodes. For production banking environments, a replication factor of <strong>3 (3-way replication)</strong> is the minimum standard.</p>
+<h4>Key Aspects of Data Replication:</h4>
+<ul>
+<li><p><strong>Replica Count:</strong> Storing 3 independent copies of every block of data.</p>
+</li>
+<li><p><strong>Failure Domains (Crush Map):</strong> Ensuring that the 3 copies are never placed on the same node or in the same rack.</p>
+</li>
+<li><p><strong>Self-Healing:</strong> If one disk or node fails, the storage system automatically identifies the lost copy and begins replicating a new 3rd copy from the remaining two.</p>
+</li>
+<li><p><strong>Consistency Level:</strong> Requiring a majority (2 out of 3) to acknowledge a write before it is confirmed to the application.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><strong>Storage Cluster Config:</strong> Verify the</li>
+</ul>
+<pre><code class="language-bash">spec.storageDeviceSets[].dataPVCTemplate.spec.resources and the ODF StorageCluster replication settings.
+</code></pre>
+<ul>
+<li><p><strong>Pool Status:</strong> Use the Ceph dashboard or CLI to check the replication factor of the pools.</p>
+</li>
+<li><p><strong>Placement Rules:</strong> Confirm the "Failure Domain" is set to host or rack.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In bare-metal environments, disk failures are the most frequent hardware event.</p>
+<ul>
+<li><p><strong>Survival of Double Failure:</strong> While 3-way replication primarily protects against a single node/disk failure, it provides a safety margin to survive a second failure during the "rebuild" phase.</p>
+</li>
+<li><p><strong>Zero Data Loss:</strong> Ensures that even if an entire physical server rack loses power, the data remains available from other racks.</p>
+</li>
+<li><p><strong>High Availability for Databases:</strong> Provides the underlying "Shared Storage" needed for <a class="cross-control-link" href="pillar-ar.html#control-id-ar-007" title="Open AR-007">AR-007</a> (Live Migration) with the resilience required for financial records.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Storage system internal status check.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check ODF Cluster status:</strong></p><pre class="cli"><code>oc get storagecluster -n openshift-storage</code></pre></li>
+<li><p><strong>Verify replication in Ceph:</strong></p><pre class="cli"><code>oc patch -n openshift-storage cephcluster ocs-deviceset --type json -p '[{"op": "replace", "path": "/spec/managedResources/cephBlockPools/reconciled/spec/replicated/size", "value": 3}]' (Check current value).</code></pre></li>
+<li><p><strong>Check health:</strong></p><pre class="cli"><code>oc rsh -n openshift-storage $(oc get pod -n openshift-storage -l app=rook-ceph-operator -o name) ceph health detail</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Storage Cluster YAML:</strong> Export of the ODF configuration.</p>
+</li>
+<li><p><strong>Ceph Status Output:</strong> The "Health_OK" status showing 3-way replication is active.</p>
+</li>
+<li><p><strong>Disk Mapping Report:</strong> A report showing how data chunks are distributed across physical nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Permanent Data Loss):</strong> Using a replication factor of 1 or 2 in production is high risk; a single disk failure or a double disk failure (during rebuild) can result in permanent loss of banking data.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Frequent "Degraded" storage alerts if the replication factor is too low to handle routine maintenance reboots.</p>
+</li>
+<li><p><strong>Compliance Risk:</strong> Violates RMiT requirements for "Effective Data Integrity" and "High Availability" of critical data.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 11.1</strong> (Data Integrity); <strong>Section 10.3</strong> (Availability and Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 11</strong> (Data Recovery).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CP-2</strong> (Contingency Plan); <strong>SC-36</strong> (Distributed Storage).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-011">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-011</span><span class="subdomain-pill">Infrastructure Resilience</span></div>
+<h2>Capacity Threshold Alerting</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Capacity Threshold Alerting</strong> is a proactive monitoring and notification system that warns administrators before a cluster runs out of physical resources (CPU, Memory, or Storage). In a bare-metal environment, "running out of room" is a critical event because, unlike the cloud, you cannot instantly spin up new physical servers.</p>
+<h4>Key Aspects of Capacity Alerting:</h4>
+<ul>
+<li><p><strong>Multi-Level Thresholds:</strong> Implementing "Warning" (e.g., 70% utilization) and "Critical" (e.g., 85% utilization) alerts.</p>
+</li>
+<li><p><strong>Predictive Analysis:</strong> Using Prometheus metrics to forecast when a disk will be full based on the current rate of growth.</p>
+</li>
+<li><p><strong>Burst Buffer Awareness:</strong> Ensuring alerts account for the "overhead" needed to allow for node failures (N+1 redundancy).</p>
+</li>
+<li><p><strong>Storage Pressure Monitoring:</strong> Specifically tracking ODF (OpenShift Data Foundation) usable capacity to prevent the storage cluster from entering a "Read-Only" state.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Alerting Rules:</strong> Verify that Prometheus AlertManager has active rules for ClusterCPUHighUsage, ClusterMemoryHighUsage, and KubePersistentVolumeFull.</p>
+</li>
+<li><p><strong>Notification Channels:</strong> Confirm that critical alerts are integrated with the IT Operations center (e.g., via Email, Slack, or PagerDuty).</p>
+</li>
+<li><p><strong>Reserve Capacity:</strong> Verify that "Available" capacity alerts take into account the size of the largest single node in the cluster (to ensure failover room).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment, an "Out of Resource" condition is equivalent to a system outage.</p>
+<ul>
+<li><p><strong>Preventing Scheduling Failures:</strong> Ensures the platform team has sufficient lead time to procure and rack new bare-metal hardware.</p>
+</li>
+<li><p><strong>Avoiding Performance Degradation:</strong> High memory pressure leads to "OOM Killing" (Out of Memory) of pods, while high CPU pressure leads to transaction latency spikes.</p>
+</li>
+<li><p><strong>Maintaining Resilience:</strong> If a cluster is at 95% capacity and one node fails, there is no room to reschedule the lost pods, resulting in a permanent reduction in service availability.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is performed by auditing the Alerting rules within the OpenShift Console or CLI:</p>
+<ul>
+<li><strong>Validation Method:</strong> Review of AlertManager configuration and historical alert logs.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>List active alerts:</p><pre class="cli"><code>oc get alerts -n openshift-monitoring</code></pre></li>
+<li><p>Review specific threshold rules:</p><pre class="cli"><code>oc get prometheusrule -n openshift-monitoring</code></pre></li>
+<li><p>Check ODF capacity specifically:</p><pre class="cli"><code>oc get cephcluster -n openshift-storage (Look for capacity usage in status).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>AlertManager Config:</strong> Export of the notification routing configuration.</p>
+</li>
+<li><p><strong>Prometheus Rule YAML:</strong> Snippet showing the defined percentage thresholds for CPU/RAM/Disk.</p>
+</li>
+<li><p><strong>Alert History Report:</strong> A report showing recent capacity warnings and the corresponding remediation actions taken.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Total Cluster Freeze):</strong> If storage reaches 100%, etcd may fail (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-001" title="Open AR-001">AR-001</a>), leading to a total cluster lockdown.</p>
+</li>
+<li><p><strong>High Risk (Application Instability):</strong> Over-provisioned clusters will suffer from random pod evictions and sluggish performance.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Emergency hardware procurement is significantly more expensive and disruptive than planned capacity expansion.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.5</strong> (Performance Management); <strong>Section 10.1</strong> (Operations Management).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>AU-5</strong> (Response to Audit Processing Failures); <strong>SI-4</strong> (System Monitoring).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-012">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-012</span><span class="subdomain-pill">Infrastructure Resilience</span></div>
+<h2>Physical Link Aggregation</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Physical Link Aggregation</strong> (commonly implemented via <strong>LACP/Bonding</strong>) is the practice of combining multiple physical network interfaces (NICs) on a bare-metal node into a single logical channel. This provides both increased bandwidth and, more importantly, hardware-level network redundancy.</p>
+<h4>Key Aspects of Link Aggregation:</h4>
+<ul>
+<li><p><strong>Active-Backup vs. LACP:</strong> * <strong>Active-Backup:</strong> One NIC is active; the other takes over only on failure.</p>
+<ul>
+<li><strong>LACP (802.3ad):</strong> Both NICs are active, providing increased throughput and sub-second failover.</li>
+</ul>
+</li>
+<li><p><strong>Multi-Switch Bonding (MLAG):</strong> Connecting the two physical cables to two different physical switches (ToR - Top of Rack) to ensure a single switch failure doesn't isolate the node.</p>
+</li>
+<li><p><strong>Declarative Config:</strong> Using the <strong>NMState Operator</strong> (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-024" title="Open AR-024">AR-024</a>) to ensure the bond is configured consistently across all nodes in the cluster.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Interface Configuration:</strong> Verify that each node shows a bond0 or similar interface comprised of at least two physical slaves.</p>
+</li>
+<li><p><strong>Switch-Side Config:</strong> Confirm with the network team that LACP/MLAG is enabled on the corresponding switch ports.</p>
+</li>
+<li><p><strong>NMState Policies:</strong> Verify that a NodeNetworkConfigurationPolicy (NNCP) exists to enforce the bonding across the worker pool.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Bare-metal nodes are susceptible to cable snags, transceiver failures, and switch port outages.</p>
+<ul>
+<li><p><strong>Zero-Downtime Network Failover:</strong> If a cable is pulled or a port fails, the LACP bond immediately reroutes traffic to the secondary link without dropping the TCP connection.</p>
+</li>
+<li><p><strong>High-Throughput Requirements:</strong> Combines multiple 10Gbps or 25Gbps links to handle intensive traffic like ODF storage replication (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-010" title="Open AR-010">AR-010</a>) or VM live migrations (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-007" title="Open AR-007">AR-007</a>).</p>
+</li>
+<li><p><strong>Standardization:</strong> Ensures that the "Data Plane" and "Management Plane" have consistent, resilient paths to the rest of the banking network.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is performed by inspecting the host-level network state:</p>
+<ul>
+<li><strong>Validation Method:</strong> Inspection of the node network state via CLI.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check bond status:</p><pre class="cli"><code>oc get nodenetworkstate &lt;node-name&gt; -o yaml</code></pre></li>
+<li><p>Review NMState policy:</p><pre class="cli"><code>oc get nncp</code></pre></li>
+<li><p>Verify LACP partner status on the host:</p><pre class="cli"><code>oc debug node/&lt;node-name&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>NNCP YAML:</strong> The declarative policy defining the bond.</p>
+</li>
+<li><p><strong>Node Network State Output:</strong> Export showing the bond interface status and active slave interfaces.</p>
+</li>
+<li><p><strong>Network Diagram:</strong> Logical diagram showing physical cabling to redundant Top-of-Rack switches.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Single Point of Failure):</strong> Without bonding, the loss of a single $50 cable or a transceiver results in the total loss of a bare-metal node (and all hosted banking apps).</p>
+</li>
+<li><p><strong>Performance Risk:</strong> A single link may become a bottleneck for high-traffic environments, leading to dropped packets and application timeouts.</p>
+</li>
+<li><p><strong>Compliance Risk:</strong> Violates RMiT requirements for "Redundancy of Critical Infrastructure Components."</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CP-2</strong> (Contingency Plan); <strong>SC-6</strong> (Resource Availability).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-013">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-013</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Ingress High Availability</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>The <strong>Ingress Controller</strong> (Router) is the entry point for all external traffic into the OpenShift cluster. <strong>Ingress High Availability</strong> ensures that the routing layer is not a single point of failure by deploying multiple router instances across different physical nodes and utilizing an external load balancer to distribute traffic.</p>
+<h4>Key Aspects of Ingress HA:</h4>
+<ul>
+<li><p><strong>Replica Scaling:</strong> Running at least 3 replicas of the Ingress Controller (HAProxy).</p>
+</li>
+<li><p><strong>Anti-Affinity:</strong> Ensuring Ingress pods are scheduled on different nodes (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-005" title="Open AR-005">AR-005</a>) and ideally on dedicated "Infra" nodes (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-019" title="Open AR-019">AR-019</a>).</p>
+</li>
+<li><p><strong>External Load Balancer (F5/Citadel/NetScaler):</strong> A physical or virtual load balancer outside the cluster that performs health checks on the Ingress pods and routes traffic only to healthy instances.</p>
+</li>
+<li><p><strong>Keepalived/VIP (Alternative):</strong> In environments without an external LB, using a Virtual IP (VIP) that floats between Ingress nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Ingress Replica Count:</strong> Verify the ingresscontroller resource has spec.replicas set to $\ge 2$ (3 is recommended).</p>
+</li>
+<li><p><strong>Pod Distribution:</strong> Confirm that Ingress pods are running on separate physical nodes.</p>
+</li>
+<li><p><strong>Health Check Logic:</strong> Verify that the external Load Balancer is correctly configured to poll the OpenShift /healthz or /metrics endpoint of the routers.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>If the Ingress layer fails, the entire cluster is effectively "offline" to the outside world, even if all applications are running perfectly.</p>
+<ul>
+<li><p><strong>Traffic Resilience:</strong> Ensures that a single router pod crash or a single "Infra" node failure does not interrupt the flow of customer banking transactions.</p>
+</li>
+<li><p><strong>Seamless Upgrades:</strong> Allows the Ingress pods to be updated one at a time (rolling update) without any drop in external connectivity.</p>
+</li>
+<li><p><strong>Performance Scaling:</strong> Distributes the TLS termination and routing logic across multiple CPUs, preventing a single pod from becoming a bottleneck.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is performed by checking the Ingress Operator and pod placement:</p>
+<ul>
+<li><strong>Validation Method:</strong> Operator inspection and pod mapping.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check Ingress status:</p><pre class="cli"><code>oc get ingresscontroller default -n openshift-ingress-operator</code></pre></li>
+<li><p>Verify pod count:</p><pre class="cli"><code>oc get pods -n openshift-ingress -l ingresscontroller.operator.openshift.io/deployment-ingresscontroller=default</code></pre></li>
+<li><p>Check anti-affinity:</p><pre class="cli"><code>oc get pod -n openshift-ingress -o wide</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>IngressController YAML:</strong> Export showing the replica count and node placement constraints.</p>
+</li>
+<li><p><strong>Load Balancer Config:</strong> Documentation or screenshot of the VIP and Pool member configuration.</p>
+</li>
+<li><p><strong>Uptime Reports:</strong> Historical logs showing continuous external connectivity during a router pod restart.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Total Service Outage):</strong> If only one Ingress pod is running and it fails, all external access to Agrobank services is lost.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> A single router may become overwhelmed during peak banking hours, leading to high 5xx error rates.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Routine maintenance of the networking stack becomes impossible without a declared maintenance window.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Appendix 4</strong> (Critical System Design).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability); <strong>SC-5</strong> (DoS Protection).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-014">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-014</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Replica Counts (Declarative)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For high availability, no critical application should ever run as a single instance. This control mandates that all production-grade workloads be deployed with <strong>Declarative Replica Counts</strong> ($\ge 2$) managed by a Deployment, StatefulSet, or DeploymentConfig.</p>
+<h4>Key Aspects of Replica Management:</h4>
+<ul>
+<li><p><strong>Minimum Replicas:</strong> A hard requirement for at least 2 replicas (standard) or 3 replicas (critical/quorum-based) for every production service.</p>
+</li>
+<li><p><strong>Self-Healing:</strong> If a replica fails, the Kubernetes controller-manager immediately detects the discrepancy from the "Desired State" and initiates a new pod.</p>
+</li>
+<li><p><strong>Rolling Updates:</strong> Enables the ability to update software without downtime by keeping old replicas running until new replicas are confirmed healthy.</p>
+</li>
+<li><p><strong>Declarative YAML:</strong> The count is stored in Git (GitOps - <a class="cross-control-link" href="pillar-mo.html#control-id-mo-001" title="Open MO-001">MO-001</a>), ensuring that even after a cluster restore, the correct number of instances is maintained.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Workload Audit:</strong> Scan all production namespaces for pods that belong to a controller with replicas: 1.</p>
+</li>
+<li><p><strong>HPA Integration:</strong> If Horizontal Pod Autoscalers (<a class="cross-control-link" href="pillar-ps.html#control-id-ps-007" title="Open PS-007">PS-007</a>) are used, ensure the minReplicas is set to $\ge 2$.</p>
+</li>
+<li><p><strong>Pod Disruption Budgets (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-006" title="Open AR-006">AR-006</a>):</strong> Ensure that the replica count is high enough to satisfy the PDB during maintenance.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Running a single instance (replicas: 1) is the primary cause of avoidable application downtime.</p>
+<ul>
+<li><p><strong>Hardware Failure Survival:</strong> If a physical server fails, having a second replica on a different server ensures the service remains online while the cluster recovers the lost instance.</p>
+</li>
+<li><p><strong>Load Distribution:</strong> Multiple replicas allow the cluster to distribute traffic via the Service (ClusterIP), improving responsiveness.</p>
+</li>
+<li><p><strong>Upgrade Capability:</strong> Without multiple replicas, every application update requires a "kill-and-restart" cycle, resulting in several seconds or minutes of downtime.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is performed by querying the workload controllers:</p>
+<ul>
+<li><strong>Validation Method:</strong> Mass-query of deployment objects across production namespaces.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>List all deployments with replica counts:</p><pre class="cli"><code>oc get deployments -A -o custom-columns=NAMESPACE:.metadata.namespace,NAME:.metadata.name,REPLICAS:.spec.replicas</code></pre></li>
+<li><p>Identify violations: Filter for any production deployment where REPLICAS is less than 2.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Deployment YAML Snippet:</strong> Showing spec.replicas: 2 (or higher).</p>
+</li>
+<li><p><strong>Pod Status Report:</strong> A list of running pods per deployment, proving that multiple instances are active and distributed.</p>
+</li>
+<li><p><strong>HPA Configuration:</strong> YAML showing minimum scaling limits.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Avoidable Downtime):</strong> A single-replica app will go offline during every node reboot, pod crash, or cluster update.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Manual monitoring is required to ensure the single instance stays healthy; if it fails, the application is completely unavailable.</p>
+</li>
+<li><p><strong>Compliance Risk:</strong> Fails the "Resilience" test of RMiT, as the application has a single point of failure at the pod level.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Appendix 4</strong> (Critical System Design).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-015">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-015</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Node Affinity, Placement &amp; Topology Spread Constraints</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>While Anti-Affinity (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-005" title="Open AR-005">AR-005</a>) keeps pods apart, <strong>Node Affinity and Topology Spread Constraints</strong> provide granular control over <em>where</em> and <em>how</em> pods are distributed across the physical topology (Racks, Zones, or specific hardware types).</p>
+<h4>Key Aspects of Placement Control:</h4>
+<ul>
+<li><p><strong>Node Affinity:</strong> Attaching pods to specific nodes based on hardware features (e.g., "Schedule this AI pod only on a node with an NVIDIA GPU").</p>
+</li>
+<li><p><strong>Topology Spread Constraints:</strong> A more advanced mechanism than Anti-Affinity that ensures pods are spread <strong>evenly</strong> across a topology (e.g., "If I have 10 pods and 2 racks, put exactly 5 in Rack A and 5 in Rack B").</p>
+</li>
+<li><p><strong>Skew Management:</strong> Defining how much "unbalance" is allowed between failure domains (maxSkew).</p>
+</li>
+<li><p><strong>Taint/Toleration Interaction:</strong> Ensuring that specialized workloads (like ODF or Ingress) stay on their designated nodes and don't "bleed" into general application space.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Topology Labels:</strong> Verify that all nodes are labeled with topology.kubernetes.io/zone, rack, or pdu.</p>
+</li>
+<li><p><strong>Manifest Audit:</strong> Review deployments for topologySpreadConstraints and nodeAffinity stanzas.</p>
+</li>
+<li><p><strong>Spread Verification:</strong> Check if pods are truly balanced across the defined racks.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a large bare-metal data center, "blind" scheduling is a risk.</p>
+<ul>
+<li><p><strong>Rack Awareness:</strong> Ensures that if a Top-of-Rack (ToR) switch fails, only half of your database cluster goes down, maintaining quorum.</p>
+</li>
+<li><p><strong>Workload Optimization:</strong> Ensures that latency-sensitive workloads are placed on the fastest hardware or nodes with the best fiber connectivity.</p>
+</li>
+<li><p><strong>Predictable Failover:</strong> By using Spread Constraints, you guarantee that no single failure domain is over-burdened, making failover capacity predictable.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Review node labels and workload placement logic.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check node topology labels:</p><pre class="cli"><code>oc get nodes --show-labels | grep topology</code></pre></li>
+<li><p>Review deployment constraints:</p><pre class="cli"><code>oc get deployment &lt;name&gt; -o yaml | grep -A 20 topologySpreadConstraints</code></pre></li>
+<li><p>Confirm balance:</p><pre class="cli"><code>oc get pods -o wide and compare against the node rack labels.</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Deployment YAML:</strong> Snippet of the topologySpreadConstraints section.</p>
+</li>
+<li><p><strong>Node Inventory List:</strong> A report showing the physical mapping (Node -&gt; Rack -&gt; PDU).</p>
+</li>
+<li><p><strong>Placement Map:</strong> A screenshot or table showing pods perfectly distributed across physical failure domains.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Failure Domain Collapse):</strong> Without topology awareness, the scheduler might place all pods in Rack A. If Rack A's switch fails, the service is lost despite having multiple replicas.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> Placing high-I/O pods on nodes without optimized storage paths leads to degraded application response times.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Inability to perform "Rack-Level" maintenance without causing a service outage.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Appendix 4</strong> (Critical System Design).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-36</strong> (Distributed Processing and Storage); <strong>CP-2</strong> (Contingency Plan).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-016">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-016</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Advanced Traffic Management &amp; Circuit Breaking (Service Mesh)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>As applications grow into microservices, the risk of "cascading failures" increases. <strong>Advanced Traffic Management</strong> utilizes a Service Mesh (OpenShift Service Mesh / Istio) to implement <strong>Circuit Breaking</strong> and <strong>Outlier Detection</strong>. This prevents a single failing service from overwhelming the entire system by "tripping" a circuit and failing fast rather than hanging.</p>
+<h4>Key Aspects of Advanced Traffic Management:</h4>
+<ul>
+<li><p><strong>Circuit Breaking:</strong> Automatically cutting off traffic to a service that is exceeding predefined error rates or latency thresholds.</p>
+</li>
+<li><p><strong>Outlier Detection:</strong> Dynamically removing unhealthy pod instances from the load-balancing pool before they fail a readiness probe.</p>
+</li>
+<li><p><strong>Retries and Timeouts:</strong> Centrally managing how many times a service should retry a failed request and after how long it should give up.</p>
+</li>
+<li><p><strong>Traffic Shifting:</strong> Enabling canary deployments or blue/green testing by shifting small percentages of traffic to new versions.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Service Mesh Installation:</strong> Verify the <strong>OpenShift Service Mesh Operator</strong> is installed and the ServiceMeshControlPlane is healthy.</p>
+</li>
+<li><p><strong>DestinationRules:</strong> Review DestinationRule resources for the presence of trafficPolicy with outlierDetection or connectionPool settings.</p>
+</li>
+<li><p><strong>VirtualServices:</strong> Confirm that traffic routing logic (retries/timeouts) is defined in VirtualService manifests.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In high-volume banking environments, "zombie" services are more dangerous than "dead" ones.</p>
+<ul>
+<li><p><strong>Preventing Cascading Failures:</strong> If Service A is slow, Service B's threads will fill up waiting for it. A circuit breaker stops this "ripple effect" from taking down the whole portal.</p>
+</li>
+<li><p><strong>Improved User Experience:</strong> Instead of a spinning "loading" icon that eventually times out, the user receives an immediate, graceful error message or a cached response.</p>
+</li>
+<li><p><strong>Observability:</strong> Provides granular data on which specific microservice hop is causing latency in a complex transaction.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Inspection of Service Mesh custom resources and sidecar configuration.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check Control Plane health:</p><pre class="cli"><code>oc get smcp -n istio-system</code></pre></li>
+<li><p>Review circuit breaker settings:</p><pre class="cli"><code>oc get destinationrules -A -o yaml | grep -A 10 outlierDetection</code></pre></li>
+<li><p>Verify sidecar injection:</p><pre class="cli"><code>oc get pods -l istio-invoked=true</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>DestinationRule YAML:</strong> Snippet showing the circuit breaker thresholds (e.g., consecutive5xxErrors).</p>
+</li>
+<li><p><strong>Kiali Graph:</strong> A screenshot from the Kiali console showing a "tripped" (red/orange) circuit during a failure simulation.</p>
+</li>
+<li><p><strong>VirtualService Export:</strong> Showing defined timeout and retry policies for critical APIs.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Systemic Outage):</strong> One minor downstream service failure can consume all available threads in the frontend, leading to a total application blackout.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Debugging "intermittent slowness" in a distributed environment without service mesh is significantly more difficult and time-consuming.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> Uncontrolled retries ("retry storms") can worsen an already struggling database, preventing it from recovering.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Appendix 4</strong> (Critical System Design).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability); <strong>SC-5</strong> (DoS Protection).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-017">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-017</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Application Health Probes (Liveness, Readiness, Startup)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>OpenShift utilizes three distinct types of <strong>Health Probes</strong> to monitor the lifecycle of a container. Correct configuration of these probes ensures that traffic is only sent to "ready" pods and that "frozen" pods are automatically restarted.</p>
+<h4>Key Aspects of Health Probes:</h4>
+<ul>
+<li><p><strong>Startup Probe:</strong> Disables liveness and readiness checks during the initial boot-up phase. Essential for "heavy" banking applications (like JBoss/Java) that take a long time to start.</p>
+</li>
+<li><p><strong>Readiness Probe:</strong> Determines if the container is ready to accept traffic. If it fails, the pod is removed from the Service endpoint (load balancer) but <strong>not</strong> restarted.</p>
+</li>
+<li><p><strong>Liveness Probe:</strong> Determines if the container is still running. If it fails (e.g., a deadlock), OpenShift <strong>restarts</strong> the container.</p>
+</li>
+<li><p><strong>Probe Methods:</strong> Can use HTTP checks (/health), TCP socket checks, or custom Exec commands.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Probe Presence:</strong> Verify that <strong>all</strong> production containers have both livenessProbe and readinessProbe defined.</p>
+</li>
+<li><p><strong>Endpoint Validity:</strong> Confirm that the probe targets a meaningful endpoint (e.g., a database connection check) rather than just a static index.html.</p>
+</li>
+<li><p><strong>Threshold Tuning:</strong> Ensure initialDelaySeconds and failureThreshold are tuned so that pods aren't killed prematurely during normal heavy load.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Automated health monitoring is the first line of defense against application-level failures.</p>
+<ul>
+<li><p><strong>Zero-Downtime Deployments:</strong> Readiness probes ensure that during an update, the old version isn't killed until the new version is fully "ready" to take over traffic.</p>
+</li>
+<li><p><strong>Self-Healing:</strong> Liveness probes automate the "reboot" of applications that have hung, reducing the need for manual intervention by the app support team.</p>
+</li>
+<li><p><strong>Traffic Integrity:</strong> Prevents users from hitting a pod that is still initializing or is currently overwhelmed by a background task.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Analysis of pod templates in deployments.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check probes for all pods:</p><pre class="cli"><code>oc get deployments -o json | jq '.items[].spec.template.spec.containers[].livenessProbe'</code></pre></li>
+<li><p>Identify pods without probes:</p><pre class="cli"><code>oc get pods -o custom-columns=NAME:.metadata.name,LIVENESS:.spec.containers[\*].livenessProbe,READINESS:.spec.containers[\*].readinessProbe</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Deployment YAML:</strong> Snippet showing the livenessProbe, readinessProbe, and startupProbe definitions.</p>
+</li>
+<li><p><strong>Pod Events:</strong> Output of oc describe pod showing historical "Unhealthy" events and the subsequent automated recovery.</p>
+</li>
+<li><p><strong>Application Logs:</strong> Proof that the health endpoint is being polled successfully by the kubelet.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Traffic Blackhole):</strong> Without readiness probes, OpenShift will send traffic to pods that haven't finished starting, leading to 503 errors for users.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> "Zombied" pods will stay in a Running state indefinitely despite being non-functional, requiring manual detection and restart.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> If liveness probes are too aggressive, they can trigger "restart loops" during periods of high CPU usage, making an outage worse.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability); <strong>SI-4</strong> (System Monitoring).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-018">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-018</span><span class="subdomain-pill">Workload Resilience</span></div>
+<h2>Graceful Termination and Update Strategies</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>When a pod is deleted (due to a scale-down or update), OpenShift sends a <strong>SIGTERM</strong> signal. <strong>Graceful Termination</strong> ensures the application has enough time to finish in-flight transactions, close database connections, and shut down cleanly before it is forcibly killed by a <strong>SIGKILL</strong>.</p>
+<h4>Key Aspects of Graceful Termination:</h4>
+<ul>
+<li><p><strong>TerminationGracePeriodSeconds:</strong> The amount of time (default 30s) OpenShift waits before force-killing a pod.</p>
+</li>
+<li><p><strong>PreStop Hooks:</strong> Custom commands or HTTP calls executed immediately before the SIGTERM to notify external systems or "drain" work.</p>
+</li>
+<li><p><strong>RollingUpdate Strategy:</strong> Managing maxUnavailable and maxSurge to ensure the application capacity never drops below the required threshold during an update.</p>
+</li>
+<li><p><strong>Connection Draining:</strong> Ensuring the load balancer stops sending new requests while existing requests are finished.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Grace Period Tuning:</strong> Verify that terminationGracePeriodSeconds is long enough for the application's longest-running transaction (e.g., 60s or 90s).</p>
+</li>
+<li><p><strong>Update Strategy:</strong> Confirm strategy: type: RollingUpdate is used instead of Recreate.</p>
+</li>
+<li><p><strong>MaxUnavailable Setting:</strong> Ensure maxUnavailable is not set to 100% (which would take the service offline).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In banking, a "hard kill" of a process can lead to data inconsistency.</p>
+<ul>
+<li><p><strong>Transaction Integrity:</strong> Ensures that a customer's transfer isn't cut off mid-execution during a mid-day deployment.</p>
+</li>
+<li><p><strong>Clean Database Sessions:</strong> Prevents "orphaned" sessions or locks in the database that occur when an application client disappears without closing its connection.</p>
+</li>
+<li><p><strong>Zero-Downtime Updates:</strong> Provides a smooth transition for users between old and new versions of the software.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Review of deployment strategies and termination settings.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check termination period:</p><pre class="cli"><code>oc get deployment &lt;name&gt; -o jsonpath='{.spec.template.spec.terminationGracePeriodSeconds}'</code></pre></li>
+<li><p>Review update strategy:</p><pre class="cli"><code>oc get deployment &lt;name&gt; -o jsonpath='{.spec.strategy.rollingUpdate}'</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Deployment YAML:</strong> Snippet showing RollingUpdate and terminationGracePeriodSeconds.</p>
+</li>
+<li><p><strong>Application Logs:</strong> Logs showing the "Shutdown signal received" followed by successful "Cleanup complete" messages.</p>
+</li>
+<li><p><strong>Load Balancer Logs:</strong> Evidence of connections being drained before a pod IP is removed from the rotation.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Data Inconsistency):</strong> Interrupted writes can leave a database in a state that requires manual reconciliation.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Users will experience dropped connections and "Reset by Peer" errors during every cluster maintenance event.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> Hard-kills of large Java apps can cause "Zombies" at the OS level or leave the node with un-recycled memory.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 11.1</strong> (Data Integrity); <strong>Section 10.3</strong> (Availability and Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-24</strong> (Fail-Safe Procedures).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-019">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-019</span><span class="subdomain-pill">Physical Architecture &amp; Resource Isolation</span></div>
+<h2>Infrastructure (Infra) Node Segregation</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>In a production bare-metal environment, shared resource contention between the platform and applications is a major risk. <strong>Infra Node Segregation</strong> involves dedicating specific nodes to run platform-level services (Ingress, Monitoring, Logging, Registry) while keeping application workloads on separate Worker nodes.</p>
+<h4>Key Aspects of Infra Nodes:</h4>
+<ul>
+<li><p><strong>Role-Based Separation:</strong> Assigning the node-role.kubernetes.io/infra="" label to a subset of nodes.</p>
+</li>
+<li><p><strong>Resource Guarantee:</strong> Ensures that a memory leak in a user application cannot starve the Ingress Routers or Prometheus monitoring.</p>
+</li>
+<li><p><strong>Subscription Optimization:</strong> Cores on correctly labeled "Infra" nodes are typically excluded from billable OpenShift core counts (check Red Hat subscription terms).</p>
+</li>
+<li><p><strong>Scheduling Taints:</strong> Using taints (node-role.kubernetes.io/infra:NoSchedule) to prevent general applications from landing on these critical nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Node Labels:</strong> Verify that at least 3 nodes are labeled as infra.</p>
+</li>
+<li><p><strong>Workload Placement:</strong> Confirm that Ingress Controllers and Monitoring pods are actually running on these nodes via nodeSelector.</p>
+</li>
+<li><p><strong>Taint Enforcement:</strong> Ensure that no non-platform pods are running on the infra nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Platform stability is the prerequisite for application stability.</p>
+<ul>
+<li><p><strong>Noise Isolation:</strong> If an application pod on a Worker node triggers a "Kernel Panic" or saturates the CPU, the Ingress Controller on the Infra node remains unaffected, allowing traffic to reach other healthy Workers.</p>
+</li>
+<li><p><strong>High Availability for Metrics:</strong> Ensures that even during a massive application failure, the monitoring stack stays alive to provide the logs and metrics needed to diagnose the issue.</p>
+</li>
+<li><p><strong>Operational Predictability:</strong> Simplifies maintenance by allowing platform teams to upgrade infra components without touching application-hosting hardware.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node and pod affinity audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>List infra nodes:</p><pre class="cli"><code>oc get nodes -l node-role.kubernetes.io/infra</code></pre></li>
+<li><p>Check pod placement:</p><pre class="cli"><code>oc get pods -A -o wide | grep &lt;infra-node-name&gt; (Should only show openshift-ingress, openshift-monitoring, etc.).</code></pre></li>
+<li><p>Verify Taints:</p><pre class="cli"><code>oc describe node &lt;infra-node&gt; | grep Taints</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Node Role Report:</strong> A list of nodes and their roles.</p>
+</li>
+<li><p><strong>Ingress/Monitoring YAML:</strong> Snippets showing the nodeSelector targeting the infra role.</p>
+</li>
+<li><p><strong>Subscription Report:</strong> Proof that infra nodes are correctly recognized by the Red Hat Subscription Manager (if applicable).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Platform Contention):</strong> A runaway application pod could crash the Ingress Router, taking the entire cluster offline.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Loss of visibility (monitoring) during a crisis if the Prometheus pod is evicted due to resource pressure from user apps.</p>
+</li>
+<li><p><strong>Cost Risk:</strong> Inefficient use of billable cores by running non-billable infra services on worker nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Appendix 4</strong> (Critical System Design).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-6</strong> (Resource Availability); <strong>SC-32</strong> (Information System Partitioning).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-020">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-020</span><span class="subdomain-pill">Physical Architecture &amp; Resource Isolation</span></div>
+<h2>Dedicated Storage Node Roles (ODF Isolation)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For high-performance bare-metal clusters using <strong>OpenShift Data Foundation (ODF)</strong>, this control mandates that storage services are run on <strong>dedicated storage nodes</strong>. This isolates the high I/O and memory demands of the storage layer (Ceph) from the application and control plane layers.</p>
+<h4>Key Aspects of Dedicated Storage Nodes:</h4>
+<ul>
+<li><p><strong>Resource Isolation:</strong> Ceph (the engine of ODF) is resource-intensive. Dedicating nodes ensures its memory cache doesn't compete with banking applications.</p>
+</li>
+<li><p><strong>Taints &amp; Tolerations:</strong> Using a taint like node.ocs.openshift.io/storage:NoSchedule so that only ODF-related pods can run on these nodes.</p>
+</li>
+<li><p><strong>Network Optimization:</strong> These nodes can be equipped with dedicated 25Gbps/100Gbps links for storage replication traffic (back-end), separate from the application network (front-end).</p>
+</li>
+<li><p><strong>Fault Isolation:</strong> Hardware issues with a physical disk or controller only affect the storage node, not the application workers.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Node Roles:</strong> Verify a subset of nodes carries the storage role label.</p>
+</li>
+<li><p><strong>ODF Configuration:</strong> Confirm the StorageCluster resource is configured to use the storage node selector.</p>
+</li>
+<li><p><strong>Taint Check:</strong> Verify that application pods are not scheduled on storage nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Storage is the "foundation" of the cluster; if it is slow, everything is slow.</p>
+<ul>
+<li><p><strong>Latency Consistency:</strong> Prevents "I/O Wait" on worker nodes by ensuring the storage controller has 100% access to its own CPU and RAM.</p>
+</li>
+<li><p><strong>Scale-Out Simplicity:</strong> Allows you to scale storage capacity (by adding more storage nodes) independently of application compute capacity.</p>
+</li>
+<li><p><strong>Resilience:</strong> Ensures that a massive data rebuild (after a disk failure) doesn't consume the resources needed to run the banking API.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node labeling and ODF configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check storage nodes:</p><pre class="cli"><code>oc get nodes -l cluster.ocs.openshift.io/openshift-storage</code></pre></li>
+<li><p>Check taints:</p><pre class="cli"><code>oc describe node &lt;storage-node&gt; | grep Taints</code></pre></li>
+<li><p>Verify ODF placement:</p><pre class="cli"><code>oc get storagecluster -n openshift-storage ocs-storagecluster -o yaml | grep nodeSelector -A 3</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>StorageCluster YAML:</strong> Showing the placement and nodeSelector logic.</p>
+</li>
+<li><p><strong>Node List:</strong> Showing dedicated nodes for storage.</p>
+</li>
+<li><p><strong>Performance Metrics:</strong> Grafana screenshots showing consistent storage latency (below 5ms) due to lack of resource contention.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (I/O Contention):</strong> If storage and apps share nodes, a peak in application load can slow down disk writes, causing "I/O Wait" across the entire cluster.</p>
+</li>
+<li><p><strong>Critical Risk (Storage Instability):</strong> If a worker node crashes due to an app bug, the storage chunk on that node goes offline, potentially triggering a massive, resource-heavy data rebalance.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Difficulty in troubleshooting performance issues when storage and compute metrics are "blended" on the same physical hardware.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 11.1</strong> (Data Integrity); <strong>Section 10.3</strong> (Availability and Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 18</strong> (Service Software Continuity).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-36</strong> (Distributed Processing and Storage); <strong>SC-32</strong> (Information System Partitioning).</p>
+</li>
+</ul>
+<p>This completes the final set of controls for <strong>Pillar 1: Availability &amp; Resilience (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-021" title="Open AR-021">AR-021</a> to <a class="cross-control-link" href="pillar-ar.html#control-id-ar-024" title="Open AR-024">AR-024</a>)</strong>. These controls finalize the physical isolation strategy and incorporate the 2026 networking standards required for a bare-metal production environment.</p>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-021">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-021</span><span class="subdomain-pill">Physical Architecture &amp; Resource Isolation</span></div>
+<h2>Node Taints &amp; Tolerations Enforcement (Role-Based Repulsion)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Taints and Tolerations</strong> are the primary mechanism used to ensure that specific nodes "repel" pods unless those pods have a matching "toleration." In a bare-metal environment, this is essential for <strong>Role-Based Repulsion</strong>, ensuring that general application workloads do not accidentally land on specialized infrastructure (Infra), storage (ODF), or control plane (Master) nodes.</p>
+<h4>Key Aspects of Taints &amp; Tolerations:</h4>
+<ul>
+<li><p><strong>Taints:</strong> Applied to a node (e.g., node-role.kubernetes.io/infra:NoSchedule). This prevents any pod without a corresponding toleration from being scheduled on that node.</p>
+</li>
+<li><p><strong>Tolerations:</strong> Applied to specific pods (e.g., Ingress Controllers or Monitoring stack) allowing them to "ignore" the taint and schedule on the restricted node.</p>
+</li>
+<li><p><strong>Effect Types:</strong></p>
+<ul>
+<li><p>NoSchedule: New pods will not be placed on the node.</p>
+</li>
+<li><p>NoExecute: Existing pods will be evicted if they don't have the toleration.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Integrity of Roles:</strong> Prevents "Workload Bleeding" where a non-critical app consumes resources intended for critical platform services.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Master/Infra Taints:</strong> Verify that all Master and Infra nodes carry the NoSchedule taint.</p>
+</li>
+<li><p><strong>Workload Compliance:</strong> Audit all production namespaces to ensure no unauthorized pods have "wide" tolerations (e.g., operator: Exists) that allow them to land anywhere.</p>
+</li>
+<li><p><strong>Storage Isolation:</strong> Confirm that ODF storage nodes are tainted to prevent application pod placement (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-020" title="Open AR-020">AR-020</a>).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>A "Well-Architected" cluster must have predictable resource allocation.</p>
+<ul>
+<li><p><strong>Resource Preservation:</strong> Ensures that the CPU and RAM on expensive bare-metal nodes are reserved for their intended purpose (e.g., preventing a dev-app from crashing the production Ingress router).</p>
+</li>
+<li><p><strong>Security Isolation:</strong> Provides a secondary layer of isolation by keeping sensitive platform pods physically separated from user-generated application pods.</p>
+</li>
+<li><p><strong>Operational Stability:</strong> Reduces the "blast radius" of application failures by confining them to designated worker nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><p>Verification is performed by inspecting node taints and pod tolerations:</p>
+<ul>
+<li><strong>Validation Method:</strong> Node taint audit and pod placement analysis.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>List all node taints:</p><pre class="cli"><code>oc get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints</code></pre></li>
+<li><p>Verify restricted pod tolerations:</p><pre class="cli"><code>oc get pod &lt;pod-name&gt; -n &lt;namespace&gt; -o jsonpath='{.spec.tolerations}'</code></pre></li>
+<li><p>Confirm no "rogue" pods on infra nodes:</p><pre class="cli"><code>oc get pods -A --field-selector spec.nodeName=&lt;infra-node-name&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Node Taint Report:</strong> An export showing the taints assigned to Master, Infra, and Storage nodes.</p>
+</li>
+<li><p><strong>Operator Configuration:</strong> YAML snippets for Ingress/Monitoring showing the specific tolerations required to run on Infra nodes.</p>
+</li>
+<li><p><strong>Pod Placement Map:</strong> Evidence that application pods are strictly confined to the "Worker" pool.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Platform Starvation):</strong> Without taints, an application memory leak could evict critical platform pods (like Ingress), causing a cluster-wide outage.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Difficulty in managing performance SLAs when platform and application workloads are competing for the same physical hardware resources.</p>
+</li>
+<li><p><strong>Security Risk:</strong> Increased risk of side-channel attacks or resource exhaustion across different security tiers.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Section 11.2</strong> (User Access Management - Logical Isolation).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-32</strong> (Information System Partitioning); <strong>SC-6</strong> (Resource Availability).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-022">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-022</span><span class="subdomain-pill">Network Resilience</span></div>
+<h2>OVN-Kubernetes Architecture Standard</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>As of 2026, <strong>OVN-Kubernetes</strong> is the mandatory SDN (Software Defined Network) for OpenShift, replacing the deprecated OpenShift SDN. It is based on Open Virtual Network (OVN) and provides a highly scalable, distributed logical network for containerized workloads.</p>
+<h4>Key Aspects of OVN-Kubernetes:</h4>
+<ul>
+<li><p><strong>Distributed Load Balancing:</strong> Implements load balancing at the node level using OVS (Open vSwitch), reducing the bottleneck on centralized routers.</p>
+</li>
+<li><p><strong>Geneve Encapsulation:</strong> Uses the Geneve protocol for tunnel encapsulation, which supports more metadata than the older VXLAN.</p>
+</li>
+<li><p><strong>Logical Flow Performance:</strong> Optimized for high-churn environments where pods are frequently created and destroyed.</p>
+</li>
+<li><p><strong>Gateway Modes:</strong> Supports "Shared" or "Local" gateway modes to optimize how traffic exits the bare-metal nodes to the corporate network.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Network Type Check:</strong> Verify that the network.config.openshift.io resource is set to OVNKubernetes.</p>
+</li>
+<li><p><strong>MTU Alignment:</strong> Confirm that the network MTU is correctly configured (typically 1400 or 8900 for Jumbo Frames) to account for the 100-byte Geneve overhead.</p>
+</li>
+<li><p><strong>Operator Health:</strong> Ensure the network-node-identity and ovnkube pods are healthy across all nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Modern banking applications require the advanced networking features that only OVN-K provides.</p>
+<ul>
+<li><p><strong>Forward Compatibility:</strong> Standardizing on OVN-K ensures the cluster can be upgraded and supported through 2026 and beyond.</p>
+</li>
+<li><p><strong>Performance at Scale:</strong> Distributed routing eliminates the "hairpinning" of traffic, reducing latency for inter-service communication.</p>
+</li>
+<li><p><strong>Security Foundations:</strong> OVN-K is the prerequisite for advanced security features like IPsec encryption (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-020" title="Open SC-020">SC-020</a>) and Egress Firewalls.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Cluster network configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Confirm CNI type:</p><pre class="cli"><code>oc get network.config/cluster -o jsonpath='{.status.networkType}' (Must return OVNKubernetes).</code></pre></li>
+<li><p>Verify pod status:</p><pre class="cli"><code>oc get pods -n openshift-ovn-kubernetes</code></pre></li>
+<li><p>Check MTU settings:</p><pre class="cli"><code>oc get network.config/cluster -o jsonpath='{.status.clusterNetworkMTU}'</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Network Config YAML:</strong> Export of the networks.config.openshift.io resource.</p>
+</li>
+<li><p><strong>OVN Pod Logs:</strong> Logs from the ovnkube-node showing successful logical flow initialization.</p>
+</li>
+<li><p><strong>Network Benchmark:</strong> Proof of successful pod-to-pod connectivity across different physical nodes.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Upgrade Failure):</strong> Environments still running the deprecated OpenShift SDN will be unable to upgrade to newer versions, leading to a "security debt" and loss of support.</p>
+</li>
+<li><p><strong>Performance Risk:</strong> Legacy SDN types lack the distributed routing capabilities needed for high-traffic microservices.</p>
+</li>
+<li><p><strong>Compliance Risk:</strong> Using deprecated software violates RMiT requirements for "Obsolescence Management."</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Section 10.6</strong> (System Software Maintenance).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-7</strong> (Boundary Protection).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-023">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-023</span><span class="subdomain-pill">Network Resilience</span></div>
+<h2>Multus Secondary Networking (Physical Network Segmentation)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Multus CNI</strong> is a "meta-plugin" that allows a single pod to be attached to multiple physical or logical networks simultaneously. In a bare-metal banking environment, this is used to physically segment sensitive traffic (like storage or backup) from the general application traffic.</p>
+<h4>Key Aspects of Multus:</h4>
+<ul>
+<li><p><strong>Multiple Interfaces:</strong> A pod can have eth0 for the standard cluster network and net1 for a dedicated high-speed storage network.</p>
+</li>
+<li><p><strong>NetworkAttachmentDefinitions:</strong> Declarative YAML objects that define how the secondary interface should be plumbed (e.g., via Bridge, MACVLAN, or SR-IOV).</p>
+</li>
+<li><p><strong>Traffic Isolation:</strong> Ensures that "Data Plane" traffic (like high-volume database replication) does not saturate the "Control Plane" or "User" network.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>NAD Definitions:</strong> Verify that NetworkAttachmentDefinitions exist in the relevant namespaces.</p>
+</li>
+<li><p><strong>Pod Configuration:</strong> Confirm that critical pods (like ODF or Databases) have the k8s.v1.cni.cncf.io/networks annotation.</p>
+</li>
+<li><p><strong>Physical Interface Mapping:</strong> Ensure that the secondary networks are mapped to the correct physical NIC bonds (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-012" title="Open AR-012">AR-012</a>).</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Regulatory standards often require physical or strict logical isolation for specific data types.</p>
+<ul>
+<li><p><strong>Security Segmentation:</strong> Keeps sensitive "Backend" traffic (like DB-to-Storage) completely invisible to the "Frontend" application network.</p>
+</li>
+<li><p><strong>Performance Guarantee:</strong> Dedicating a physical NIC to storage traffic ensures that a spike in web traffic does not cause "I/O Wait" in the storage layer.</p>
+</li>
+<li><p><strong>Legacy Integration:</strong> Allows pods to connect directly to existing VLANs in the data center without going through the OpenShift Ingress.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Inspection of CNI definitions and pod network interfaces.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>List NADs:</p><pre class="cli"><code>oc get net-attach-def -A</code></pre></li>
+<li><p>Inspect pod interfaces:</p><pre class="cli"><code>oc exec &lt;pod-name&gt; -- ip addr (Verify multiple interfaces exist).</code></pre></li>
+<li><p>Verify connectivity: Perform a:</p><pre class="cli"><code>ping or traceroute over the secondary interface (net1).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Net-Attach-Def YAML:</strong> The configuration for the secondary network.</p>
+</li>
+<li><p><strong>Pod Annotation Snippet:</strong> The YAML metadata showing the Multus attachment.</p>
+</li>
+<li><p><strong>Network Traffic Report:</strong> Evidence of traffic flowing across multiple interfaces simultaneously.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Network Contention):</strong> Without Multus, a high-volume backup or storage rebalance could "choke" the application network, leading to a service outage.</p>
+</li>
+<li><p><strong>Security Risk:</strong> Co-mingling management and data traffic increases the risk of lateral movement if a pod is compromised.</p>
+</li>
+<li><p><strong>Compliance Risk:</strong> Failure to demonstrate "Network Segmentation" as required by PCIDSS or RMiT.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.3</strong> (Availability and Resilience); <strong>Section 11.2</strong> (Network Security).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>SC-7</strong> (Boundary Protection); <strong>SC-32</strong> (Information System Partitioning).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-ar-024">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">AR-024</span><span class="subdomain-pill">Infrastructure Resilience</span></div>
+<h2>Declarative Node Networking (NMState) (Host-level Bond/VLAN Management)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p><strong>Kubernetes NMState</strong> is an operator that allows administrators to manage the physical networking configuration of bare-metal hosts using a declarative Kubernetes API. Instead of manually editing scripts on each server, you define the desired state (Bonds, VLANs, MTU) in a YAML file.</p>
+<h4>Key Aspects of NMState:</h4>
+<ul>
+<li><p><strong>NodeNetworkConfigurationPolicy (NNCP):</strong> The primary resource used to define the desired network state for a group of nodes.</p>
+</li>
+<li><p><strong>Drift Prevention:</strong> The operator continuously monitors the physical nodes and automatically reverts any manual, non-compliant changes.</p>
+</li>
+<li><p><strong>Safe Rollouts:</strong> NMState includes "Transaction Support"—if a network change causes a node to lose connectivity, it can automatically roll back to the previous known-good configuration.</p>
+</li>
+<li><p><strong>Bare-Metal Efficiency:</strong> Simplifies the management of complex 25Gbps/100Gbps bonds and bridge configurations across dozens of servers.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Operator Health:</strong> Confirm the <strong>Kubernetes NMState Operator</strong> is installed and the nmstate pods are running on all nodes.</p>
+</li>
+<li><p><strong>NNCP Status:</strong> Verify that all NodeNetworkConfigurationPolicy objects are in a SuccessfullyConfigured state.</p>
+</li>
+<li><p><strong>Host Synchronization:</strong> Check that the physical NIC status on the hosts matches the NodeNetworkState reported in the API.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Manual network configuration is the leading cause of "gray failures" in bare-metal clusters.</p>
+<ul>
+<li><p><strong>Consistency:</strong> Ensures that every node in a worker pool has an identical network footprint, preventing "it works on Node A but not Node B" issues.</p>
+</li>
+<li><p><strong>Auditability:</strong> Network changes are now part of the GitOps pipeline (<a class="cross-control-link" href="pillar-mo.html#control-id-mo-001" title="Open MO-001">MO-001</a>), providing a full audit trail of who changed what and when.</p>
+</li>
+<li><p><strong>Reduced Human Error:</strong> The automated rollback feature prevents an administrator from accidentally "locking themselves out" of a remote server during a network update.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Policy and state audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p>Check policy status:</p><pre class="cli"><code>oc get nncp (Look for STATUS: SuccessfullyConfigured).</code></pre></li>
+<li><p>Review node state:</p><pre class="cli"><code>oc get nodenetworkstate &lt;node-name&gt; -o yaml</code></pre></li>
+<li><p>Verify bond/VLAN configuration: Inspect the interface section of the NNS output for correct MTU and slave interfaces.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>NNCP YAML:</strong> The policy defining the production network bond.</p>
+</li>
+<li><p><strong>NodeNetworkState Export:</strong> A report showing the actual physical network state of the bare-metal fleet.</p>
+</li>
+<li><p><strong>Event Logs:</strong> Records of successful network state reconciliations.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Configuration Drift):</strong> Manual changes to a single node's MTU or VLAN can cause intermittent, hard-to-debug application failures.</p>
+</li>
+<li><p><strong>Operational Risk:</strong> Increases the manual effort and time required to scale the cluster or update networking hardware.</p>
+</li>
+<li><p><strong>Critical Risk (Node Isolation):</strong> A manual error during a network change can permanently disconnect a bare-metal node, requiring a physical visit to the data center.</p>
+</li>
+</ul>
+</div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> <strong>Section 10.1</strong> (Operations Management); <strong>Section 10.3</strong> (Resilience).</p>
+</li>
+<li><p><strong>CIS Benchmarks v8:</strong> <strong>Control 12</strong> (Network Infrastructure Management).</p>
+</li>
+<li><p><strong>NIST SP 800-53:</strong> <strong>CM-3</strong> (Configuration Change Control); <strong>SC-7</strong> (Boundary Protection).</p>
+</li>
+</ul>
+</div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section></article></div><footer class="footer">Prepared as a structured HTML view of Pillar 1: Availability &amp; Resilience for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>

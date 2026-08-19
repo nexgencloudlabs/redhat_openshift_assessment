@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pillar 5: Monitoring &amp; Observability | Red Hat OpenShift Assessment Framework</title>
+<style>
+:root { --bg:#0b1020; --panel:#ffffff; --ink:#172033; --muted:#637083; --line:#dce3ee; --redhat:#ee0000; --redhat-dark:#b00000; --code-bg:#0b1220; --shadow:0 12px 30px rgba(15,23,42,.08); --shadow-soft:0 8px 18px rgba(15,23,42,.05); }
+* { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:linear-gradient(135deg,#f4f7fb 0%,#edf2f9 44%,#ffffff 100%); line-height:1.6; } a { color:inherit; }
+.skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; } .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; background:#fff; padding:.75rem 1rem; border-radius:.5rem; z-index:999; }
+.page-shell { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:100vh; }
+.sidebar { position:sticky; top:0; height:100vh; overflow-y:auto; background:radial-gradient(circle at top left,rgba(238,0,0,.20),transparent 36%),linear-gradient(180deg,#0b1020,#151f36); color:#fff; padding:1.45rem 1.05rem; border-right:1px solid rgba(255,255,255,.08); }
+.brand { display:flex; gap:14px; align-items:center; margin-bottom:1.2rem; padding:1rem; border-radius:14px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10); box-shadow:0 10px 28px rgba(0,0,0,.28); } .brand-logo-wrap { width:148px; height:92px; border-radius:16px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 28px rgba(0,0,0,.30); display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:8px; } .brand-logo { width:100%; height:100%; object-fit:contain; object-position:center; display:block; } .brand-copy h1 { margin:0; font-size:1rem; line-height:1.35; letter-spacing:.01em; color:#fff; } .brand-copy p { margin:4px 0 0; color:#bbc8d9; font-size:.84rem; line-height:1.45; } .sidebar .label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:#98a8bf; margin:1.1rem .45rem .65rem; } .nav-link { display:block; padding:.62rem .72rem; border-radius:.85rem; text-decoration:none; color:#e9eef8; border:1px solid transparent; margin:.18rem 0; } .nav-link:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); } .nav-link span { display:block; font-weight:800; color:#fff; font-size:.85rem; } .nav-link small { display:block; font-size:.73rem; color:#bbc8d9; line-height:1.35; margin-top:.12rem; } .nav-link.is-primary { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); }
+.hero { color:#fff; padding:2.75rem clamp(1.2rem,4vw,4rem) 2.15rem; background:radial-gradient(circle at 18% 12%,rgba(22,163,168,.35),transparent 32%),radial-gradient(circle at 78% 0%,rgba(238,0,0,.28),transparent 30%),linear-gradient(135deg,#101827,#1a2540 58%,#0b1020); } .eyebrow { display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border:1px solid rgba(255,255,255,.18); border-radius:999px; color:#dfe8f7; font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; background:rgba(255,255,255,.06); } .hero h2 { font-size:clamp(2rem,4vw,3.6rem); line-height:1.05; max-width:1000px; margin:1rem 0 .8rem; } .hero p { max-width:1060px; color:#dbe6f5; font-size:1rem; margin:0; }
+.content-wrap { padding:1.6rem clamp(1.1rem,4vw,4rem) 4rem; } .notice { background:#fff; border:1px solid var(--line); border-left:6px solid var(--redhat); border-radius:1rem; padding:1rem 1.15rem; box-shadow:var(--shadow-soft); margin-bottom:1.25rem; } .intro-card { background:#fff; border:1px solid var(--line); border-radius:1rem; padding:1.05rem 1.2rem; box-shadow:var(--shadow-soft); margin:0 0 1.35rem; } .intro-card p { margin:.2rem 0; color:#0f172a; line-height:1.7; font-size:.98rem; }
+
+.summary-panel { background:#fff; border:1px solid var(--line); border-radius:1rem; box-shadow:var(--shadow-soft); margin:0 0 1.45rem; overflow:hidden; }
+.summary-panel-header { padding:1rem 1.15rem; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); }
+.summary-panel-header h2 { margin:0; font-size:1.25rem; color:#0f172a; }
+.summary-panel-header p { margin:.35rem 0 0; color:#64748b; font-size:.92rem; }
+.summary-metrics { display:grid; grid-template-columns:repeat(2,minmax(180px,1fr)); gap:.8rem; padding:1rem 1.15rem .4rem; max-width:650px; }
+.summary-metric { border:1px solid #dbe4f0; border-radius:.9rem; padding:.85rem .95rem; background:linear-gradient(180deg,#ffffff,#f9fbff); }
+.summary-metric strong { display:block; font-size:1.7rem; line-height:1; color:#0f172a; }
+.summary-metric span { display:block; margin-top:.35rem; color:#475569; font-size:.85rem; font-weight:700; }
+.category-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; padding:.75rem 1.15rem 1.15rem; }
+.category-card { border:1px solid #dbe4f0; border-radius:.9rem; background:#fff; padding:.9rem; }
+.category-top { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.55rem; }
+.category-top h3 { margin:0; font-size:.95rem; color:#0f172a; }
+.count-badge { display:inline-flex; min-width:2.1rem; height:2.1rem; align-items:center; justify-content:center; border-radius:999px; font-weight:800; background:#e9f0ff; color:#1d4ed8; border:1px solid #c8d8ff; }
+.control-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+.control-tags a { text-decoration:none; font-size:.74rem; font-weight:800; color:#b00000; background:#fff1f1; border:1px solid #ffd2d2; border-radius:999px; padding:.18rem .45rem; }
+.control-tags a:hover { background:#ffe2e2; }
+@media (max-width: 1120px) { .summary-metrics { grid-template-columns:repeat(2,minmax(150px,1fr)); } .category-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 680px) { .summary-metrics, .category-grid { grid-template-columns:1fr; } }
+
+.index-section { margin-bottom:1.5rem; } .index-section h2 { margin:0 0 .8rem; font-size:1.3rem; color:#0f172a; } .control-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.75rem; width:100%; } .control-chip { display:flex; gap:.75rem; align-items:flex-start; width:100%; min-height:80px; padding:.8rem .9rem; border:1px solid var(--line); border-radius:1rem; background:#fff; text-decoration:none; box-shadow:var(--shadow-soft); } .control-chip:hover { transform:translateY(-1px); border-color:rgba(238,0,0,.35); box-shadow:var(--shadow); } .control-chip strong { flex:0 0 auto; color:var(--redhat-dark); font-size:.86rem; } .control-chip span { color:#334155; font-size:.88rem; line-height:1.35; }
+.article { max-width:none; width:100%; } .control-card { width:100%; background:var(--panel); border:1px solid var(--line); border-radius:1.1rem; box-shadow:var(--shadow-soft); margin:1rem 0 1.25rem; padding:.9rem; scroll-margin-top:1rem; } .control-head { width:100%; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; border:1px solid var(--line); border-radius:.95rem; padding:.9rem 1rem; background:linear-gradient(180deg,#fbfdff,#f7faff); } .control-title-wrap h2 { margin:.32rem 0 0; font-size:1.34rem; line-height:1.25; color:#0f172a; } .control-kicker-row { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; } .control-code { display:inline-flex; align-items:center; justify-content:center; padding:.22rem .55rem; border-radius:999px; background:#e9f0ff; color:#1d4ed8; font-weight:800; font-size:.75rem; border:1px solid #c8d8ff; } .subdomain-pill { display:inline-flex; align-items:center; padding:.24rem .58rem; border-radius:999px; background:#eef2f7; color:#334155; font-size:.75rem; font-weight:700; border:1px solid #d6deea; }
+.risk-pill { display:inline-flex; align-items:center; justify-content:center; padding:.26rem .62rem; border-radius:999px; font-size:.73rem; font-weight:800; border:1px solid transparent; white-space:nowrap; } .risk-pill.critical { background:#fee2e2; color:#7f1d1d; border-color:#fca5a5; } .risk-pill.high { background:#fee2e2; color:#b91c1c; border-color:#fecaca; } .risk-pill.moderate { background:#fef3c7; color:#b45309; border-color:#fde68a; } .risk-pill.low { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+.field-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.85rem; margin-top:.9rem; width:100%; align-items:start; } .field-box { border:1px solid var(--line); border-radius:.85rem; background:#fff; overflow:hidden; min-width:0; } .field-box h3 { margin:0; padding:.72rem .86rem; font-size:.76rem; line-height:1.2; text-transform:uppercase; letter-spacing:.04em; color:#1f3b5d; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); } .field-body { padding:.85rem .95rem; font-size:.92rem; color:#172033; } .field-body > :first-child { margin-top:0; } .field-body > :last-child { margin-bottom:0; } .field-box-full { grid-column:1/-1; } .risk-box.critical { border-left:4px solid #b91c1c; background:#fff5f5; } .risk-box.high { border-left:4px solid #ef4444; background:#fff8f8; } .risk-box.moderate { border-left:4px solid #f59e0b; background:#fffdf5; } .risk-box.low { border-left:4px solid #22c55e; background:#f7fff8; }
+.field-body ul,.field-body ol { margin:.3rem 0 .6rem 1.1rem; padding:0; } .field-body li { margin:.35rem 0; } .field-body p { margin:.45rem 0; } .field-body strong { color:#0f172a; } .field-body code { background:#eef2f7; color:#9f1239; padding:.12rem .32rem; border-radius:.35rem; font-size:.9em; }
+.field-body pre, pre.cli { background:#0b1220; color:#f8fafc; border-radius:.75rem; padding:1rem 1.1rem; overflow:auto; border:1px solid #111827; white-space:pre-wrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); margin:.75rem 0; } .field-body pre code, pre.cli code { background:transparent!important; color:#f8fafc!important; padding:0; font-family:Consolas,'Courier New',monospace; font-size:.88rem; font-weight:700; line-height:1.45; } .verification-steps li pre.cli { margin:.35rem 0 .2rem; }
+.control-links { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem .3rem .15rem; } .control-links a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:.85rem; } .control-links a:hover { text-decoration:underline; } .empty-note { color:var(--muted); font-style:italic; } .footer { padding:1.4rem clamp(1.1rem,4vw,4rem); color:#64748b; border-top:1px solid var(--line); background:#fff; }
+@media (max-width:1120px) { .field-grid { grid-template-columns:1fr; } .field-box-full { grid-column:auto; } } @media (max-width:980px) { .page-shell { grid-template-columns:1fr; } .sidebar { position:relative; height:auto; max-height:420px; } .control-head { flex-direction:column; } } @media print { .sidebar,.control-grid,.control-links,.notice { display:none!important; } .page-shell { display:block; } .hero { color:#111; background:#fff; padding:1rem 0; } .content-wrap { padding:0; } .control-card { box-shadow:none; break-inside:avoid; } }
+
+.cross-control-link { color:#1d4ed8; text-decoration:none; font-weight:700; border-bottom:1px dotted rgba(29,78,216,.45); }
+.cross-control-link:hover { color:#b00000; border-bottom-color:#b00000; }
+</style>
+</head>
+<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label" data-cross-pillar-nav="true">Assessment pillars</div><nav data-cross-pillar-nav="true"><a class="nav-link" href="pillar-ar.html"><span>Pillar 1: Availability &amp; Resilience</span><small>Open AR pillar</small></a><a class="nav-link" href="pillar-rc.html"><span>Pillar 2: Recoverability / Disaster Recovery</span><small>Open RC pillar</small></a><a class="nav-link" href="pillar-ps.html"><span>Pillar 3: Performance &amp; Scalability</span><small>Open PS pillar</small></a><a class="nav-link" href="pillar-sc.html"><span>Pillar 4: Security &amp; Compliance</span><small>Open SC pillar</small></a><a aria-current="page" class="nav-link is-primary" href="pillar-mo.html"><span>Pillar 5: Monitoring &amp; Observability</span><small>MO controls — current page</small></a><a class="nav-link" href="pillar-co.html"><span>Pillar 6: Cost Optimization</span><small>Open CO pillar</small></a></nav><div class="label">Pillar 5 controls</div><nav><a class="nav-link" href="#control-id-mo-001"><span>MO-001</span><small>GitOps-Driven Observability Configuration</small></a>
+<a class="nav-link" href="#control-id-mo-002"><span>MO-002</span><small>Centralized Log Forwarding (ClusterLogForwarder)</small></a>
+<a class="nav-link" href="#control-id-mo-003"><span>MO-003</span><small>High Availability for the Monitoring Stack</small></a>
+<a class="nav-link" href="#control-id-mo-004"><span>MO-004</span><small>API Audit Logging</small></a>
+<a class="nav-link" href="#control-id-mo-005"><span>MO-005</span><small>Long-Term Metric Retention (Thanos Integration)</small></a>
+<a class="nav-link" href="#control-id-mo-006"><span>MO-006</span><small>Network Observability &amp; Flow Logging (eBPF)</small></a>
+<a class="nav-link" href="#control-id-mo-007"><span>MO-007</span><small>Distributed Tracing (OpenTelemetry &amp; Jaeger)</small></a>
+<a class="nav-link" href="#control-id-mo-008"><span>MO-008</span><small>Synthetic Proactive Monitoring (Blackbox / Uptime)</small></a>
+<a class="nav-link" href="#control-id-mo-009"><span>MO-009</span><small>Cluster State Metrics (kube-state-metrics)</small></a>
+<a class="nav-link" href="#control-id-mo-010"><span>MO-010</span><small>Kubernetes Event Forwarding &amp; Archiving</small></a></nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 5</span><h2>Pillar 5: Monitoring &amp; Observability</h2><p>Architecture assessment page for validating observability-as-code, centralized logging, resilient monitoring, API audit logging, long-term metric retention, network flow visibility, distributed tracing, synthetic monitoring, Kubernetes state metrics, and event archiving controls.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Monitoring and Observability define the platform's capability to detect service degradation, preserve operational evidence, support incident response, and provide measurable visibility across infrastructure, workloads, applications, network flows, logs, metrics, traces, and Kubernetes events. For OpenShift environments supporting containerized workloads and OpenShift Virtualization, these controls validate that observability configuration, log forwarding, monitoring high availability, audit logging, metric retention, network observability, distributed tracing, synthetic monitoring, cluster-state telemetry, and event archiving are implemented through tested, automated, and evidence-backed operational practices.</p>
+</div><section aria-labelledby="control-summary" class="summary-panel">
+<div class="summary-panel-header">
+<h2 id="control-summary">Summary of Controls</h2>
+<p>Pillar 5 contains 10 assessment controls grouped by monitoring and observability domain to support auditability, telemetry, proactive detection, operational resilience, incident analysis, and long-term evidence retention.</p>
+</div>
+<div class="summary-metrics">
+<div class="summary-metric"><strong>10</strong><span>Total controls</span></div>
+<div class="summary-metric"><strong>5</strong><span>Monitoring &amp; Observability domains</span></div>
+</div>
+<div class="category-grid">
+<div class="category-card"><div class="category-top"><h3>Observability Architecture</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-mo-001">MO-001</a><a href="#control-id-mo-003">MO-003</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Audit and Logging</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-mo-002">MO-002</a><a href="#control-id-mo-004">MO-004</a><a href="#control-id-mo-010">MO-010</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Metrics &amp; Telemetry</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-mo-005">MO-005</a><a href="#control-id-mo-008">MO-008</a><a href="#control-id-mo-009">MO-009</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Network Monitoring</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-mo-006">MO-006</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Application Observability</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-mo-007">MO-007</a></div></div>
+</div>
+</section><section aria-labelledby="controls-index" class="index-section"><h2 id="controls-index">Assessment Controls Index</h2><div class="control-grid"><a class="control-chip" href="#control-id-mo-001"><strong>MO-001</strong><span>GitOps-Driven Observability Configuration</span></a>
+<a class="control-chip" href="#control-id-mo-002"><strong>MO-002</strong><span>Centralized Log Forwarding (ClusterLogForwarder)</span></a>
+<a class="control-chip" href="#control-id-mo-003"><strong>MO-003</strong><span>High Availability for the Monitoring Stack</span></a>
+<a class="control-chip" href="#control-id-mo-004"><strong>MO-004</strong><span>API Audit Logging</span></a>
+<a class="control-chip" href="#control-id-mo-005"><strong>MO-005</strong><span>Long-Term Metric Retention (Thanos Integration)</span></a>
+<a class="control-chip" href="#control-id-mo-006"><strong>MO-006</strong><span>Network Observability &amp; Flow Logging (eBPF)</span></a>
+<a class="control-chip" href="#control-id-mo-007"><strong>MO-007</strong><span>Distributed Tracing (OpenTelemetry &amp; Jaeger)</span></a>
+<a class="control-chip" href="#control-id-mo-008"><strong>MO-008</strong><span>Synthetic Proactive Monitoring (Blackbox / Uptime)</span></a>
+<a class="control-chip" href="#control-id-mo-009"><strong>MO-009</strong><span>Cluster State Metrics (kube-state-metrics)</span></a>
+<a class="control-chip" href="#control-id-mo-010"><strong>MO-010</strong><span>Kubernetes Event Forwarding &amp; Archiving</span></a></div></section><article class="article">
+<section class="control-card" id="control-id-mo-001">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-001</span><span class="subdomain-pill">Observability Architecture</span></div>
+<h2>GitOps-Driven Observability Configuration</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>GitOps-Driven Observability mandates that all monitoring configurations—including Prometheus Rules, Alertmanager routing, and Grafana dashboards—are defined as code and managed via OpenShift GitOps (ArgoCD). No manual edits via the OpenShift Console or CLI are permitted for production monitoring alerts.</p>
+<h4>Key Aspects of GitOps Observability:</h4>
+<ul>
+<li><p><strong>Declarative Alerts:</strong> Storing PrometheusRule objects in a version-controlled Git repository.</p></li>
+<li><p><strong>Dashboard as Code:</strong> Defining custom Grafana dashboards as JSON files injected via ConfigMaps managed by ArgoCD.</p></li>
+<li><p><strong>Peer Review:</strong> Requiring a Pull Request (PR) approval process before an alert threshold (e.g., changing a CPU warning from 80% to 90%) can be modified.</p></li>
+<li><p><strong>Drift Reconciliation:</strong> ArgoCD automatically reverts any unauthorized manual changes to the alerting pipeline back to the approved Git state.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>ArgoCD Management:</strong> Verify that resources in the openshift-monitoring and openshift-user-workload-monitoring namespaces are labeled as managed by ArgoCD.</p></li>
+<li><p><strong>Git Repository:</strong> Audit the repository storing the monitoring manifests for proper access controls and branch protection rules.</p></li>
+<li><p><strong>Drift Status:</strong> Ensure that the ArgoCD application managing observability is reporting a Synced and Healthy status.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment, an undocumented change to a monitoring alert can mask a critical failure.</p>
+<ul>
+<li><p><strong>Auditability:</strong> Provides a pristine, unalterable audit trail of who changed an alert, when, and why (via the Git commit history).</p></li>
+<li><p><strong>Disaster Recovery:</strong> If the cluster is lost, the entire observability stack and all custom dashboards can be restored to the DR site in seconds (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-006" title="Open RC-006">RC-006</a>).</p></li>
+<li><p><strong>Standardization:</strong> Ensures that the "Development" and "Production" environments use the exact same alerting logic, preventing surprises during deployment.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> GitOps configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check ArgoCD apps:</strong></p><pre class="cli"><code>oc get applications -n openshift-gitops | grep monitoring</code></pre></li>
+<li><p><strong>Verify resource labels:</strong></p><pre class="cli"><code>oc get prometheusrule -n openshift-monitoring -o jsonpath='{.items[*].metadata.labels}' (Look for app.kubernetes.io/instance).</code></pre></li>
+<li><p>Check Git commit history for recent alert modifications.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>ArgoCD Application YAML:</strong> Showing the source repository for the monitoring stack.</p></li>
+<li><p><strong>Git PR Log:</strong> An example of an approved Pull Request modifying an alerting threshold.</p></li>
+<li><p><strong>Sync Status Report:</strong> Screenshot of ArgoCD showing no configuration drift in the monitoring namespace.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Missed Incidents):</strong> Manual, untracked changes to alerts can lead to "silenced" warnings, allowing minor issues to cascade into major banking outages.</p></li>
+<li><p><strong>Operational Risk:</strong> Dashboards built manually in the UI will be permanently lost during a cluster rebuild or migration.</p></li>
+<li><p><strong>Compliance Risk:</strong> May not meet regulatory requirements for strict Change Management and configuration tracking for critical systems.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.1 (Operations Management); Section 11.5 (Logging and Monitoring).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 4 (Secure Configuration of Enterprise Assets).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> CM-3 (Configuration Change Control).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-002">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-002</span><span class="subdomain-pill">Audit and Logging</span></div>
+<h2>Centralized Log Forwarding (ClusterLogForwarder)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Local storage on OpenShift nodes is ephemeral. Centralized Log Forwarding utilizes the OpenShift Logging Operator to collect logs from all containers and bare-metal nodes, format them, and securely transmit them to an external Security Information and Event Management (SIEM) system (e.g., Splunk, IBM QRadar, or Elastic).</p>
+<h4>Key Aspects of Log Forwarding:</h4>
+<ul>
+<li><p><strong>Data Types:</strong> Must forward three specific types of logs:</p></li>
+<li><p><strong>Application:</strong> Output from the banking microservices (stdout/stderr).</p></li>
+<li><p><strong>Infrastructure:</strong> Logs from the OpenShift platform pods and node journals.</p></li>
+<li><p><strong>Audit:</strong> Security events from the Kubernetes API server (<a class="cross-control-link" href="pillar-mo.html#control-id-mo-004" title="Open MO-004">MO-004</a>) and OpenVN.</p></li>
+<li><p><strong>ClusterLogForwarder API:</strong> The declarative configuration defining the inputs, outputs (external SIEM IP/FQDN), and pipelines.</p></li>
+<li><p><strong>TLS Encryption:</strong> Ensuring the transmission of logs from the cluster to the SIEM is encrypted using mutual TLS (mTLS).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Logging Operator:</strong> Verify the OpenShift Logging Operator is installed and healthy.</p></li>
+<li><p><strong>Forwarder Configuration:</strong> Audit the ClusterLogForwarder instance to ensure all three log types (App, Infra, Audit) are routed to the SIEM.</p></li>
+<li><p><strong>Transport Security:</strong> Confirm that the output configuration utilizes secure TLS certificates.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Logs are the definitive source of truth during a security breach or application failure.</p>
+<ul>
+<li><p><strong>Forensic Immutability:</strong> Once a log is pushed to an external SIEM, a cluster administrator (or an attacker who gains cluster-admin rights) cannot delete or alter the evidence.</p></li>
+<li><p><strong>Survival of Node Death:</strong> If a bare-metal node panics and crashes, the logs leading up to the crash are safely stored off-site.</p></li>
+<li><p><strong>Correlation:</strong> Allows the Security Operations Center (SOC) to correlate an OpenShift ingress event with a perimeter firewall event.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Forwarder configuration and SIEM receipt audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check forwarder object:</strong></p><pre class="cli"><code>oc get clusterlogforwarder instance -n openshift-logging -o yaml</code></pre></li>
+<li><p><strong>Verify pipeline routing:</strong> Ensure pipelines define inputRefs: [application, infrastructure, audit].</p></li>
+<li><p><strong>Check collector health:</strong></p><pre class="cli"><code>oc get pods -n openshift-logging -l component=collector (Fluentd or Vector pods must be running).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>ClusterLogForwarder YAML:</strong> Export showing the configured pipelines and secure SIEM endpoints.</p></li>
+<li><p><strong>SIEM Query Screenshot:</strong> A screenshot from Splunk/QRadar showing recent OpenShift audit logs successfully ingested.</p></li>
+<li><p><strong>TLS Secret Export:</strong> Proof that a client certificate is mounted for secure transmission.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Forensic Blindness):</strong> If logs remain on the node, an attacker who deletes the container or reboots the node destroys all evidence of the intrusion.</p></li>
+<li><p><strong>Compliance Risk:</strong> Immediate non-compliance with regulatory expectations for continuous security monitoring and log retention.</p></li>
+<li><p><strong>Operational Risk:</strong> Application teams cannot troubleshoot production issues without access to historical application logs.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.5 (Logging and Security Monitoring).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 8 (Audit Log Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AU-4 (Audit Log Storage Capacity); AU-9 (Protection of Audit Information).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-003">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-003</span><span class="subdomain-pill">Observability Architecture</span></div>
+<h2>High Availability for the Monitoring Stack</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>The monitoring stack (Prometheus, Alertmanager, Thanos) must be as resilient as the applications it monitors. This control mandates High Availability (HA) for all observability components and ensures they are physically isolated on dedicated infrastructure nodes (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-019" title="Open AR-019">AR-019</a>).</p>
+<h4>Key Aspects of Monitoring HA:</h4>
+<ul>
+<li><p><strong>Prometheus Replicas:</strong> Running at least two identical instances of Prometheus that scrape the same targets independently.</p></li>
+<li><p><strong>Alertmanager Clustering:</strong> Running a highly available Alertmanager cluster that deduplicates alerts before sending them to external channels (e.g., PagerDuty, Email).</p></li>
+<li><p><strong>Node Segregation:</strong> Placing these pods exclusively on nodes labeled node-role.kubernetes.io/infra to prevent application spikes from crashing the monitoring tools.</p></li>
+<li><p><strong>Storage Resiliency:</strong> Utilizing persistent, replicated storage (ODF) for the Prometheus Write-Ahead Log (WAL) to prevent data loss during pod restarts.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>ConfigMap Audit:</strong> Verify the cluster-monitoring-config to ensure retention and replicas are properly configured.</p></li>
+<li><p><strong>Pod Distribution:</strong> Confirm that Prometheus and Alertmanager pods are scheduled across different physical infra nodes (Anti-Affinity).</p></li>
+<li><p><strong>Storage Configuration:</strong> Ensure Prometheus is configured to use a PersistentVolumeClaim (PVC) rather than emptyDir.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>A failure in monitoring during an application outage creates a "blind" disaster scenario.</p>
+<ul>
+<li><p><strong>Continuous Visibility:</strong> If one Infra node crashes, the secondary Prometheus instance continues to collect metrics and fire alerts without interruption.</p></li>
+<li><p><strong>Preventing Alert Fatigue:</strong> An HA Alertmanager ensures that engineers receive a single, consolidated notification rather than duplicate alerts from multiple Prometheus instances.</p></li>
+<li><p><strong>Resource Guarantee:</strong> By keeping monitoring off worker nodes, a rogue banking app with a memory leak cannot starve Prometheus of the RAM it needs to process metrics.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Operator configuration and pod placement audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check monitoring config:</strong></p><pre class="cli"><code>oc get configmap cluster-monitoring-config -n openshift-monitoring -o yaml</code></pre></li>
+<li><p><strong>Verify replicas:</strong></p><pre class="cli"><code>oc get statefulset prometheus-k8s -n openshift-monitoring -o jsonpath='{.spec.replicas}' (Must be $\ge 2$).</code></pre></li>
+<li><p><strong>Check pod placement:</strong></p><pre class="cli"><code>oc get pods -n openshift-monitoring -o wide | grep prometheus</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Cluster-Monitoring-Config YAML:</strong> Showing replicas: 2 and the nodeSelector targeting infra nodes.</p></li>
+<li><p><strong>Pod Affinity Report:</strong> Evidence that the two Prometheus instances are running on different bare-metal hosts.</p></li>
+<li><p><strong>PVC Status:</strong> Output of oc get pvc -n openshift-monitoring showing bound volumes.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Monitoring Blackout):</strong> A single-replica monitoring stack can crash under heavy load, precisely when it is needed most to diagnose an ongoing incident.</p></li>
+<li><p><strong>Operational Risk:</strong> Duplicate alerts or missed pages can lead to slower incident response times and SLA breaches.</p></li>
+<li><p><strong>Efficiency Risk:</strong> Losing local metric history during a pod restart complicates immediate troubleshooting.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.3 (Availability and Resilience); Section 11.5 (Logging and Monitoring).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-4 (Information System Monitoring).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-004">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-004</span><span class="subdomain-pill">Audit and Logging</span></div>
+<h2>API Audit Logging</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>The OpenShift API Server processes every command executed in the cluster. API Audit Logging configures the API server to record a chronological set of records detailing the sequence of activities that have affected the system by individual users, administrators, or other components.</p>
+<h4>Key Aspects of API Audit Logging:</h4>
+<ul>
+<li><p><strong>Audit Profile Levels:</strong> OpenShift offers different profiles. For production banking, RequestResponse (logs full request and response bodies) or Metadata (logs user, timestamp, resource, and action) must be explicitly configured.</p></li>
+<li><p><strong>Default Profile:</strong> The Default profile logs only metadata for write requests and does not log read requests, which is often insufficient for strict financial compliance.</p></li>
+<li><p><strong>Log Forwarding:</strong> These logs must be captured by the ClusterLogForwarder (<a class="cross-control-link" href="pillar-mo.html#control-id-mo-002" title="Open MO-002">MO-002</a>) and pushed to the SIEM.</p></li>
+<li><p><strong>Retention:</strong> Ensuring local audit logs on the master nodes are rotated and retained long enough for the forwarder to process them securely.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Audit Profile Configuration:</strong> Verify the APIServer cluster resource to check the active audit.profile.</p></li>
+<li><p><strong>SIEM Ingestion:</strong> Confirm with the SOC team that API audit logs are successfully parsing in the SIEM and mapped to identity data (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-002" title="Open SC-002">SC-002</a>).</p></li>
+<li><p><strong>Custom Rules:</strong> If using a custom profile, verify that sensitive data (like secret contents) are "omitted" from the logs to prevent credential leakage into the SIEM.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>API audit logs are the primary mechanism for detecting insider threats and compromised administrative credentials.</p>
+<ul>
+<li><p><strong>Non-Repudiation:</strong> Proves definitively that user "George" executed oc delete secret at 2:00 AM.</p></li>
+<li><p><strong>Behavioral Analytics:</strong> Allows the SOC to detect anomalous behavior, such as a service account suddenly attempting to list all secrets across all namespaces.</p></li>
+<li><p><strong>Root Cause Analysis:</strong> Helps determine if a service outage was caused by a configuration change applied via the API.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> APIServer configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check active profile:</strong></p><pre class="cli"><code>oc get apiserver cluster -o jsonpath='{.spec.audit.profile}'</code></pre></li>
+<li><p><strong>Check custom rules (if applicable):</strong></p><pre class="cli"><code>oc get apiserver cluster -o jsonpath='{.spec.audit.customRules}'</code></pre></li>
+<li><p><strong>Verify log existence on master node:</strong></p><pre class="cli"><code>oc debug node/&lt;master-node&gt; -- chroot /host tail /var/log/kube-apiserver/audit.log</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>APIServer YAML:</strong> Export showing the enforced audit.profile.</p></li>
+<li><p><strong>Sample Audit Log Event:</strong> A JSON snippet from the SIEM showing an API action (e.g., creating a pod), the authenticated user, and the source IP.</p></li>
+<li><p><strong>Log Rotation Config:</strong> Proof that /etc/audit/auditd.conf is correctly configured to prevent disk exhaustion.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Unattributable Breaches):</strong> Without detailed API logging, an attacker can modify cluster security policies and the organization will have no idea how it happened or what was changed.</p></li>
+<li><p><strong>Compliance Risk:</strong> Major non-compliance with regulatory requirements Section 11.5 and general PCIDSS requirements for tracking privileged access.</p></li>
+<li><p><strong>Privacy Risk:</strong> If custom rules aren't set correctly, RequestResponse logging might accidentally record the plain-text payload of a Secret object into the SIEM.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.5 (Logging and Security Monitoring); Section 11.2 (User Access).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 8 (Audit Log Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AU-2 (Event Logging); AU-3 (Content of Audit Records).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-005">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-005</span><span class="subdomain-pill">Metrics &amp; Telemetry</span></div>
+<h2>Long-Term Metric Retention (Thanos Integration)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>By default, the local Prometheus instances in OpenShift only retain metric data for a short period (typically 15 days) to prevent local disk exhaustion. Long-Term Metric Retention utilizes the native Thanos Querier and Receiver components to push metrics to an external S3-compatible Object Store (like ODF or MinIO).</p>
+<h4>Key Aspects of Thanos Integration:</h4>
+<ul>
+<li><p><strong>Object Storage:</strong> Configuring a highly durable, cheap object storage bucket to hold months or years of compressed metric data.</p></li>
+<li><p><strong>Global Query View:</strong> Thanos provides a single Grafana endpoint that can seamlessly query real-time data from local Prometheus and historical data from the S3 bucket simultaneously.</p></li>
+<li><p><strong>Downsampling:</strong> Automatically reducing the resolution of old data (e.g., turning 1-minute data points into 1-hour data points after 30 days) to save storage costs.</p></li>
+<li><p><strong>Multi-Cluster Visibility:</strong> Allows Thanos to aggregate metrics from both the Primary and DR clusters (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-005" title="Open RC-005">RC-005</a>) into a single pane of glass.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Secret Configuration:</strong> Verify the existence of the thanos-objstore-config secret in the openshift-monitoring namespace.</p></li>
+<li><p><strong>Monitoring Config:</strong> Confirm the cluster-monitoring-config ConfigMap is configured to enable Thanos and connect it to the object store.</p></li>
+<li><p><strong>Data Presence:</strong> Verify that metric blocks are actively being written to the target S3 bucket.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Capacity planning and seasonal trend analysis require historical context.</p>
+<ul>
+<li><p><strong>Trend Analysis:</strong> Allows the platform team to compare the cluster's CPU load during this month's payroll processing with last month's, identifying efficiency degradation.</p></li>
+<li><p><strong>SLA Reporting:</strong> Financial institutions require historical uptime and latency metrics to prove adherence to Service Level Agreements (SLAs).</p></li>
+<li><p><strong>Stateless Prometheus:</strong> By offloading data to S3, the local Prometheus pods become nearly stateless, making them much faster to restart and recover.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Object storage configuration and data verification.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Thanos secret:</strong></p><pre class="cli"><code>oc get secret thanos-objstore-config -n openshift-monitoring</code></pre></li>
+<li><p><strong>Check monitoring config:</strong></p><pre class="cli"><code>oc get configmap cluster-monitoring-config -n openshift-monitoring -o yaml | grep -A 5 thanos</code></pre></li>
+<li><p><strong>Verify Thanos Pods:</strong></p><pre class="cli"><code>oc get pods -n openshift-monitoring -l app=thanos-query</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Thanos Configuration Snippet:</strong> The YAML showing the integration with the S3 bucket.</p></li>
+<li><p><strong>S3 Bucket Listing:</strong> Evidence from the storage provider (e.g., Ceph Object Gateway) showing Thanos metric chunks stored securely.</p></li>
+<li><p><strong>Grafana Dashboard Screenshot:</strong> A chart displaying metric data spanning 90+ days, proving successful historical retrieval.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Loss of Baseline):</strong> Without long-term metrics, the engineering team cannot establish a "normal" performance baseline, making it difficult to detect subtle degradations over time.</p></li>
+<li><p><strong>Operational Risk:</strong> Prometheus local disks filling up and crashing because retention was increased without using an external object store.</p></li>
+<li><p><strong>Business Risk:</strong> Inability to accurately forecast hardware procurement needs for the bare-metal data center due to a lack of historical growth data.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity Management and Performance).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AU-4 (Audit Log Storage Capacity); AU-11 (Audit Record Retention).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-006">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-006</span><span class="subdomain-pill">Network Monitoring</span></div>
+<h2>Network Observability &amp; Flow Logging (eBPF)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Traditional network monitoring relies on capturing packets, which is heavily resource-intensive. This control mandates the use of the OpenShift Network Observability Operator, which leverages eBPF (Extended Berkeley Packet Filter) technology to securely and efficiently monitor pod-to-pod network flows directly at the Linux kernel level.</p>
+<h4>Key Aspects of Network Observability:</h4>
+<ul>
+<li><p><strong>eBPF FlowCollector:</strong> Captures highly granular network flow data (source, destination, protocol, bytes, dropped packets) without requiring a "sidecar" proxy in every pod.</p></li>
+<li><p><strong>Loki Integration:</strong> Flow data is stored in a highly scalable Loki datastore for fast querying and visualization.</p></li>
+<li><p><strong>Network Policy Verification:</strong> Provides real-time visual proof of whether a Network Policy (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-006" title="Open SC-006">SC-006</a>) is actively blocking or allowing specific traffic.</p></li>
+<li><p><strong>Topology Mapping:</strong> Automatically generates a visual dependency map of how microservices are communicating across the cluster.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Operator Status:</strong> Verify the Network Observability Operator is installed and the FlowCollector instance is active.</p></li>
+<li><p><strong>Data Retention:</strong> Confirm that Loki is backed by persistent object storage (ODF/S3) with an appropriate retention period for flow logs.</p></li>
+<li><p><strong>Sampling Rate:</strong> Ensure the eBPF sampling rate is tuned to balance visibility with bare-metal CPU overhead.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>"Blind" networks are a massive security liability in a financial institution.</p>
+<ul>
+<li><p><strong>Detecting Lateral Movement:</strong> Allows the SOC to detect if a compromised frontend pod suddenly attempts to scan the IP addresses of the backend databases.</p></li>
+<li><p><strong>Troubleshooting Network Drops:</strong> Instantly identifies if a connection timeout is caused by a firewall drop, an OpenShift Network Policy, or an application-level failure.</p></li>
+<li><p><strong>Performance Optimization:</strong> Identifies "chatty" microservices that may be saturating the inter-node network bandwidth (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-008" title="Open AR-008">AR-008</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Operator audit and flow querying.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check FlowCollector status:</strong></p><pre class="cli"><code>oc get flowcollector cluster -o yaml</code></pre></li>
+<li><p><strong>Verify Loki deployment:</strong></p><pre class="cli"><code>oc get pods -n netobserv | grep loki</code></pre></li>
+<li><p><strong>Console Verification:</strong></p><pre class="cli"><code>Navigate to Observe -&gt; Network Traffic in the OpenShift Console to ensure data is populating.</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>FlowCollector YAML:</strong> Snippet showing the eBPF agent configuration and Loki storage endpoint.</p></li>
+<li><p><strong>Traffic Topology Export:</strong> A screenshot from the console showing the mapped traffic flows of a critical banking application.</p></li>
+<li><p><strong>SIEM Integration Log:</strong> (If applicable) Proof that high-risk flow alerts are forwarded to the central SIEM.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Undetected Intrusions):</strong> Without flow logging, an attacker exfiltrating data out of the cluster may go completely unnoticed until the data appears on the dark web.</p></li>
+<li><p><strong>Operational Risk:</strong> Network engineers lack the data needed to resolve "finger-pointing" between the application and infrastructure teams during an outage.</p></li>
+<li><p><strong>Compliance Risk:</strong> Fails the RMiT Section 11.2 requirement for monitoring internal network traffic in critical systems.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.2 (Network Security); Section 11.5 (Logging and Monitoring).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 13 (Network Monitoring and Defense).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-4 (Information System Monitoring); SC-7 (Boundary Protection).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-007">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-007</span><span class="subdomain-pill">Application Observability</span></div>
+<h2>Distributed Tracing (OpenTelemetry &amp; Jaeger)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>In a microservices architecture, a single user click (e.g., "Transfer Funds") might traverse 10 different pods across 5 different bare-metal nodes. Distributed Tracing uses OpenTelemetry and Jaeger to inject a unique "Trace ID" into the request header, tracking its journey and timing at every hop.</p>
+<h4>Key Aspects of Distributed Tracing:</h4>
+<ul>
+<li><p><strong>OpenTelemetry Integration:</strong> The standardized framework used to instrument the banking applications (Java, Go, Node.js) to emit trace data.</p></li>
+<li><p><strong>Span Measurement:</strong> A "Trace" is made up of "Spans." Each span measures the exact time spent in a specific function or database query.</p></li>
+<li><p><strong>Jaeger Backend:</strong> The centralized datastore and UI used to visualize the traces and identify bottlenecks.</p></li>
+<li><p><strong>Sampling Strategies:</strong> Configuring probabilistic sampling (e.g., capturing 5% of all traffic) to avoid overwhelming the storage backend during peak loads.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Operator Presence:</strong> Confirm the OpenShift Distributed Tracing Platform (Jaeger) and OpenTelemetry Operators are installed.</p></li>
+<li><p><strong>Application Instrumentation:</strong> Verify that critical production applications have the OpenTelemetry agent injected (via auto-instrumentation or code libraries).</p></li>
+<li><p><strong>Trace Generation:</strong> Confirm that valid traces are appearing in the Jaeger UI.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Traditional logging (<a class="cross-control-link" href="pillar-mo.html#control-id-mo-002" title="Open MO-002">MO-002</a>) is insufficient for debugging complex, asynchronous microservices.</p>
+<ul>
+<li><p><strong>Pinpointing Latency:</strong> Identifies exactly which microservice—or which specific SQL query—is causing a 5-second delay in the mobile banking app.</p></li>
+<li><p><strong>Error Isolation:</strong> If a transaction fails, tracing shows the exact sequence of events leading up to the failure, drastically reducing Mean Time to Resolution (MTTR).</p></li>
+<li><p><strong>Architecture Validation:</strong> Visually proves that requests are adhering to the designed application architecture and not making redundant or circular calls.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Operator check and trace UI audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check OTel Collectors:</strong></p><pre class="cli"><code>oc get opentelemetrycollector -A</code></pre></li>
+<li><p><strong>Check Jaeger instances:</strong></p><pre class="cli"><code>oc get jaeger -A</code></pre></li>
+<li><p><strong>UI Verification:</strong> Access the Jaeger Route and query for a trace associated with a known frontend transaction.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Jaeger UI Trace Export:</strong> A screenshot or JSON export of a completed multi-hop transaction trace.</p></li>
+<li><p><strong>OTel Collector YAML:</strong> Showing the pipeline configuration for receiving and exporting traces.</p></li>
+<li><p><strong>Application Deployment YAML:</strong> Snippet showing the annotations or environment variables used to enable auto-instrumentation.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Prolonged Outages):</strong> Diagnosing a microservice failure using only fragmented text logs can take hours, leading to prolonged SLA breaches.</p></li>
+<li><p><strong>Performance Risk:</strong> Hidden bottlenecks remain unoptimized, leading to poor customer experience and inefficient use of bare-metal CPU resources.</p></li>
+<li><p><strong>Operational Risk:</strong> High developer frustration and burnout due to the complexity of debugging distributed systems without the right tools.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.5 (Capacity and Performance Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-4 (Information System Monitoring).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-008">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-008</span><span class="subdomain-pill">Metrics &amp; Telemetry</span></div>
+<h2>Synthetic Proactive Monitoring (Blackbox / Uptime)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Standard monitoring tells you if a pod is Running. Synthetic Monitoring (often utilizing the Prometheus Blackbox Exporter) tells you if the application is actually functioning from the user's perspective. It involves simulating user traffic by sending continuous, automated HTTP/HTTPS, TCP, or DNS requests to the application's endpoints.</p>
+<h4>Key Aspects of Synthetic Monitoring:</h4>
+<ul>
+<li><p><strong>Outside-In Testing:</strong> Probes should ideally originate from outside the cluster (e.g., a dedicated monitoring VM) or from a completely isolated namespace to test the full Ingress path (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-013" title="Open SC-013">SC-013</a>).</p></li>
+<li><p><strong>HTTP Status Assertion:</strong> Verifying not just that the port is open, but that the endpoint returns a 200 OK and specific expected text content.</p></li>
+<li><p><strong>Certificate Expiration Alerts:</strong> Using synthetic probes to monitor the expiry dates of the TLS certificates on the Ingress routes.</p></li>
+<li><p><strong>Latency Baselines:</strong> Tracking the time to first byte (TTFB) to ensure performance SLAs are met.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Probe Configuration:</strong> Verify that Probe objects (part of the Prometheus Operator) are defined for all Tier 1 application endpoints.</p></li>
+<li><p><strong>Target Diversity:</strong> Ensure probes test both the internal Service IPs and the external public/corporate Routes.</p></li>
+<li><p><strong>Alert Rules:</strong> Confirm that an alert is triggered if an endpoint fails consecutively (e.g., 3 failures over 3 minutes).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Applications can fail in ways that Kubernetes cannot detect internally (e.g., a database connection pool is exhausted, but the pod process hasn't crashed).</p>
+<ul>
+<li><p><strong>True Uptime Measurement:</strong> Measures availability exactly as the customer experiences it, providing the most accurate metric for SLA reporting.</p></li>
+<li><p><strong>Proactive Alerting:</strong> Alerts the operations team to a degraded service before customers start calling the helpdesk.</p></li>
+<li><p><strong>Ingress Validation:</strong> Verifies that external load balancers, DNS, and OpenShift routers are all functioning in unison.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Probe resource audit and Alertmanager check.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>List active probes:</strong></p><pre class="cli"><code>oc get probes -A</code></pre></li>
+<li><p><strong>Check Prometheus Targets:</strong> In the OpenShift Console, navigate to Observe -&gt; Targets and filter for blackbox.</p></li>
+<li><p><strong>Review Alert Rules:</strong></p><pre class="cli"><code>oc get prometheusrule -A | grep -i endpoint (Look for rules tied to probe success metrics).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Probe YAML Configuration:</strong> Showing the target URL and the expected HTTP response code.</p></li>
+<li><p><strong>Grafana Uptime Dashboard:</strong> A screenshot showing the 99.99% uptime status generated from synthetic probe data.</p></li>
+<li><p><strong>TLS Expiry Alert Rule:</strong> A snippet of the Prometheus rule alerting on certificates expiring in &lt; 14 days.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Silent Outages):</strong> The cluster reports all pods are healthy, but an internal application deadlock prevents users from logging in, severely damaging the bank's reputation.</p></li>
+<li><p><strong>Operational Risk:</strong> Reactive, rather than proactive, incident management.</p></li>
+<li><p><strong>Compliance Risk:</strong> Inability to provide accurate, independent verification of system uptime to regulators.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.3 (Availability and Resilience).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-4 (Information System Monitoring).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-009">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-009</span><span class="subdomain-pill">Metrics &amp; Telemetry</span></div>
+<h2>Cluster State Metrics (kube-state-metrics)</h2>
+</div>
+<span class="risk-pill moderate">Moderate</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>While Prometheus natively collects hardware metrics (CPU, Memory, Disk I/O), it requires kube-state-metrics (KSM) to understand the logical state of Kubernetes objects. This control ensures KSM is fully operational and configured to monitor the lifecycle of deployments, nodes, pods, and quotas.</p>
+<h4>Key Aspects of Kube-State-Metrics:</h4>
+<ul>
+<li><p><strong>Object Lifecycle Tracking:</strong> Emits metrics on the status of Deployments, StatefulSets, DaemonSets, and CronJobs.</p></li>
+<li><p><strong>CrashLoopBackOff Detection:</strong> Provides the data necessary to alert when a pod is constantly crashing and restarting.</p></li>
+<li><p><strong>Resource Quota Monitoring:</strong> Tracks namespace-level ResourceQuotas, triggering alerts before a development team hits their maximum CPU limit and gets blocked from deploying.</p></li>
+<li><p><strong>Node Readiness:</strong> Monitors the Ready and NotReady conditions of the bare-metal nodes (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-004" title="Open AR-004">AR-004</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Deployment Status:</strong> Confirm the kube-state-metrics deployment is running within the openshift-monitoring namespace.</p></li>
+<li><p><strong>Alerting Rules:</strong> Audit the default Prometheus rules to ensure alerts like KubePodCrashLooping, KubeDeploymentReplicasMismatch, and KubeNodeNotReady are active.</p></li>
+<li><p><strong>Scrape Configuration:</strong> Verify that Prometheus is successfully scraping the KSM endpoint without dropping metrics due to high cardinality.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Application health is intrinsically tied to the state of its Kubernetes orchestration objects.</p>
+<ul>
+<li><p><strong>Configuration Error Detection:</strong> Instantly flags deployments that are "stuck" because of a typo in an image name or a missing Secret.</p></li>
+<li><p><strong>Capacity Forecasting:</strong> By monitoring quotas vs. actual usage, platform engineers can proactively allocate more resources to growing business units.</p></li>
+<li><p><strong>Job Reliability:</strong> Ensures that critical scheduled tasks (like nightly database backups or batch processing CronJobs) completed successfully.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Pod verification and PromQL query testing.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check KSM pod:</strong></p><pre class="cli"><code>oc get pods -n openshift-monitoring -l app.kubernetes.io/name=kube-state-metrics</code></pre></li>
+<li><p><strong>PromQL Test:</strong> In the Console UI, execute the query kube_pod_status_phase{phase="Failed"}.</p></li>
+<li><p><strong>Check active rules:</strong></p><pre class="cli"><code>oc get prometheusrule kube-state-metrics -n openshift-monitoring -o yaml</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Prometheus Alert Rule YAML:</strong> Showing the configuration for CrashLoopBackOff alerting.</p></li>
+<li><p><strong>Grafana Dashboard Screenshot:</strong> Showing a "Cluster Health" dashboard powered by KSM data (e.g., Total Pods, Nodes Offline).</p></li>
+<li><p><strong>PromQL Query Result:</strong> Export of metric data showing accurate state tracking.</p></li>
+</ul></div></div>
+<div class="field-box risk-box moderate"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Moderate Risk (Deployment Stalls):</strong> Without KSM, a failed deployment update will just sit indefinitely without notifying the CI/CD pipeline or the operations team.</p></li>
+<li><p><strong>Operational Risk:</strong> "Ghost" pods consuming resources in an error state without being detected and remediated.</p></li>
+<li><p><strong>Efficiency Risk:</strong> Inability to effectively enforce or monitor Resource Quotas across multi-tenant clusters.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 10.1 (Operations Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-4 (Information System Monitoring).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-mo-010">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">MO-010</span><span class="subdomain-pill">Audit and Logging</span></div>
+<h2>Kubernetes Event Forwarding &amp; Archiving</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Kubernetes "Events" are objects generated by the cluster in response to state changes (e.g., an image pulling successfully, a pod being evicted due to memory pressure, or a node rebooting). By default, these events are stored in etcd and deleted after 1 hour. This control mandates that Events be captured and forwarded to the central SIEM for long-term archiving.</p>
+<h4>Key Aspects of Event Forwarding:</h4>
+<ul>
+<li><p><strong>Event Router/Collector:</strong> Utilizing the OpenShift Logging ClusterLogForwarder (with the kubernetes.events input) or deploying an eventrouter pod to capture this data stream.</p></li>
+<li><p><strong>SIEM Indexing:</strong> Events must be pushed to a searchable index in the SIEM (<a class="cross-control-link" href="pillar-mo.html#control-id-mo-002" title="Open MO-002">MO-002</a>) alongside standard application and audit logs.</p></li>
+<li><p><strong>Alert Generation:</strong> Translating specific high-severity Kubernetes Events (e.g., FailedToPullImage, NodeHasDiskPressure) into actionable SIEM alerts.</p></li>
+<li><p><strong>Historical Context:</strong> Providing the operational narrative for why a system behaved the way it did days or weeks after the occurrence.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Forwarding Pipeline:</strong> Verify the OpenShift Logging configuration to ensure Kubernetes Events are explicitly included in the output stream.</p></li>
+<li><p><strong>Data Verification in SIEM:</strong> Confirm with the SOC or monitoring team that the SIEM contains OpenShift event data older than 24 hours.</p></li>
+<li><p><strong>Format Integrity:</strong> Ensure the forwarded events contain the original JSON metadata (reason, message, object reference) for accurate parsing.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>A one-hour retention period is fundamentally incompatible with enterprise incident investigation.</p>
+<ul>
+<li><p><strong>Post-Mortem Analysis:</strong> If a major outage occurs at 2:00 AM and engineers log in at 8:00 AM, the cluster events that triggered the outage have already been erased. Event forwarding preserves this critical timeline.</p></li>
+<li><p><strong>Security Forensics:</strong> Captures low-level operational anomalies (like an unexpected node reboot or a flood of pod evictions) that might indicate a sophisticated denial-of-service attack.</p></li>
+<li><p><strong>Troubleshooting Context:</strong> While logs show what an application is doing, Events show what the platform is doing to the application.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Forwarder config audit and SIEM query validation.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check ClusterLogForwarder:</strong></p><pre class="cli"><code>oc get clusterlogforwarder instance -n openshift-logging -o yaml (Look for the infrastructure or specific event inputs being routed).</code></pre></li>
+<li><p><strong>Generate a test event:</strong></p><pre class="cli"><code>oc run test-event-pod --image=nginx:does-not-exist (This forces a FailedToPullImage event).</code></pre></li>
+<li><p><strong>Verify SIEM:</strong></p><pre class="cli"><code>Check the central logging system to ensure the generated test event was successfully received and archived.</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>ClusterLogForwarder YAML:</strong> Snippet showing the inclusion of system events in the SIEM pipeline.</p></li>
+<li><p><strong>SIEM Screenshot:</strong> A view from Splunk/Elastic showing the test-event-pod failure event safely archived.</p></li>
+<li><p><strong>Retention Policy Document:</strong> Documentation proving the SIEM retains these events for the duration required by financial regulations (e.g., 1-7 years).</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Loss of Incident Context):</strong> Inability to accurately determine the root cause of transient or historical cluster failures, leading to repeated, preventable outages.</p></li>
+<li><p><strong>Compliance Risk:</strong> May result in non-compliance with regulatory requirements for comprehensive system activity logging and incident reporting data preservation.</p></li>
+<li><p><strong>Operational Risk:</strong> Wasted engineering hours trying to reconstruct the timeline of an event without the native orchestration data.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.5 (Logging and Security Monitoring); Section 12.1 (Incident Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 8 (Audit Log Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AU-2 (Event Logging); AU-11 (Audit Record Retention).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+</article></div><footer class="footer">Prepared as a structured HTML view of Pillar 5: Monitoring &amp; Observability for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>

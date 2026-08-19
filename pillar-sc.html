@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pillar 4: Security &amp; Compliance | Red Hat OpenShift Assessment Framework</title>
+<style>
+:root { --bg:#0b1020; --panel:#ffffff; --ink:#172033; --muted:#637083; --line:#dce3ee; --redhat:#ee0000; --redhat-dark:#b00000; --code-bg:#0b1220; --shadow:0 12px 30px rgba(15,23,42,.08); --shadow-soft:0 8px 18px rgba(15,23,42,.05); }
+* { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; font-family:Arial,Helvetica,sans-serif; color:var(--ink); background:linear-gradient(135deg,#f4f7fb 0%,#edf2f9 44%,#ffffff 100%); line-height:1.6; } a { color:inherit; }
+.skip-link { position:absolute; left:-999px; top:auto; width:1px; height:1px; overflow:hidden; } .skip-link:focus { left:1rem; top:1rem; width:auto; height:auto; background:#fff; padding:.75rem 1rem; border-radius:.5rem; z-index:999; }
+.page-shell { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:100vh; }
+.sidebar { position:sticky; top:0; height:100vh; overflow-y:auto; background:radial-gradient(circle at top left,rgba(238,0,0,.20),transparent 36%),linear-gradient(180deg,#0b1020,#151f36); color:#fff; padding:1.45rem 1.05rem; border-right:1px solid rgba(255,255,255,.08); }
+.brand { display:flex; gap:14px; align-items:center; margin-bottom:1.2rem; padding:1rem; border-radius:14px; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10); box-shadow:0 10px 28px rgba(0,0,0,.28); } .brand-logo-wrap { width:148px; height:92px; border-radius:16px; overflow:hidden; background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); box-shadow:0 10px 28px rgba(0,0,0,.30); display:flex; align-items:center; justify-content:center; flex-shrink:0; padding:8px; } .brand-logo { width:100%; height:100%; object-fit:contain; object-position:center; display:block; } .brand-copy h1 { margin:0; font-size:1rem; line-height:1.35; letter-spacing:.01em; color:#fff; } .brand-copy p { margin:4px 0 0; color:#bbc8d9; font-size:.84rem; line-height:1.45; } .sidebar .label { font-size:.72rem; text-transform:uppercase; letter-spacing:.12em; color:#98a8bf; margin:1.1rem .45rem .65rem; } .nav-link { display:block; padding:.62rem .72rem; border-radius:.85rem; text-decoration:none; color:#e9eef8; border:1px solid transparent; margin:.18rem 0; } .nav-link:hover { background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.12); } .nav-link span { display:block; font-weight:800; color:#fff; font-size:.85rem; } .nav-link small { display:block; font-size:.73rem; color:#bbc8d9; line-height:1.35; margin-top:.12rem; } .nav-link.is-primary { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.10); }
+.hero { color:#fff; padding:2.75rem clamp(1.2rem,4vw,4rem) 2.15rem; background:radial-gradient(circle at 18% 12%,rgba(22,163,168,.35),transparent 32%),radial-gradient(circle at 78% 0%,rgba(238,0,0,.28),transparent 30%),linear-gradient(135deg,#101827,#1a2540 58%,#0b1020); } .eyebrow { display:inline-flex; align-items:center; gap:.45rem; padding:.35rem .7rem; border:1px solid rgba(255,255,255,.18); border-radius:999px; color:#dfe8f7; font-size:.78rem; letter-spacing:.04em; text-transform:uppercase; background:rgba(255,255,255,.06); } .hero h2 { font-size:clamp(2rem,4vw,3.6rem); line-height:1.05; max-width:1000px; margin:1rem 0 .8rem; } .hero p { max-width:1060px; color:#dbe6f5; font-size:1rem; margin:0; }
+.content-wrap { padding:1.6rem clamp(1.1rem,4vw,4rem) 4rem; } .notice { background:#fff; border:1px solid var(--line); border-left:6px solid var(--redhat); border-radius:1rem; padding:1rem 1.15rem; box-shadow:var(--shadow-soft); margin-bottom:1.25rem; } .intro-card { background:#fff; border:1px solid var(--line); border-radius:1rem; padding:1.05rem 1.2rem; box-shadow:var(--shadow-soft); margin:0 0 1.35rem; } .intro-card p { margin:.2rem 0; color:#0f172a; line-height:1.7; font-size:.98rem; }
+
+.summary-panel { background:#fff; border:1px solid var(--line); border-radius:1rem; box-shadow:var(--shadow-soft); margin:0 0 1.45rem; overflow:hidden; }
+.summary-panel-header { padding:1rem 1.15rem; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); }
+.summary-panel-header h2 { margin:0; font-size:1.25rem; color:#0f172a; }
+.summary-panel-header p { margin:.35rem 0 0; color:#64748b; font-size:.92rem; }
+.summary-metrics { display:grid; grid-template-columns:repeat(2,minmax(180px,1fr)); gap:.8rem; padding:1rem 1.15rem .4rem; max-width:650px; }
+.summary-metric { border:1px solid #dbe4f0; border-radius:.9rem; padding:.85rem .95rem; background:linear-gradient(180deg,#ffffff,#f9fbff); }
+.summary-metric strong { display:block; font-size:1.7rem; line-height:1; color:#0f172a; }
+.summary-metric span { display:block; margin-top:.35rem; color:#475569; font-size:.85rem; font-weight:700; }
+.category-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.8rem; padding:.75rem 1.15rem 1.15rem; }
+.category-card { border:1px solid #dbe4f0; border-radius:.9rem; background:#fff; padding:.9rem; }
+.category-top { display:flex; align-items:center; justify-content:space-between; gap:.75rem; margin-bottom:.55rem; }
+.category-top h3 { margin:0; font-size:.95rem; color:#0f172a; }
+.count-badge { display:inline-flex; min-width:2.1rem; height:2.1rem; align-items:center; justify-content:center; border-radius:999px; font-weight:800; background:#e9f0ff; color:#1d4ed8; border:1px solid #c8d8ff; }
+.control-tags { display:flex; flex-wrap:wrap; gap:.35rem; }
+.control-tags a { text-decoration:none; font-size:.74rem; font-weight:800; color:#b00000; background:#fff1f1; border:1px solid #ffd2d2; border-radius:999px; padding:.18rem .45rem; }
+.control-tags a:hover { background:#ffe2e2; }
+@media (max-width: 1120px) { .summary-metrics { grid-template-columns:repeat(2,minmax(150px,1fr)); } .category-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media (max-width: 680px) { .summary-metrics, .category-grid { grid-template-columns:1fr; } }
+
+.index-section { margin-bottom:1.5rem; } .index-section h2 { margin:0 0 .8rem; font-size:1.3rem; color:#0f172a; } .control-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:.75rem; width:100%; } .control-chip { display:flex; gap:.75rem; align-items:flex-start; width:100%; min-height:80px; padding:.8rem .9rem; border:1px solid var(--line); border-radius:1rem; background:#fff; text-decoration:none; box-shadow:var(--shadow-soft); } .control-chip:hover { transform:translateY(-1px); border-color:rgba(238,0,0,.35); box-shadow:var(--shadow); } .control-chip strong { flex:0 0 auto; color:var(--redhat-dark); font-size:.86rem; } .control-chip span { color:#334155; font-size:.88rem; line-height:1.35; }
+.article { max-width:none; width:100%; } .control-card { width:100%; background:var(--panel); border:1px solid var(--line); border-radius:1.1rem; box-shadow:var(--shadow-soft); margin:1rem 0 1.25rem; padding:.9rem; scroll-margin-top:1rem; } .control-head { width:100%; display:flex; justify-content:space-between; align-items:flex-start; gap:1rem; border:1px solid var(--line); border-radius:.95rem; padding:.9rem 1rem; background:linear-gradient(180deg,#fbfdff,#f7faff); } .control-title-wrap h2 { margin:.32rem 0 0; font-size:1.34rem; line-height:1.25; color:#0f172a; } .control-kicker-row { display:flex; align-items:center; gap:.55rem; flex-wrap:wrap; } .control-code { display:inline-flex; align-items:center; justify-content:center; padding:.22rem .55rem; border-radius:999px; background:#e9f0ff; color:#1d4ed8; font-weight:800; font-size:.75rem; border:1px solid #c8d8ff; } .subdomain-pill { display:inline-flex; align-items:center; padding:.24rem .58rem; border-radius:999px; background:#eef2f7; color:#334155; font-size:.75rem; font-weight:700; border:1px solid #d6deea; }
+.risk-pill { display:inline-flex; align-items:center; justify-content:center; padding:.26rem .62rem; border-radius:999px; font-size:.73rem; font-weight:800; border:1px solid transparent; white-space:nowrap; } .risk-pill.critical { background:#fee2e2; color:#7f1d1d; border-color:#fca5a5; } .risk-pill.high { background:#fee2e2; color:#b91c1c; border-color:#fecaca; } .risk-pill.moderate { background:#fef3c7; color:#b45309; border-color:#fde68a; } .risk-pill.low { background:#dcfce7; color:#15803d; border-color:#bbf7d0; }
+.field-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:.85rem; margin-top:.9rem; width:100%; align-items:start; } .field-box { border:1px solid var(--line); border-radius:.85rem; background:#fff; overflow:hidden; min-width:0; } .field-box h3 { margin:0; padding:.72rem .86rem; font-size:.76rem; line-height:1.2; text-transform:uppercase; letter-spacing:.04em; color:#1f3b5d; border-bottom:1px solid var(--line); background:linear-gradient(180deg,#fbfdff,#f6f8fc); } .field-body { padding:.85rem .95rem; font-size:.92rem; color:#172033; } .field-body > :first-child { margin-top:0; } .field-body > :last-child { margin-bottom:0; } .field-box-full { grid-column:1/-1; } .risk-box.critical { border-left:4px solid #b91c1c; background:#fff5f5; } .risk-box.high { border-left:4px solid #ef4444; background:#fff8f8; } .risk-box.moderate { border-left:4px solid #f59e0b; background:#fffdf5; } .risk-box.low { border-left:4px solid #22c55e; background:#f7fff8; }
+.field-body ul,.field-body ol { margin:.3rem 0 .6rem 1.1rem; padding:0; } .field-body li { margin:.35rem 0; } .field-body p { margin:.45rem 0; } .field-body strong { color:#0f172a; } .field-body code { background:#eef2f7; color:#9f1239; padding:.12rem .32rem; border-radius:.35rem; font-size:.9em; }
+.field-body pre, pre.cli { background:#0b1220; color:#f8fafc; border-radius:.75rem; padding:1rem 1.1rem; overflow:auto; border:1px solid #111827; white-space:pre-wrap; box-shadow:inset 0 0 0 1px rgba(255,255,255,.02); margin:.75rem 0; } .field-body pre code, pre.cli code { background:transparent!important; color:#f8fafc!important; padding:0; font-family:Consolas,'Courier New',monospace; font-size:.88rem; font-weight:700; line-height:1.45; } .verification-steps li pre.cli { margin:.35rem 0 .2rem; }
+.control-links { display:flex; gap:1rem; flex-wrap:wrap; padding:.8rem .3rem .15rem; } .control-links a { color:#1d4ed8; text-decoration:none; font-weight:700; font-size:.85rem; } .control-links a:hover { text-decoration:underline; } .empty-note { color:var(--muted); font-style:italic; } .footer { padding:1.4rem clamp(1.1rem,4vw,4rem); color:#64748b; border-top:1px solid var(--line); background:#fff; }
+@media (max-width:1120px) { .field-grid { grid-template-columns:1fr; } .field-box-full { grid-column:auto; } } @media (max-width:980px) { .page-shell { grid-template-columns:1fr; } .sidebar { position:relative; height:auto; max-height:420px; } .control-head { flex-direction:column; } } @media print { .sidebar,.control-grid,.control-links,.notice { display:none!important; } .page-shell { display:block; } .hero { color:#111; background:#fff; padding:1rem 0; } .content-wrap { padding:0; } .control-card { box-shadow:none; break-inside:avoid; } }
+
+.cross-control-link { color:#1d4ed8; text-decoration:none; font-weight:700; border-bottom:1px dotted rgba(29,78,216,.45); }
+.cross-control-link:hover { color:#b00000; border-bottom-color:#b00000; }
+</style>
+</head>
+<body id="top"><a class="skip-link" href="#main-content">Skip to content</a><div class="page-shell"><aside aria-label="Assessment control navigation" class="sidebar"><div class="brand"><div class="brand-logo-wrap"><img alt="NextGen Cloudlabs logo" class="brand-logo" src="nexgencloudlabs-logo.png"/></div><div class="brand-copy"><h1>NextGen Cloudlabs</h1><p>Red Hat OpenShift Assessment Tool</p></div></div><div class="label">Page navigation</div><nav><a class="nav-link is-primary" href="index.html"><span>Back to main page</span><small>Return to the landing page and six pillar overview</small></a><a class="nav-link" href="#top"><span>Back to top</span><small>Jump to the start of this pillar page</small></a></nav><div class="label" data-cross-pillar-nav="true">Assessment pillars</div><nav data-cross-pillar-nav="true"><a class="nav-link" href="pillar-ar.html"><span>Pillar 1: Availability &amp; Resilience</span><small>Open AR pillar</small></a><a class="nav-link" href="pillar-rc.html"><span>Pillar 2: Recoverability / Disaster Recovery</span><small>Open RC pillar</small></a><a class="nav-link" href="pillar-ps.html"><span>Pillar 3: Performance &amp; Scalability</span><small>Open PS pillar</small></a><a aria-current="page" class="nav-link is-primary" href="pillar-sc.html"><span>Pillar 4: Security &amp; Compliance</span><small>SC controls — current page</small></a><a class="nav-link" href="pillar-mo.html"><span>Pillar 5: Monitoring &amp; Observability</span><small>Open MO pillar</small></a><a class="nav-link" href="pillar-co.html"><span>Pillar 6: Cost Optimization</span><small>Open CO pillar</small></a></nav><div class="label">Pillar 4 controls</div><nav><a class="nav-link" href="#control-id-sc-001"><span>SC-001</span><small>RBAC Implementation (Least Privilege)</small></a>
+<a class="nav-link" href="#control-id-sc-002"><span>SC-002</span><small>Identity Provider (IDP) Integration (AD/LDAP/OIDC)</small></a>
+<a class="nav-link" href="#control-id-sc-003"><span>SC-003</span><small>Pod Security Admissions (PSA) Enforcement</small></a>
+<a class="nav-link" href="#control-id-sc-004"><span>SC-004</span><small>SELinux Reinforcement</small></a>
+<a class="nav-link" href="#control-id-sc-005"><span>SC-005</span><small>FIPS 140-2/3 Compliance</small></a>
+<a class="nav-link" href="#control-id-sc-006"><span>SC-006</span><small>Network Policies (Namespace Isolation)</small></a>
+<a class="nav-link" href="#control-id-sc-007"><span>SC-007</span><small>Egress Firewalls (EgressNetworkPolicy)</small></a>
+<a class="nav-link" href="#control-id-sc-008"><span>SC-008</span><small>Ingress TLS Encryption (Route Hardening)</small></a>
+<a class="nav-link" href="#control-id-sc-009"><span>SC-009</span><small>API Server Hardening &amp; Private Endpoints</small></a>
+<a class="nav-link" href="#control-id-sc-010"><span>SC-010</span><small>Secret Management &amp; Encryption (etcd KMS)</small></a>
+<a class="nav-link" href="#control-id-sc-011"><span>SC-011</span><small>RHCOS Immutable Operating System</small></a>
+<a class="nav-link" href="#control-id-sc-012"><span>SC-012</span><small>Container User Mapping (Non-Root Enforcement)</small></a>
+<a class="nav-link" href="#control-id-sc-013"><span>SC-013</span><small>HostPath Mount Restrictions</small></a>
+<a class="nav-link" href="#control-id-sc-014"><span>SC-014</span><small>Secure Container Runtime (CRI-O Hardening)</small></a>
+<a class="nav-link" href="#control-id-sc-015"><span>SC-015</span><small>Node-Level SSH Access Restriction</small></a>
+<a class="nav-link" href="#control-id-sc-016"><span>SC-016</span><small>UEFI Secure Boot Enforcement</small></a>
+<a class="nav-link" href="#control-id-sc-017"><span>SC-017</span><small>Automated Vulnerability Scanning (Advanced Cluster Security)</small></a>
+<a class="nav-link" href="#control-id-sc-018"><span>SC-018</span><small>Container Content Trust (Image Signing)</small></a>
+<a class="nav-link" href="#control-id-sc-019"><span>SC-019</span><small>Node-to-Node Encryption (IPsec)</small></a>
+<a class="nav-link" href="#control-id-sc-020"><span>SC-020</span><small>Hardware Security Module (HSM) for Master Key Storage</small></a></nav></aside><main id="main-content"><header class="hero"><span class="eyebrow">Red Hat OpenShift · Pillar 4</span><h2>Pillar 4: Security &amp; Compliance</h2><p>Architecture assessment page for validating identity and access control, workload hardening, cryptographic controls, network security, infrastructure protection, vulnerability management, supply-chain trust, and data protection controls.</p></header><div class="content-wrap"><div class="notice"><strong>Use note:</strong> This page is a consulting assessment artefact for OpenShift architecture and operations review. It is not an official Red Hat methodology. Validate technical statements and command syntax against the target OpenShift version and client environment before use.</div><div class="intro-card"><p>Security and Compliance define the platform's capability to protect identities, workloads, data, infrastructure, network paths, and software supply chains through enforceable policies and auditable controls. For OpenShift environments supporting containerized workloads and OpenShift Virtualization on bare-metal infrastructure, these controls validate that RBAC, identity provider integration, pod admission controls, SELinux, FIPS, network policies, TLS, API hardening, secret encryption, immutable nodes, runtime hardening, vulnerability scanning, image signing, node-to-node encryption, and key management are implemented through tested, evidence-backed security practices.</p>
+</div><section aria-labelledby="control-summary" class="summary-panel">
+<div class="summary-panel-header">
+<h2 id="control-summary">Summary of Controls</h2>
+<p>Pillar 4 contains 20 assessment controls grouped by security and compliance domain to support identity governance, workload protection, data protection, network security, system hardening, vulnerability management, and cryptographic assurance.</p>
+</div>
+<div class="summary-metrics">
+<div class="summary-metric"><strong>20</strong><span>Total controls</span></div>
+<div class="summary-metric"><strong>9</strong><span>Security &amp; Compliance domains</span></div>
+</div>
+<div class="category-grid">
+<div class="category-card"><div class="category-top"><h3>Identity and Access Management</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-sc-001">SC-001</a><a href="#control-id-sc-002">SC-002</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Workload Security</h3><span class="count-badge">4</span></div><div class="control-tags"><a href="#control-id-sc-003">SC-003</a><a href="#control-id-sc-012">SC-012</a><a href="#control-id-sc-013">SC-013</a><a href="#control-id-sc-018">SC-018</a></div></div>
+<div class="category-card"><div class="category-top"><h3>System Hardening</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-sc-004">SC-004</a><a href="#control-id-sc-011">SC-011</a><a href="#control-id-sc-014">SC-014</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Cryptographic Standards</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-sc-005">SC-005</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Network Security</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-sc-006">SC-006</a><a href="#control-id-sc-007">SC-007</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Data in Transit</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-sc-008">SC-008</a><a href="#control-id-sc-019">SC-019</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Infrastructure Security</h3><span class="count-badge">3</span></div><div class="control-tags"><a href="#control-id-sc-009">SC-009</a><a href="#control-id-sc-015">SC-015</a><a href="#control-id-sc-016">SC-016</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Data Protection</h3><span class="count-badge">2</span></div><div class="control-tags"><a href="#control-id-sc-010">SC-010</a><a href="#control-id-sc-020">SC-020</a></div></div>
+<div class="category-card"><div class="category-top"><h3>Vulnerability Management</h3><span class="count-badge">1</span></div><div class="control-tags"><a href="#control-id-sc-017">SC-017</a></div></div>
+</div>
+</section><section aria-labelledby="controls-index" class="index-section"><h2 id="controls-index">Assessment Controls Index</h2><div class="control-grid"><a class="control-chip" href="#control-id-sc-001"><strong>SC-001</strong><span>RBAC Implementation (Least Privilege)</span></a>
+<a class="control-chip" href="#control-id-sc-002"><strong>SC-002</strong><span>Identity Provider (IDP) Integration (AD/LDAP/OIDC)</span></a>
+<a class="control-chip" href="#control-id-sc-003"><strong>SC-003</strong><span>Pod Security Admissions (PSA) Enforcement</span></a>
+<a class="control-chip" href="#control-id-sc-004"><strong>SC-004</strong><span>SELinux Reinforcement</span></a>
+<a class="control-chip" href="#control-id-sc-005"><strong>SC-005</strong><span>FIPS 140-2/3 Compliance</span></a>
+<a class="control-chip" href="#control-id-sc-006"><strong>SC-006</strong><span>Network Policies (Namespace Isolation)</span></a>
+<a class="control-chip" href="#control-id-sc-007"><strong>SC-007</strong><span>Egress Firewalls (EgressNetworkPolicy)</span></a>
+<a class="control-chip" href="#control-id-sc-008"><strong>SC-008</strong><span>Ingress TLS Encryption (Route Hardening)</span></a>
+<a class="control-chip" href="#control-id-sc-009"><strong>SC-009</strong><span>API Server Hardening &amp; Private Endpoints</span></a>
+<a class="control-chip" href="#control-id-sc-010"><strong>SC-010</strong><span>Secret Management &amp; Encryption (etcd KMS)</span></a>
+<a class="control-chip" href="#control-id-sc-011"><strong>SC-011</strong><span>RHCOS Immutable Operating System</span></a>
+<a class="control-chip" href="#control-id-sc-012"><strong>SC-012</strong><span>Container User Mapping (Non-Root Enforcement)</span></a>
+<a class="control-chip" href="#control-id-sc-013"><strong>SC-013</strong><span>HostPath Mount Restrictions</span></a>
+<a class="control-chip" href="#control-id-sc-014"><strong>SC-014</strong><span>Secure Container Runtime (CRI-O Hardening)</span></a>
+<a class="control-chip" href="#control-id-sc-015"><strong>SC-015</strong><span>Node-Level SSH Access Restriction</span></a>
+<a class="control-chip" href="#control-id-sc-016"><strong>SC-016</strong><span>UEFI Secure Boot Enforcement</span></a>
+<a class="control-chip" href="#control-id-sc-017"><strong>SC-017</strong><span>Automated Vulnerability Scanning (Advanced Cluster Security)</span></a>
+<a class="control-chip" href="#control-id-sc-018"><strong>SC-018</strong><span>Container Content Trust (Image Signing)</span></a>
+<a class="control-chip" href="#control-id-sc-019"><strong>SC-019</strong><span>Node-to-Node Encryption (IPsec)</span></a>
+<a class="control-chip" href="#control-id-sc-020"><strong>SC-020</strong><span>Hardware Security Module (HSM) for Master Key Storage</span></a></div></section><article class="article">
+<section class="control-card" id="control-id-sc-001">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-001</span><span class="subdomain-pill">Identity and Access Management</span></div>
+<h2>RBAC Implementation (Least Privilege)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Role-Based Access Control (RBAC) is the foundational security mechanism in OpenShift that regulates access to cluster resources based on the roles of individual users or groups. This control mandates the enforcement of the Principle of Least Privilege (PoLP), ensuring users have only the minimum permissions necessary to perform their job functions.</p>
+<h4>Key Aspects of RBAC:</h4>
+<ul>
+<li><p><strong>Role/ClusterRole:</strong> Defining sets of permissions (verbs like get, list, create) at either the namespace or cluster level.</p></li>
+<li><p><strong>RoleBinding/ClusterRoleBinding:</strong> Granting defined roles to specific users, groups, or service accounts.</p></li>
+<li><p><strong>Default Deny:</strong> Access is denied by default; all permissions must be explicitly granted.</p></li>
+<li><p><strong>Separation of Duties:</strong> Distinct roles for Cluster Admins, Network Admins, and Application Developers to prevent a single account from having total control over the environment.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Cluster Admin Audit:</strong> Verify the number of users with the cluster-admin role; this should be limited to a minimal set of infrastructure engineers.</p></li>
+<li><p><strong>Default Roles:</strong> Confirm that no users are using broad default roles like edit or admin at the cluster level.</p></li>
+<li><p><strong>Service Account Review:</strong> Ensure service accounts used by applications do not have excessive permissions (e.g., ability to list secrets in other namespaces).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment, uncontrolled administrative access is a significant risk.</p>
+<ul>
+<li><p><strong>Blast Radius Limitation:</strong> If a developer's credentials are compromised, RBAC ensures the attacker is confined to a specific namespace and cannot escalate to the cluster level.</p></li>
+<li><p><strong>Auditability:</strong> Standardizing roles makes it easier to audit "who can do what," which is a core requirement of RMiT Section 11.2.</p></li>
+<li><p><strong>Insider Threat Mitigation:</strong> Prevents unauthorized changes to security policies or logging configurations by non-security personnel.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> RBAC policy audit and binding analysis.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>List all Cluster Admins:</strong></p><pre class="cli"><code>oc get clusterrolebinding -o json | jq '.items[] | select(.roleRef.name=="cluster-admin") | .subjects'</code></pre></li>
+<li><p><strong>Check permissions for a specific user:</strong></p><pre class="cli"><code>oc adm policy who-can &lt;verb&gt; &lt;resource&gt;</code></pre></li>
+<li><p><strong>Audit namespace-level bindings:</strong></p><pre class="cli"><code>oc get rolebindings -n &lt;namespace&gt;</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>RBAC Binding Report:</strong> An export of all ClusterRoleBindings and RoleBindings for production namespaces.</p></li>
+<li><p><strong>Policy Verification Log:</strong> Output of oc adm policy who-can delete nodes showing only authorized groups.</p></li>
+<li><p><strong>Custom Role YAML:</strong> Snippets of custom-defined roles that follow the "Least Privilege" model for developers.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Privilege Escalation):</strong> Weak RBAC allows a malicious actor to gain full control of the cluster, potentially leading to data exfiltration or total system destruction.</p></li>
+<li><p><strong>Compliance Risk:</strong> Failure to demonstrate strict access controls violates RMiT and CIS Benchmarks.</p></li>
+<li><p><strong>Operational Risk:</strong> Accidental deletion of critical cluster components (like the etcd operator) by an over-privileged user.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.2 (User Access Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 5 (Account Management); Control 6 (Access Control Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AC-2 (Account Management); AC-3 (Access Enforcement).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-002">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-002</span><span class="subdomain-pill">Identity and Access Management</span></div>
+<h2>Identity Provider (IDP) Integration (AD/LDAP/OIDC)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>OpenShift should never use local "htpasswd" files for production user management. This control mandates the integration of OpenShift with an enterprise-grade Identity Provider (IDP) such as Microsoft Active Directory (via LDAP), Azure AD, or an OIDC-compliant provider (e.g., Keycloak).</p>
+<h4>Key Aspects of IDP Integration:</h4>
+<ul>
+<li><p><strong>Centralized Authentication:</strong> Users log in using their standard corporate credentials, ensuring a single source of truth for identity.</p></li>
+<li><p><strong>Group Syncing:</strong> Automatically mapping corporate groups (e.g., AD_OCP_ADMINS) to OpenShift RBAC groups, automating onboarding and offboarding.</p></li>
+<li><p><strong>Multi-Factor Authentication (MFA):</strong> Leveraging the IDP's MFA capabilities (e.g., Microsoft Authenticator or Duo) to secure cluster access.</p></li>
+<li><p><strong>Token Management:</strong> Utilizing short-lived OAuth tokens for CLI and Console access.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>OAuth Configuration:</strong> Verify the OAuth cluster resource to see the configured IDPs.</p></li>
+<li><p><strong>MFA Enforcement:</strong> Confirm that the connected IDP is enforcing MFA for all users with administrative roles.</p></li>
+<li><p><strong>Local Account Status:</strong> Verify that the default kubeadmin user is disabled or its password is securely vaulted and only used for emergencies.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Identity is the new perimeter in modern infrastructure.</p>
+<ul>
+<li><p><strong>Automated Offboarding:</strong> When an employee leaves the bank and their AD account is disabled, their access to OpenShift is revoked automatically.</p></li>
+<li><p><strong>Password Policy Enforcement:</strong> Ensures that corporate password complexity and rotation policies are applied to cluster access.</p></li>
+<li><p><strong>Audit Consistency:</strong> Logs will reflect actual corporate usernames (e.g., george.titus) rather than generic local accounts, making forensic analysis possible.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> OAuth configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check IDP configuration:</strong></p><pre class="cli"><code>oc get oauth cluster -o yaml</code></pre></li>
+<li><p><strong>Verify group synchronization:</strong></p><pre class="cli"><code>oc get groups (Compare against AD/LDAP source).</code></pre></li>
+<li><p><strong>Attempt login:</strong> Verify the login flow redirects to the corporate identity portal.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>OAuth YAML:</strong> Export showing the LDAP/OIDC provider details (with sensitive secrets redacted).</p></li>
+<li><p><strong>Group Mapping Log:</strong> Evidence of successful group synchronization from the external IDP.</p></li>
+<li><p><strong>Authentication Log:</strong> A sample log showing a successful login via the corporate IDP with MFA verification.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Unauthorized Access):</strong> Use of local accounts makes offboarding difficult, potentially leaving "backdoor" access for former employees.</p></li>
+<li><p><strong>Compliance Risk:</strong> Violates RMiT requirements for "Strong Authentication" and "Centralized Identity Management".</p></li>
+<li><p><strong>Security Risk:</strong> Without MFA, a single credential leak (phishing) can grant an attacker access to the management plane of the cluster.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.2 (User Access Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 5 (Account Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> IA-2 (Identification and Authentication); IA-5 (Authenticator Management).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-003">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-003</span><span class="subdomain-pill">Workload Security</span></div>
+<h2>Pod Security Admissions (PSA) Enforcement</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Pod Security Admissions (PSA) is the Kubernetes-native replacement for Pod Security Policies (PSP). It evaluates pod specifications against a set of security standards (Privileged, Baseline, or Restricted) and blocks the creation of pods that do not comply.</p>
+<h4>Key Aspects of PSA:</h4>
+<ul>
+<li><p><strong>Restricted Profile:</strong> The mandatory standard for production banking workloads. It prevents pods from running as root, using host networking, or mounting sensitive host paths.</p></li>
+<li><p><strong>Namespace-Level Enforcement:</strong> Policies are applied via labels on the namespace (e.g., pod-security.kubernetes.io/enforce: restricted).</p></li>
+<li><p><strong>Audit Mode:</strong> Allows administrators to "Audit" or "Warn" on non-compliant pods before switching to strict "Enforce" mode.</p></li>
+<li><p><strong>Exemption Management:</strong> Carefully controlled exemptions for system-level pods (e.g., Ingress or Logging) while maintaining a strict posture for user applications.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Namespace Labels:</strong> Verify that all production and UAT namespaces have the restricted enforcement label.</p></li>
+<li><p><strong>Exemptions:</strong> Audit the PodSecurityConfiguration to ensure no general-purpose namespaces are exempted from the checks.</p></li>
+<li><p><strong>Compliance Check:</strong> Attempt to deploy a privileged pod in a restricted namespace; the action must be blocked.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Container "breakouts" often rely on excessive pod privileges.</p>
+<ul>
+<li><p><strong>Prevention of Container Breakouts:</strong> By blocking "Privileged" containers, PSA ensures that an attacker who compromises a container cannot easily gain control of the underlying bare-metal host.</p></li>
+<li><p><strong>Host Protection:</strong> Prevents pods from accessing /etc/shadow or other sensitive host files through hostPath mounts.</p></li>
+<li><p><strong>Standardization:</strong> Provides a consistent, out-of-the-box security baseline across the entire cluster.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Namespace metadata audit and negative testing.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check labels:</strong></p><pre class="cli"><code>oc get namespaces --show-labels | grep pod-security</code></pre></li>
+<li><p><strong>Negative Test:</strong></p><pre class="cli"><code>oc run privileged-test --image=bitnami/nginx --privileged -n &lt;prod-namespace&gt; (Expected result: Error from server (Forbidden))</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Namespace Label Export:</strong> A list of all namespaces and their enforced PSA level.</p></li>
+<li><p><strong>Blocked Event Log:</strong> An audit log showing the PSA controller rejecting an insecure pod request.</p></li>
+<li><p><strong>Cluster-wide PSA Policy:</strong> Export of the global PSA configuration resource.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Host Compromise):</strong> Without PSA, a single compromised "privileged" container can lead to full access to the bare-metal server and all other workloads running on it.</p></li>
+<li><p><strong>Security Risk:</strong> Running as root (UID 0) allows an attacker to bypass many internal container security layers.</p></li>
+<li><p><strong>Compliance Risk:</strong> Violates CIS Benchmarks for Kubernetes and RMiT guidelines for "System Hardening".</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.3 (System and Network Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-7 (Boundary Protection); AC-3 (Access Enforcement).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-004">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-004</span><span class="subdomain-pill">System Hardening</span></div>
+<h2>SELinux Reinforcement</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>SELinux (Security-Enhanced Linux) is a mandatory access control (MAC) system that is enabled by default in Red Hat Enterprise Linux CoreOS (RHCOS). On OpenShift, SELinux ensures that every container is confined to a unique security context, preventing it from interacting with the host or other containers even if it is compromised.</p>
+<h4>Key Aspects of SELinux:</h4>
+<ul>
+<li><p><strong>Enforcing Mode:</strong> SELinux must always be in Enforcing mode, never Permissive or Disabled.</p></li>
+<li><p><strong>MCS (Multi-Category Security) Labeling:</strong> OpenShift automatically assigns a unique SELinux label to each pod and its volumes. Only a pod with the matching label can access its specific data.</p></li>
+<li><p><strong>Context Isolation:</strong> Even if a container manages to "escape" to the host, SELinux prevents it from reading or writing to any host file not explicitly labeled for container use.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Node Status:</strong> Verify that all nodes (Master/Worker) are in Enforcing mode.</p></li>
+<li><p><strong>Pod Contexts:</strong> Confirm that running pods have assigned SELinux contexts (e.g., s0:c12,c34).</p></li>
+<li><p><strong>Audit Logs:</strong> Check the node audit logs for any avc: denied messages, which indicate SELinux successfully blocked an unauthorized action.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>SELinux is the "Final Defense" against Zero-Day exploits.</p>
+<ul>
+<li><p><strong>Kernel-Level Protection:</strong> Provides an independent layer of security that does not rely on the container runtime or Kubernetes configuration.</p></li>
+<li><p><strong>Prevention of Cross-Pod Data Theft:</strong> If Pod A is compromised, SELinux ensures it cannot read the persistent volume attached to Pod B, even if the file permissions appear to allow it.</p></li>
+<li><p><strong>Host Hardening:</strong> Protects critical bare-metal OS files (like /boot or /root) from any unauthorized container access.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node and Pod level inspection.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check node mode:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host getenforce (Must return Enforcing).</code></pre></li>
+<li><p><strong>Check pod context:</strong></p><pre class="cli"><code>oc get pod &lt;name&gt; -o jsonpath='{.spec.securityContext.seLinuxOptions}'</code></pre></li>
+<li><p><strong>Verify container process:</strong></p><pre class="cli"><code>oc exec &lt;pod&gt; -- ps -Z</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Getenforce Output:</strong> Proving all production nodes are in Enforcing mode.</p></li>
+<li><p><strong>AVC Denial Report:</strong> A filtered list of blocked SELinux events (if any) from the node's /var/log/audit/audit.log.</p></li>
+<li><p><strong>Pod Security Context Export:</strong> Showing the unique MCS labels assigned to different applications.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Kernel Escape):</strong> If SELinux is disabled, a kernel vulnerability could allow an attacker to gain full root access to the physical host.</p></li>
+<li><p><strong>High Risk (Lateral Movement):</strong> Without SELinux labels, a compromised container could potentially read the data of every other container on the same host.</p></li>
+<li><p><strong>Compliance Risk:</strong> Non-compliant with Red Hat's security baseline and general financial industry hardening standards.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.3 (System and Network Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 3 (Data Protection).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AC-3 (Access Enforcement); SI-7 (Software, Firmware, and Information Integrity).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-005">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-005</span><span class="subdomain-pill">Cryptographic Standards</span></div>
+<h2>FIPS 140-2/3 Compliance</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For high-security banking environments, the underlying operating system and the OpenShift platform itself must be configured to use FIPS-validated cryptographic modules. This ensures that all encryption (at rest and in transit) utilizes algorithms and implementations that have been strictly tested and certified.</p>
+<h4>Key Aspects of FIPS Compliance:</h4>
+<ul>
+<li><p><strong>FIPS Mode:</strong> Enabling FIPS at the kernel level during the initial installation of RHCOS. This cannot be enabled later.</p></li>
+<li><p><strong>Restricted Algorithms:</strong> The system will block the use of non-compliant algorithms (e.g., MD5 or older versions of SHA).</p></li>
+<li><p><strong>Golang Compliance:</strong> OpenShift's internal components (written in Go) are compiled to use the FIPS-validated OpenSSL library.</p></li>
+<li><p><strong>End-to-End Cryptography:</strong> Ensures that everything from etcd encryption (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-001" title="Open RC-001">RC-001</a>) to Ingress TLS (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-008" title="Open SC-008">SC-008</a>) uses FIPS-compliant cryptography.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Kernel Check:</strong> Verify that the fips=1 flag is present in the kernel arguments on all nodes.</p></li>
+<li><p><strong>Crypto Status:</strong> Confirm that the internal cryptographic checks return a "FIPS enabled" status.</p></li>
+<li><p><strong>Algorithm Audit:</strong> Ensure that any custom application encryption also utilizes FIPS-validated libraries.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Financial institutions are often mandated to use FIPS-validated crypto for all sensitive data handling.</p>
+<ul>
+<li><p><strong>Regulatory Alignment:</strong> Directly addresses RMiT requirements for "Strong Cryptography" and "Standardized Encryption Algorithms".</p></li>
+<li><p><strong>Guaranteed Strength:</strong> Prevents the accidental use of "broken" or weak encryption that could be decrypted by unauthorized parties.</p></li>
+<li><p><strong>Audit Readiness:</strong> Provides a clear, certified baseline for auditors to verify the cryptographic strength of the entire platform.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node-level kernel and crypto check.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check kernel args:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /proc/cmdline | grep fips=1</code></pre></li>
+<li><p><strong>Verify crypto status:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /proc/sys/crypto/fips_enabled (Must return 1).</code></pre></li>
+<li><p><strong>Check platform status:</strong></p><pre class="cli"><code>oc get infrastructures cluster -o jsonpath='{.status.fipsDisabled}' (Must be false).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Fips_enabled Output:</strong> Proving FIPS is active at the OS level.</p></li>
+<li><p><strong>Infrastructure Resource Export:</strong> Showing the cluster was installed with FIPS mode enabled.</p></li>
+<li><p><strong>OpenSSL Check:</strong> Output showing the node's OpenSSL is operating in FIPS mode.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Cryptographic Vulnerability):</strong> Use of non-validated crypto may leave data vulnerable to decryption through known weaknesses in older algorithms.</p></li>
+<li><p><strong>Compliance Risk:</strong> Immediate failure of many high-level financial security audits (like SWIFT or BNM RMiT) that require validated encryption.</p></li>
+<li><p><strong>Interoperability Risk:</strong> Some external secure gateways may reject connections that do not meet FIPS standards.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity); Section 11.3 (Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 3 (Data Protection).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-13 (Cryptographic Protection).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-006">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-006</span><span class="subdomain-pill">Network Security</span></div>
+<h2>Network Policies (Namespace Isolation)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>By default, Kubernetes networking is a "flat" structure where all pods can communicate with all other pods across the cluster. Network Policies act as a pod-level firewall, allowing administrators to define explicit "Allow" rules for ingress and egress traffic. This control mandates a Default Deny posture for all production namespaces.</p>
+<h4>Key Aspects of Network Policies:</h4>
+<ul>
+<li><p><strong>Default Deny:</strong> A catch-all policy that drops all traffic to and from a namespace unless a specific permit rule exists.</p></li>
+<li><p><strong>Label-Based Filtering:</strong> Defining rules based on pod labels (e.g., "Allow traffic from app=frontend to app=backend").</p></li>
+<li><p><strong>Namespace Selectors:</strong> Restricting traffic between different business units or environments (e.g., "Block all traffic from UAT namespace to PROD").</p></li>
+<li><p><strong>Port/Protocol Restriction:</strong> Limiting communication to specific necessary ports (e.g., only TCP 5432 for database access).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Default Deny Policy:</strong> Verify that a NetworkPolicy exists in each namespace with an empty podSelector that denies all ingress/egress.</p></li>
+<li><p><strong>Allow-List Audit:</strong> Review existing policies to ensure they are not too broad (e.g., using 0.0.0.0/0 instead of specific pod selectors).</p></li>
+<li><p><strong>Policy Coverage:</strong> Confirm that all applications in production are covered by at least one explicit Network Policy.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment, lateral movement is the primary technique used by attackers after an initial compromise.</p>
+<ul>
+<li><p><strong>Micro-segmentation:</strong> Ensures that even if a web-facing pod is compromised, the attacker cannot reach the core database or other internal services.</p></li>
+<li><p><strong>Reduction of Attack Surface:</strong> Limits the "visibility" of the cluster; an attacker cannot perform internal port scanning if a default-deny policy is in place.</p></li>
+<li><p><strong>Regulatory Compliance:</strong> Directly fulfills RMiT requirements for "Network Segmentation" and "Internal Firewalling" within critical systems.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Network policy inspection and connectivity testing.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check for Default Deny:</strong></p><pre class="cli"><code>oc get networkpolicy -n &lt;namespace&gt; -o yaml</code></pre></li>
+<li><p><strong>Test blocked traffic:</strong></p><pre class="cli"><code>oc exec &lt;pod-a&gt; -- curl &lt;pod-b-ip&gt; (Should time out).</code></pre></li>
+<li><p><strong>Verify active flows:</strong> Use the OpenShift Console "Network Observability" plugin to visualize blocked vs. allowed flows.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>NetworkPolicy YAML:</strong> Export of the default-deny and application-specific permit policies.</p></li>
+<li><p><strong>Connectivity Matrix:</strong> A document showing the intended flow of traffic between microservices.</p></li>
+<li><p><strong>Observability Screenshot:</strong> A visual graph from the console showing restricted traffic patterns.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Lateral Movement):</strong> Without network policies, a single compromised pod can scan and attack every other service in the cluster, including the control plane.</p></li>
+<li><p><strong>High Risk (Data Exfiltration):</strong> Lack of egress controls allows a compromised pod to send banking data to a malicious external command-and-control (C2) server.</p></li>
+<li><p><strong>Compliance Risk:</strong> Immediate non-compliance with RMiT Section 11.2 regarding network security.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.2 (Network Security).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 12 (Network Infrastructure Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-7 (Boundary Protection).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-007">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-007</span><span class="subdomain-pill">Network Security</span></div>
+<h2>Egress Firewalls (EgressNetworkPolicy)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>While Network Policies (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-006" title="Open SC-006">SC-006</a>) manage traffic within the cluster, Egress Firewalls (or EgressNetworkPolicies) manage traffic leaving the cluster to the external banking network or the internet. This control restricts which external IP addresses or DNS domains a pod can communicate with.</p>
+<h4>Key Aspects of Egress Firewalls:</h4>
+<ul>
+<li><p><strong>IP-Based Rules:</strong> Restricting pod access to specific external database IPs or API gateways.</p></li>
+<li><p><strong>Domain-Based Rules:</strong> (In OVN-Kubernetes) Allowing access to specific FQDNs (e.g., api.agrobank.com.my) while blocking everything else.</p></li>
+<li><p><strong>Namespace Scoping:</strong> Policies are applied at the namespace level, ensuring that different applications have different external access profiles.</p></li>
+<li><p><strong>Integration with Corporate Firewalls:</strong> Acts as the first layer of defense before traffic reaches the physical data center perimeter firewalls.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Policy Existence:</strong> Verify EgressNetworkPolicy objects exist in namespaces requiring external access.</p></li>
+<li><p><strong>Rule Precision:</strong> Confirm rules use CIDR blocks or FQDNs rather than broad allow-alls.</p></li>
+<li><p><strong>Logging:</strong> Check if egress violations are being logged in the cluster's centralized logging system.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Endpoints within the cluster should not have unrestricted internet access.</p>
+<ul>
+<li><p><strong>Prevention of Data Phoning Home:</strong> If a pod is infected with malware, an egress firewall blocks it from reaching the attacker's external server.</p></li>
+<li><p><strong>Dependency Protection:</strong> Ensures that application pods only talk to authorized external services (e.g., specific SWIFT gateways or payment processors).</p></li>
+<li><p><strong>Regulatory Alignment:</strong> Supports RMiT's requirement for controlling outbound connections from critical environments.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Policy audit and egress testing.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>List egress policies:</strong></p><pre class="cli"><code>oc get egressnetworkpolicy -n &lt;namespace&gt;</code></pre></li>
+<li><p><strong>Negative Test:</strong></p><pre class="cli"><code>oc exec &lt;pod&gt; -- curl http://www.google.com (Should be denied if not explicitly allowed).</code></pre></li>
+<li><p><strong>Inspect policy rules:</strong></p><pre class="cli"><code>oc describe egressnetworkpolicy &lt;name&gt;.</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>EgressNetworkPolicy YAML:</strong> Export showing the allowed external destinations.</p></li>
+<li><p><strong>Egress Log Export:</strong> A sample log showing a blocked attempt to reach an unauthorized external IP.</p></li>
+<li><p><strong>External Dependency List:</strong> A document mapping applications to their required external service endpoints.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Data Exfiltration):</strong> Unrestricted egress allows an attacker to "tunnel" sensitive data out of the cluster using common protocols like HTTPS or DNS.</p></li>
+<li><p><strong>Security Risk:</strong> Allows pods to download malicious scripts or tools from the internet after an initial compromise.</p></li>
+<li><p><strong>Compliance Risk:</strong> Fails the RMiT requirement for "outbound traffic filtering" for critical systems.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.2 (Network Security).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 13 (Network Monitoring and Defense).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-7 (Boundary Protection).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-008">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-008</span><span class="subdomain-pill">Data in Transit</span></div>
+<h2>Ingress TLS Encryption (Route Hardening)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>All external traffic entering the OpenShift cluster must be encrypted using Transport Layer Security (TLS). This control mandates that every "Route" uses secure termination (Edge, Re-encrypt, or Passthrough) and utilizes strong, bank-approved cipher suites.</p>
+<h4>Key Aspects of Ingress Hardening:</h4>
+<ul>
+<li><p><strong>TLS Termination Types:</strong></p></li>
+<li><p><strong>Edge:</strong> TLS is terminated at the router (Ingress Controller).</p></li>
+<li><p><strong>Re-encrypt:</strong> TLS is terminated at the router and then re-encrypted before being sent to the pod (mandatory for end-to-end security).</p></li>
+<li><p><strong>HSTS (HTTP Strict Transport Security):</strong> Forcing browsers to communicate only over HTTPS.</p></li>
+<li><p><strong>Minimum TLS Version:</strong> Restricting connections to TLS 1.2 or 1.3 only.</p></li>
+<li><p><strong>Certificate Management:</strong> Utilizing automated certificate rotation (e.g., via cert-manager) with CA-signed certificates.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Route Audit:</strong> Scan all routes for termination: edge or reencrypt and ensure none are set to allowHTTP: true.</p></li>
+<li><p><strong>Cipher Suite Check:</strong> Verify the IngressController configuration to ensure weak ciphers (e.g., DES, RC4) are disabled.</p></li>
+<li><p><strong>Certificate Validity:</strong> Confirm certificates are valid, unexpired, and issued by an approved internal or public Certificate Authority (CA).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Cleartext traffic (HTTP) is unacceptable for banking data.</p>
+<ul>
+<li><p><strong>Prevention of Eavesdropping:</strong> Ensures that sensitive customer data (PINs, account numbers) cannot be intercepted by anyone on the network path.</p></li>
+<li><p><strong>Man-in-the-Middle (MitM) Protection:</strong> Cryptographic verification ensures the user is communicating with the genuine Agrobank service.</p></li>
+<li><p><strong>Compliance:</strong> Fulfills RMiT's mandate for "strong encryption for data in transit".</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Route configuration audit and SSL scanning.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check for insecure routes:</strong></p><pre class="cli"><code>oc get routes -A -o json | jq '.items[] | select(.spec.tls==null)'</code></pre></li>
+<li><p><strong>Check TLS version:</strong></p><pre class="cli"><code>openssl s_client -connect &lt;route-url&gt;:443 -tls1_2</code></pre></li>
+<li><p><strong>Verify HSTS:</strong></p><pre class="cli"><code>curl -I https://&lt;route-url&gt; (Check for Strict-Transport-Security header).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Route Resource YAML:</strong> Snippet showing the TLS configuration and HSTS annotations.</p></li>
+<li><p><strong>SSL Labs / Qualys Report:</strong> A scan showing an "A" or "A+" rating for the production ingress.</p></li>
+<li><p><strong>IngressController Config:</strong> Showing the global TLS profile and cipher restrictions.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Data Interception):</strong> Use of HTTP or weak TLS allows attackers to steal credentials and transaction data in plain text.</p></li>
+<li><p><strong>Reputational Risk:</strong> Browsers showing "Not Secure" warnings for banking portals.</p></li>
+<li><p><strong>Compliance Risk:</strong> Direct violation of RMiT Section 11.1 and 11.3 regarding data protection.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity); Section 11.3 (Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 3 (Data Protection).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-8 (Transmission Confidentiality and Integrity).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-009">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-009</span><span class="subdomain-pill">Infrastructure Security</span></div>
+<h2>API Server Hardening &amp; Private Endpoints</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>The OpenShift API Server is the most sensitive endpoint in the cluster. This control mandates that the API server be restricted from public internet access and secured through IP allow-listing and private networking.</p>
+<h4>Key Aspects of API Hardening:</h4>
+<ul>
+<li><p><strong>Internal-Only Access:</strong> Configuring the API server to be reachable only via the internal corporate VPN or leased lines.</p></li>
+<li><p><strong>IP Allow-listing:</strong> Restricting API access to a specific range of "Jump Host" or "Admin VDI" IP addresses.</p></li>
+<li><p><strong>Audit Logging:</strong> Enabling full request/response auditing to track every administrative action (<a class="cross-control-link" href="pillar-mo.html#control-id-mo-004" title="Open MO-004">MO-004</a>).</p></li>
+<li><p><strong>Load Balancer Isolation:</strong> Using a private Internal Load Balancer (ILB) to front the master nodes.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Public Access Check:</strong> Attempt to reach the API endpoint (https://api.&lt;cluster-name&gt;.&lt;domain&gt;:6443) from an external, non-VPN network. It must fail.</p></li>
+<li><p><strong>Infrastructure Config:</strong> Verify the Infrastructure resource to ensure apiServer.servingCerts and endpoints are configured as "Internal."</p></li>
+<li><p><strong>Firewall Rules:</strong> Confirm with the network team that port 6443 is blocked at the data center perimeter.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>The management plane is the primary target for advanced persistent threats (APTs).</p>
+<ul>
+<li><p><strong>Prevention of Brute Force:</strong> If the API is not on the internet, it cannot be scanned or brute-forced by external bots.</p></li>
+<li><p><strong>Management Plane Isolation:</strong> Ensures that even if the "Data Plane" (applications) is under a DDoS attack, the "Control Plane" remains accessible to administrators.</p></li>
+<li><p><strong>Audit Readiness:</strong> Strict access controls on the API fulfill RMiT requirements for "Administrator Access Security".</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Network reachability testing and configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check infrastructure status:</strong></p><pre class="cli"><code>oc get infrastructure cluster -o jsonpath='{.status.apiServerInternalURI}'</code></pre></li>
+<li><p><strong>Verify allow-list:</strong> Check the apiserver resource for additionalCORSAllowedOrigins or restricted CIDR configurations.</p></li>
+<li><p><strong>Audit Log Check:</strong></p><pre class="cli"><code>oc get configmap -n openshift-kube-apiserver (Check for audit policy).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Infrastructure YAML:</strong> Showing the internal API URI.</p></li>
+<li><p><strong>External Scan Result:</strong> Proving port 6443 is "Filtered" or "Closed" from the internet.</p></li>
+<li><p><strong>Admin VDI Proof:</strong> A screenshot showing API access is only possible from an authorized management workstation.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Full Cluster Takeover):</strong> An exposed API server with a single credential leak allows an attacker to delete the entire cluster or exfiltrate all data.</p></li>
+<li><p><strong>High Risk (Exploitation of Zero-Days):</strong> If a new Kubernetes API vulnerability is discovered, exposed clusters are the first to be exploited.</p></li>
+<li><p><strong>Compliance Risk:</strong> Non-compliance with RMiT Section 11.2 and CIS Benchmarks for control plane security.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.2 (User Access Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 12 (Network Infrastructure Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AC-3 (Access Enforcement); SC-7 (Boundary Protection).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-010">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-010</span><span class="subdomain-pill">Data Protection</span></div>
+<h2>Secret Management &amp; Encryption (etcd KMS)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Kubernetes "Secrets" are stored in etcd and, by default, are only base64 encoded, not encrypted. This control mandates that Encryption at Rest be enabled for the etcd database using a KMS (Key Management Service) or a provider like AES-CBC.</p>
+<h4>Key Aspects of Secret Encryption:</h4>
+<ul>
+<li><p><strong>etcd Encryption:</strong> Ensuring that if the physical disks are stolen or the etcd database is dumped, the secrets (passwords, TLS keys, API tokens) remain unreadable.</p></li>
+<li><p><strong>External KMS Integration:</strong> Utilizing an external Hardware Security Module (HSM) or HashiCorp Vault to manage the encryption keys.</p></li>
+<li><p><strong>Automatic Rotation:</strong> Periodically rotating the encryption keys to minimize the impact of a potential key compromise.</p></li>
+<li><p><strong>Least Privilege Secret Access:</strong> Using RBAC (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-001" title="Open SC-001">SC-001</a>) to ensure pods can only see the specific secrets they require.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Encryption Status:</strong> Verify the apiserver cluster resource shows encryption is active.</p></li>
+<li><p><strong>Algorithm Check:</strong> Confirm that a strong algorithm (e.g., aescbc) is in use.</p></li>
+<li><p><strong>Rotation Schedule:</strong> Audit the logs to see when the last secret encryption key rotation occurred.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Secrets are the "Keys to the Kingdom."</p>
+<ul>
+<li><p><strong>Protection of Credentials:</strong> Ensures that database passwords and internal certificates are never stored in cleartext on physical media.</p></li>
+<li><p><strong>Regulatory Compliance:</strong> Directly fulfills RMiT's requirement for "Encryption of sensitive data at rest".</p></li>
+<li><p><strong>Defense in Depth:</strong> Even if an attacker gains OS-level access to a master node, they cannot read the cluster secrets without the decryption key.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Configuration check and data verification.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Verify encryption is on:</strong></p><pre class="cli"><code>oc get apiserver cluster -o jsonpath='{.spec.encryption.type}' (Should return aescbc).</code></pre></li>
+<li><p><strong>Check encryption progress:</strong></p><pre class="cli"><code>oc get openshiftapiserver -o yaml (Look for Encrypted status).</code></pre></li>
+<li><p><strong>Test etcd data:</strong> (For auditors only) Attempt to read a secret directly from an etcd backup file; it must appear as encrypted gibberish.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>APIServer YAML:</strong> Showing the encryption stanza.</p></li>
+<li><p><strong>Encryption Status Log:</strong> Output showing the percentage of secrets successfully encrypted.</p></li>
+<li><p><strong>Vault/KMS Integration Proof:</strong> Documentation of the external key management lifecycle.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Secret Exposure):</strong> Without encryption, anyone with access to a master node backup or the storage layer can steal every password and certificate in the bank's cluster.</p></li>
+<li><p><strong>Compliance Risk:</strong> Immediate failure of RMiT and PCIDSS audits regarding the protection of sensitive data.</p></li>
+<li><p><strong>Operational Risk:</strong> Inability to securely rotate keys after a suspected breach.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 3 (Data Protection).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-28 (Protection of Information at Rest).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-011">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-011</span><span class="subdomain-pill">System Hardening</span></div>
+<h2>RHCOS Immutable Operating System</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Red Hat Enterprise Linux CoreOS (RHCOS) is the mandatory operating system for all OpenShift 4.x nodes. Unlike traditional Linux distributions, RHCOS is immutable, meaning the root filesystem is mounted as read-only. Changes to the OS configuration are not performed manually via SSH; instead, they are managed through a centralized Machine Config Operator (MCO).</p>
+<h4>Key Aspects of RHCOS:</h4>
+<ul>
+<li><p><strong>Read-Only Root File System:</strong> Prevents persistent malware from modifying core system binaries (e.g., /usr).</p></li>
+<li><p><strong>Ignition-Based Provisioning:</strong> Nodes are initialized using a declarative "Ignition" config, ensuring every bare-metal node starts from an identical security baseline.</p></li>
+<li><p><strong>Transactional Updates:</strong> OS updates are performed as a single atomic unit; if an update fails, the node automatically rolls back to the previous known-good version.</p></li>
+<li><p><strong>Minimal Attack Surface:</strong> RHCOS excludes unnecessary packages (like Python, compilers, or standard shells) to reduce the surface area available to attackers.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Filesystem Status:</strong> Verify that /usr and other system directories are mounted as ro (read-only) on all nodes.</p></li>
+<li><p><strong>Manual Access Audit:</strong> Confirm that SSH access is restricted and that no manual modifications exist in /etc that aren't managed by a MachineConfig.</p></li>
+<li><p><strong>MCO Health:</strong> Ensure the Machine Config Operator is reporting a "Ready" status for all machine pools.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a banking environment, "Configuration Drift" is a primary security risk.</p>
+<ul>
+<li><p><strong>Prevention of Unauthorized Persistence:</strong> Even if an attacker gains root access, they cannot easily modify the OS to survive a reboot because the filesystem is locked.</p></li>
+<li><p><strong>Auditability:</strong> Since all OS changes must go through the MCO, there is a clear, cluster-wide audit trail of every configuration change.</p></li>
+<li><p><strong>Rapid Recovery:</strong> In line with the "Cattle" model (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-004" title="Open RC-004">RC-004</a>), a compromised or misconfigured node can be wiped and re-imaged to its exact desired state in minutes.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node-level filesystem and operator audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check mount status:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host mount | grep " /usr "</code></pre></li>
+<li><p><strong>Check MCO status:</strong></p><pre class="cli"><code>oc get machineconfigpool</code></pre></li>
+<li><p><strong>Verify OS immutability:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host touch /usr/bin/testfile (Expected result: Read-only file system).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>MachineConfigPool Output:</strong> Showing all nodes are "Updated" and "Ready."</p></li>
+<li><p><strong>Mount Point Report:</strong> Proving system directories are read-only across the bare-metal fleet.</p></li>
+<li><p><strong>Ignition Config Export:</strong> Snippets showing the declarative nature of node initialization.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (System Tampering):</strong> Use of a non-immutable OS allows attackers to install "rootkits" that are nearly impossible to detect through standard container monitoring.</p></li>
+<li><p><strong>Operational Risk:</strong> Manual changes to nodes lead to "Snowflakes" that fail during cluster upgrades or disaster recovery.</p></li>
+<li><p><strong>Compliance Risk:</strong> Fails the RMiT requirement for "System Integrity" and "Standardized Build Images."</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.3 (System Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 3 (Data Protection); Control 4 (Secure Configuration).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-7 (Software, Firmware, and Information Integrity).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-012">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-012</span><span class="subdomain-pill">Workload Security</span></div>
+<h2>Container User Mapping (Non-Root Enforcement)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>A core tenet of container security is that processes should never run as the root user (UID 0). This control mandates that all application containers use a non-privileged user and that OpenShift's Security Context Constraints (SCC) are used to enforce unique, random UIDs for every namespace.</p>
+<h4>Key Aspects of User Mapping:</h4>
+<ul>
+<li><p><strong>MustRunAsNonRoot:</strong> Ensuring the container manifest explicitly denies running as root.</p></li>
+<li><p><strong>SCC Restricted Profile:</strong> By default, OpenShift's restricted-v2 SCC assigns a high-number random UID (e.g., 1000640000) to the container process.</p></li>
+<li><p><strong>User Namespace Isolation:</strong> Utilizing the Linux kernel's user namespace feature to map a container's "root" to a non-privileged user on the host.</p></li>
+<li><p><strong>Block SetUID/SetGID:</strong> Preventing containers from escalating their own privileges through special file bits.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>SCC Audit:</strong> Verify that the restricted-v2 SCC is the default for all application service accounts.</p></li>
+<li><p><strong>Process Check:</strong> Inspect running containers to ensure the effective UID is not 0.</p></li>
+<li><p><strong>Manifest Review:</strong> Check for runAsUser or runAsNonRoot fields in the Pod Security Context.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>Most container escape vulnerabilities rely on the process running as root within the container.</p>
+<ul>
+<li><p><strong>Privilege Containment:</strong> If an attacker gains a shell in a container running as a random UID, they cannot modify system files, install packages, or interact with the host kernel in a meaningful way.</p></li>
+<li><p><strong>Defense in Depth:</strong> Even if the container runtime has a bug, being a non-privileged user provides a critical second layer of protection against host-level compromise.</p></li>
+<li><p><strong>Multi-tenancy Safety:</strong> Ensures that Pod A in Namespace A cannot interfere with the files of Pod B, as they are running as entirely different UIDs on the physical host.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Pod process audit and SCC analysis.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check running UID:</strong></p><pre class="cli"><code>oc exec &lt;pod-name&gt; -- id (Should show a high-number UID, not 0).</code></pre></li>
+<li><p><strong>Check SCC assignment:</strong></p><pre class="cli"><code>oc get pod &lt;pod-name&gt; -o jsonpath='{.metadata.annotations.openshift\.io/scc}'</code></pre></li>
+<li><p><strong>Verify "Non-Root" enforcement:</strong></p><pre class="cli"><code>oc get pod &lt;pod-name&gt; -o jsonpath='{.spec.securityContext.runAsNonRoot}'</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>SCC Restricted-V2 YAML:</strong> Showing the runAsUser: type: MustRunAsRange configuration.</p></li>
+<li><p><strong>Pod ID Output:</strong> Screenshot or log showing the application running as a non-privileged user.</p></li>
+<li><p><strong>Admission Controller Log:</strong> Proof of the cluster blocking a container that attempted to run as root.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Host Escape):</strong> Root containers can more easily exploit kernel vulnerabilities to take control of the bare-metal node.</p></li>
+<li><p><strong>Security Risk:</strong> Allows an attacker to easily install tools and modify the application environment if they gain access to the container.</p></li>
+<li><p><strong>Compliance Risk:</strong> Direct violation of RMiT Section 11.3 and CIS Benchmarks for secure container execution.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.3 (Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AC-3 (Access Enforcement); AC-6 (Least Privilege).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-013">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-013</span><span class="subdomain-pill">Workload Security</span></div>
+<h2>HostPath Mount Restrictions</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>A hostPath volume mounts a file or directory from the host node's filesystem directly into a pod. This is one of the most dangerous capabilities in OpenShift. This control mandates that hostPath mounts be strictly forbidden for all application workloads, with exceptions only granted for critical system agents.</p>
+<h4>Key Aspects of HostPath Restrictions:</h4>
+<ul>
+<li><p><strong>Volume Type Blocking:</strong> Using PSA (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-003" title="Open SC-003">SC-003</a>) and SCC (SC-12) to block the hostPath volume type in all user namespaces.</p></li>
+<li><p><strong>Alternative Storage:</strong> Forcing the use of Persistent Volumes (PVs) from ODF or other managed storage (<a class="cross-control-link" href="pillar-ar.html#control-id-ar-010" title="Open AR-010">AR-010</a>) instead of local host directories.</p></li>
+<li><p><strong>Read-Only Exceptions:</strong> If a system agent must use a hostPath (e.g., for log collection), it must be mounted as read-only whenever possible.</p></li>
+<li><p><strong>Audit of Exceptions:</strong> Any existing hostPath mount must be documented with a specific technical justification and approved by the Technology Risk department.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Volume Audit:</strong> Scan all pods in production namespaces for any volumes of type hostPath.</p></li>
+<li><p><strong>SCC Review:</strong> Ensure the restricted and non-root SCCs do not allow the hostPath volume type.</p></li>
+<li><p><strong>System Pod Justification:</strong> Review system pods (Monitoring, Logging) to ensure their hostPath usage is limited to the minimum necessary directory.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>HostPath is the "Doorway to the Host."</p>
+<ul>
+<li><p><strong>Prevention of Data Theft:</strong> Prevents a container from mounting the host's /etc or /var/lib/etcd and stealing cluster-wide secrets or credentials.</p></li>
+<li><p><strong>Integrity Protection:</strong> Prevents a container from modifying host-level configurations (like SSH keys or Cron jobs) to establish persistence.</p></li>
+<li><p><strong>Isolation Enforcement:</strong> Ensures that the "Container Boundary" remains intact and that pods remain portable across the cluster.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Cluster-wide volume audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Search for hostPath:</strong></p><pre class="cli"><code>oc get pods -A -o json | jq '.items[] | select(.spec.volumes[].hostPath != null) | {name: .metadata.name, ns: .metadata.namespace}'</code></pre></li>
+<li><p><strong>Check SCC permissions:</strong></p><pre class="cli"><code>oc describe scc restricted-v2 | grep -i hostpath</code></pre></li>
+<li><p><strong>Verify Read-Only:</strong></p><pre class="cli"><code>For any system hostPath, check oc get pod &lt;name&gt; -o yaml for readOnly: true.</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Volume Audit Report:</strong> A zero-result list of hostPath mounts in application namespaces.</p></li>
+<li><p><strong>SCC Configuration YAML:</strong> Showing allowHostDirVolumePlugin: false.</p></li>
+<li><p><strong>Risk Approval Document:</strong> For any authorized system-level hostPath usage.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Total Host Compromise):</strong> Allows an attacker to read/write any file on the physical server, bypassing almost all container security controls.</p></li>
+<li><p><strong>Security Risk:</strong> Leads to "Break-out" scenarios where an attacker moves from one container to the host, and then to all other containers.</p></li>
+<li><p><strong>Compliance Risk:</strong> Direct violation of CIS Kubernetes Benchmark 5.2.4 and RMiT hardening standards.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.3 (Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AC-3 (Access Enforcement); SC-7 (Boundary Protection).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-014">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-014</span><span class="subdomain-pill">System Hardening</span></div>
+<h2>Secure Container Runtime (CRI-O Hardening)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>OpenShift uses CRI-O as its native container runtime. Unlike generic Docker, CRI-O is specifically built for Kubernetes and is hardened by default. This control ensures that CRI-O is further restricted to block dangerous Linux capabilities and system calls.</p>
+<h4>Key Aspects of CRI-O Hardening:</h4>
+<ul>
+<li><p><strong>Capability Dropping:</strong> Automatically dropping all Linux capabilities (e.g., CAP_NET_ADMIN, CAP_SYS_ADMIN) and only allowing the absolute minimum required for a standard process.</p></li>
+<li><p><strong>Seccomp (Secure Computing Mode):</strong> Applying a default seccomp profile to every container that filters the system calls (syscalls) the process can make to the kernel.</p></li>
+<li><p><strong>Process Tree Isolation:</strong> Ensuring that containers cannot see or interact with processes running on the host or in other containers (PID Namespace isolation).</p></li>
+<li><p><strong>No New Privileges:</strong> Ensuring that the no_new_privs flag is set, preventing child processes from gaining more permissions than their parents.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Default Seccomp Profile:</strong> Verify that pods are running with the RuntimeDefault seccomp profile.</p></li>
+<li><p><strong>Dropped Capabilities:</strong> Check the container spec to ensure capabilities: drop: ["ALL"] is enforced by the SCC.</p></li>
+<li><p><strong>CRI-O Config:</strong> Audit the /etc/crio/crio.conf file on the nodes for security-specific tuning.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>The Linux kernel provides thousands of features that containers don't need but attackers can exploit.</p>
+<ul>
+<li><p><strong>Attack Surface Reduction:</strong> By blocking 90% of available syscalls, seccomp prevents an attacker from exploiting many known (and unknown) kernel vulnerabilities.</p></li>
+<li><p><strong>Hardened Perimeter:</strong> Dropping capabilities ensures that even a root-compromised container cannot reconfigure the network or mount new filesystems.</p></li>
+<li><p><strong>Predictable Execution:</strong> Ensures the runtime is optimized for performance and security without the "bloat" of legacy container engines.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Pod security context and runtime audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check seccomp:</strong></p><pre class="cli"><code>oc get pod &lt;name&gt; -o jsonpath='{.spec.securityContext.seccompProfile.type}' (Must be RuntimeDefault).</code></pre></li>
+<li><p><strong>Check capabilities:</strong></p><pre class="cli"><code>oc exec &lt;pod&gt; -- capsh --print (Should show an extremely limited list).</code></pre></li>
+<li><p><strong>Verify no-new-privs:</strong></p><pre class="cli"><code>oc get pod &lt;name&gt; -o jsonpath='{.spec.securityContext.allowPrivilegeEscalation}' (Must be false).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>CRI-O Configuration Snippet:</strong> Showing the default security settings.</p></li>
+<li><p><strong>Capsh Output:</strong> From a production pod proving that all dangerous capabilities are dropped.</p></li>
+<li><p><strong>Seccomp Profile YAML:</strong> Showing the RuntimeDefault policy in use across the cluster.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Kernel Exploitation):</strong> Without seccomp, an attacker can use obscure syscalls to trigger kernel bugs and gain host-level access.</p></li>
+<li><p><strong>Security Risk:</strong> Excess capabilities allow for lateral network movement and unauthorized system modifications within the container.</p></li>
+<li><p><strong>Compliance Risk:</strong> Non-compliance with the NIST and CIS guidelines for container runtime security.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.3 (System Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-39 (Process Isolation).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-015">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-015</span><span class="subdomain-pill">Infrastructure Security</span></div>
+<h2>Node-Level SSH Access Restriction</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Direct SSH access to bare-metal OpenShift nodes bypasses the cluster's API-level audit logs and RBAC. This control mandates that SSH access be disabled by default for all personnel and only enabled through a strictly controlled "Break Glass" process.</p>
+<h4>Key Aspects of SSH Restriction:</h4>
+<ul>
+<li><p><strong>SSH Key Management:</strong> No individual user keys should be present on the nodes. Only a cluster-wide deployment key (stored in a secure vault) is permitted.</p></li>
+<li><p><strong>Firewall Blocking:</strong> Port 22 must be blocked at the internal firewall level for all traffic except from designated "Jump Hosts."</p></li>
+<li><p><strong>Audit Logging:</strong> Every SSH login attempt (successful or failed) must be forwarded to the centralized SIEM (<a class="cross-control-link" href="pillar-mo.html#control-id-mo-004" title="Open MO-004">MO-004</a>).</p></li>
+<li><p><strong>Use of oc debug:</strong> Encouraging the use of oc debug node/ which provides a shell via the API server, maintaining the full Kubernetes audit trail.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Port 22 Reachability:</strong> Perform a scan of the worker and master nodes from a non-authorized network; port 22 must be "Filtered" or "Closed."</p></li>
+<li><p><strong>Authorized Keys Audit:</strong> Audit the /root/.ssh/authorized_keys file on nodes to ensure no personal keys are present.</p></li>
+<li><p><strong>SSHD Config:</strong> Verify that PermitRootLogin is set to prohibit-password or no and that password authentication is disabled.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>SSH is an "unmanaged" entry point that can lead to undocumented changes.</p>
+<ul>
+<li><p><strong>Prevention of Undocumented Changes:</strong> Ensures that no one can manually "fix" a node in a way that isn't captured by the Machine Config Operator (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-011" title="Open SC-011">SC-011</a>).</p></li>
+<li><p><strong>Credential Protection:</strong> Reduces the risk of "SSH Key Sprawl" where hundreds of developer keys are left on production servers.</p></li>
+<li><p><strong>Accountability:</strong> By forcing use of the oc CLI, every action is tied to an authenticated Identity Provider user (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-002" title="Open SC-002">SC-002</a>).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Network scan and node-level configuration audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Scan node:</strong></p><pre class="cli"><code>nmap -p 22 &lt;node-ip&gt; (Should be blocked).</code></pre></li>
+<li><p><strong>Check keys:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /root/.ssh/authorized_keys</code></pre></li>
+<li><p><strong>Verify SSHD config:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /etc/ssh/sshd_config | grep PasswordAuthentication</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Nmap Scan Report:</strong> Proving port 22 is unreachable from general corporate networks.</p></li>
+<li><p><strong>SSHD Configuration YAML:</strong> Export from the MachineConfig showing the hardened SSH settings.</p></li>
+<li><p><strong>SIEM Alert Sample:</strong> A log showing an alert triggered by a "Break Glass" SSH login.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Lateral Movement):</strong> An attacker with SSH access can easily move between nodes and bypass all container-level security controls.</p></li>
+<li><p><strong>Operational Risk:</strong> "Drift" caused by manual SSH edits can cause cluster upgrades to fail or produce inconsistent application behavior.</p></li>
+<li><p><strong>Compliance Risk:</strong> Violates RMiT requirements for "Administrator Access Control" and "Auditability of Privileged Actions."</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.2 (User Access Management).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 4 (Secure Configuration); Control 5 (Account Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> AC-17 (Remote Access); AC-3 (Access Enforcement).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-016">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-016</span><span class="subdomain-pill">Infrastructure Security</span></div>
+<h2>UEFI Secure Boot Enforcement</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>UEFI Secure Boot is a verification mechanism that ensures the bare-metal server only boots software that is trusted by the hardware manufacturer or the organization. This control mandates that Secure Boot be enabled in the physical server BIOS/UEFI settings to protect the boot chain.</p>
+<h4>Key Aspects of Secure Boot:</h4>
+<ul>
+<li><p><strong>Signature Verification:</strong> The hardware UEFI firmware checks the digital signature of the bootloader (shim), the Linux kernel, and kernel modules before execution.</p></li>
+<li><p><strong>Hardware Root of Trust:</strong> Leverages the physical TPM (Trusted Platform Module) or UEFI secure variables to store trusted keys.</p></li>
+<li><p><strong>Protection Against Bootkits:</strong> Prevents malicious code (Rootkits/Bootkits) from inserting itself into the boot process before the operating system or OpenShift security layers are active.</p></li>
+<li><p><strong>RHCOS Support:</strong> Red Hat Enterprise Linux CoreOS (RHCOS) is fully signed and supports Secure Boot out of the box for bare-metal deployments.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>BIOS/UEFI Configuration:</strong> Physically or via BMC (IPMI/Redfish) verify that "Secure Boot" is set to Enabled.</p></li>
+<li><p><strong>OS Verification:</strong> Check the running state on the node to confirm the kernel recognizes it was booted securely.</p></li>
+<li><p><strong>TPM Presence:</strong> Confirm that a TPM 2.0 module is present and initialized on all master and worker nodes.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a high-security banking environment, the integrity of the physical server is the foundation of all other security layers.</p>
+<ul>
+<li><p><strong>Prevention of Low-Level Attacks:</strong> Ensures that an attacker with temporary physical access or firmware-level access cannot subvert the OS by loading a compromised kernel.</p></li>
+<li><p><strong>Integrity Assurance:</strong> Guarantees that the "Immutable" OS (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-011" title="Open SC-011">SC-011</a>) has not been tampered with before it even finishes booting.</p></li>
+<li><p><strong>Compliance:</strong> Directly addresses RMiT requirements for "System Integrity" and the use of trusted hardware foundations.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node-level boot status audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check Secure Boot status:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host mokutil --sb-state (Should return SecureBoot enabled).</code></pre></li>
+<li><p><strong>Verify kernel lockdown:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host dmesg | grep -i "Secure boot enabled"</code></pre></li>
+<li><p><strong>Check TPM status:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host ls /dev/tpm0 (Device must exist).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Mokutil Output:</strong> Proving Secure Boot is active across the production fleet.</p></li>
+<li><p><strong>BIOS Configuration Export:</strong> A report from the server management tool (e.g., HPE iLO or Dell iDRAC) showing Secure Boot enabled.</p></li>
+<li><p><strong>Kernel Log Snippet:</strong> Proof of the kernel entering "Lockdown" mode due to Secure Boot.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Rootkit Persistence):</strong> Without Secure Boot, an attacker can replace the bootloader, gaining total control over the server that is invisible to the OS and OpenShift.</p></li>
+<li><p><strong>High Risk (Unauthorized OS):</strong> Allows the booting of unapproved or modified operating systems on banking hardware.</p></li>
+<li><p><strong>Compliance Risk:</strong> Fails the RMiT and NIST standards for hardware-based root of trust.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.3 (System Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 4 (Secure Configuration).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-7 (Software, Firmware, and Information Integrity).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-017">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-017</span><span class="subdomain-pill">Vulnerability Management</span></div>
+<h2>Automated Vulnerability Scanning (Advanced Cluster Security)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>This control mandates the use of Red Hat Advanced Cluster Security (RHACS) (StackRox) to perform continuous, automated vulnerability scanning of all container images and cluster configurations.</p>
+<h4>Key Aspects of RHACS Scanning:</h4>
+<ul>
+<li><p><strong>Image Scanning:</strong> Scanning every container image for known CVEs (Common Vulnerabilities and Exposures) at rest and during runtime.</p></li>
+<li><p><strong>Configuration Auditing:</strong> Checking for insecure Kubernetes configurations (e.g., pods running as root or missing network policies).</p></li>
+<li><p><strong>Policy Enforcement:</strong> Automatically blocking the deployment of any image that contains "Critical" or "High" vulnerabilities.</p></li>
+<li><p><strong>Runtime Security:</strong> Monitoring for suspicious activity (e.g., unexpected process execution) inside running containers.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>RHACS Status:</strong> Verify that the RHACS Operator is installed and the Central/Scanner components are healthy.</p></li>
+<li><p><strong>Scanning Policy:</strong> Confirm that a policy is in place to "Fail" builds or "Block" deployments with Critical vulnerabilities.</p></li>
+<li><p><strong>Scope:</strong> Ensure all namespaces (Production, UAT, System) are being actively monitored.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>New vulnerabilities are discovered daily; manual periodic scanning is insufficient.</p>
+<ul>
+<li><p><strong>Proactive Defense:</strong> Prevents known vulnerable software from ever reaching the production environment.</p></li>
+<li><p><strong>Risk Visibility:</strong> Provides the Technology Risk department with a real-time dashboard of the cluster's security posture.</p></li>
+<li><p><strong>Compliance Automation:</strong> Automates the "Vulnerability Assessment" requirements of RMiT Section 11.4.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> RHACS dashboard and policy audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check RHACS health:</strong></p><pre class="cli"><code>oc get secret central-htpasswd -n stackrox (Verify access to console).</code></pre></li>
+<li><p><strong>Review violation list:</strong> Check the "Violations" tab in the RHACS UI.</p></li>
+<li><p><strong>Verify admission control:</strong> Attempt to deploy an image with a known critical CVE (e.g., an old version of Log4j). It should be blocked.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>RHACS Security Report:</strong> A PDF export showing 0 "Critical" vulnerabilities in the production namespace.</p></li>
+<li><p><strong>Policy Configuration YAML:</strong> Showing the enforcement rules for CVE thresholds.</p></li>
+<li><p><strong>Scan Log:</strong> Proof of a recent scan completion for a core banking microservice.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Exploitation of Known Vulnerabilities):</strong> Without automated scanning, applications may run with "Critical" bugs that allow for remote code execution or data theft.</p></li>
+<li><p><strong>Operational Risk:</strong> Delayed detection of new vulnerabilities increases the window of opportunity for attackers.</p></li>
+<li><p><strong>Compliance Risk:</strong> Direct violation of RMiT Section 11.4 (Vulnerability Assessment).</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.4 (Vulnerability Assessment).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 7 (Vulnerability Management).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> RA-5 (Vulnerability Monitoring and Scanning).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-018">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-018</span><span class="subdomain-pill">Workload Security</span></div>
+<h2>Container Content Trust (Image Signing)</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>Container Content Trust ensures that only images signed by a trusted authority (e.g., the bank's internal CI/CD pipeline) can be pulled and executed in the cluster. This prevents the execution of "rogue" or tampered-with images.</p>
+<h4>Key Aspects of Image Signing:</h4>
+<ul>
+<li><p><strong>Cosign / Skopeo Integration:</strong> Utilizing tools like Cosign to sign images after they pass security scans.</p></li>
+<li><p><strong>Signature Verification:</strong> Configuring the OpenShift nodes to check the signature against a public key before allowing a container to start.</p></li>
+<li><p><strong>Trusted Registries:</strong> Restricting image pulls to only the bank's hardened internal registry (<a class="cross-control-link" href="pillar-rc.html#control-id-rc-007" title="Open RC-007">RC-007</a>/<a class="cross-control-link" href="pillar-rc.html#control-id-rc-009" title="Open RC-009">RC-009</a>).</p></li>
+<li><p><strong>Admission Control:</strong> Using a policy engine (like RHACS or Kyverno) to enforce that every image has a valid, verifiable signature.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>MachineConfig Policy:</strong> Verify the /etc/containers/policy.json on nodes to ensure it requires signatures for production registries.</p></li>
+<li><p><strong>Public Key Distribution:</strong> Confirm that the public keys used for verification are securely managed across the nodes.</p></li>
+<li><p><strong>Negative Test:</strong> Attempt to deploy an unsigned image from a public registry (e.g., Docker Hub); it must be blocked.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>An attacker who gains access to the image registry could replace a legitimate application image with a malicious one.</p>
+<ul>
+<li><p><strong>Supply Chain Security:</strong> Ensures that the code running in production is exactly what was built and approved by the dev team.</p></li>
+<li><p><strong>Prevention of Image Tampering:</strong> Detects if an image has been modified between the build phase and the deployment phase.</p></li>
+<li><p><strong>Trust Verification:</strong> Fulfills RMiT requirements for "Software Integrity" and "Origin Validation."</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Node-level policy audit and negative testing.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check container policy:</strong></p><pre class="cli"><code>oc debug node/&lt;node-name&gt; -- chroot /host cat /etc/containers/policy.json</code></pre></li>
+<li><p><strong>Verify signature check:</strong> Attempt to pull an unsigned image and check for "Signature Verification Failed" in the crio logs.</p></li>
+<li><p><strong>Check RHACS policy:</strong> Verify the "Image Signature Verified" policy is enabled.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Policy.json Export:</strong> Showing the simpleSigning or cosign requirements.</p></li>
+<li><p><strong>CI/CD Log:</strong> Proof of the cosign sign step in the application build pipeline.</p></li>
+<li><p><strong>Blocked Deployment Log:</strong> Evidence of the cluster rejecting an unsigned image.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Malicious Code Execution):</strong> An attacker could inject a "backdoor" into a container image and have it run in production if signatures are not verified.</p></li>
+<li><p><strong>High Risk (Supply Chain Attack):</strong> Vulnerable or unauthorized images could be "side-loaded" into the cluster.</p></li>
+<li><p><strong>Compliance Risk:</strong> Non-compliance with modern software supply chain security standards (SLSA).</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity); Section 11.3 (Hardening).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 18 (Service Software Continuity).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SI-7 (Software, Firmware, and Information Integrity).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-019">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-019</span><span class="subdomain-pill">Data in Transit</span></div>
+<h2>Node-to-Node Encryption (IPsec)</h2>
+</div>
+<span class="risk-pill high">High</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>While TLS (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-008" title="Open SC-008">SC-008</a>) secures traffic from the user to the cluster, Node-to-Node Encryption secures the "East-West" traffic between the bare-metal nodes themselves. Using IPsec within the OVN-Kubernetes CNI, all pod-to-pod traffic is encrypted at the network layer.</p>
+<h4>Key Aspects of Node Encryption:</h4>
+<ul>
+<li><p><strong>OVN-K IPsec:</strong> A native feature of the OVN-Kubernetes network plugin that encrypts all Geneve-encapsulated tunnels.</p></li>
+<li><p><strong>Automated Key Management:</strong> Utilizing the ovn-ipsec daemon to manage and rotate encryption keys automatically.</p></li>
+<li><p><strong>Standard Encryption:</strong> Uses AES-GCM for high-performance hardware-accelerated encryption.</p></li>
+<li><p><strong>Transparency:</strong> Encryption happens at the network layer; applications do not need any modification to be secured.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>Cluster Network Config:</strong> Verify that ipsec: true is set in the networks.config.openshift.io resource.</p></li>
+<li><p><strong>Daemon Status:</strong> Confirm that the ovn-ipsec pods are running on all nodes in the openshift-ovn-kubernetes namespace.</p></li>
+<li><p><strong>Encryption Verification:</strong> Use network tools to verify that traffic between nodes is indeed encrypted (ESP packets).</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>In a bare-metal environment, traffic travels over physical top-of-rack switches that could be intercepted.</p>
+<ul>
+<li><p><strong>Zero-Trust Networking:</strong> Ensures that even if the physical network infrastructure (switches/cables) is compromised, the banking data remains encrypted.</p></li>
+<li><p><strong>Compliance with RMiT Appendix 4:</strong> Fulfills the "High" criticality requirement for "Encryption of all sensitive data in transit within the internal network."</p></li>
+<li><p><strong>Defense Against Sniffing:</strong> Prevents an attacker with physical access to the network from "sniffing" sensitive inter-service communication.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> Configuration audit and packet analysis.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check IPsec setting:</strong></p><pre class="cli"><code>oc get networks.config/cluster -o jsonpath='{.spec.defaultNetwork.ovnKubernetesConfig.ipsecConfig}'</code></pre></li>
+<li><p><strong>Check pod status:</strong></p><pre class="cli"><code>oc get pods -n openshift-ovn-kubernetes -l app=ovn-ipsec</code></pre></li>
+<li><p><strong>Packet capture:</strong></p><pre class="cli"><code>(Authorized only) tcpdump -i &lt;interface&gt; esp (Should show Encapsulating Security Payload packets).</code></pre></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>Network Config YAML:</strong> Export showing IPsec is enabled.</p></li>
+<li><p><strong>IPsec Status Report:</strong> Output of oc rsh into an ovn-ipsec pod showing active security associations (SAs).</p></li>
+<li><p><strong>Security Architecture Diagram:</strong> Showing the encrypted tunnels between bare-metal hosts.</p></li>
+</ul></div></div>
+<div class="field-box risk-box high"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>High Risk (Internal Eavesdropping):</strong> Unencrypted internal traffic allows anyone with network-level access to steal sensitive data as it moves between microservices.</p></li>
+<li><p><strong>Compliance Risk:</strong> Immediate non-compliance with RMiT mandates for internal data encryption for critical systems.</p></li>
+<li><p><strong>Performance Risk:</strong> While hardware-accelerated, IPsec does add a minor CPU overhead that must be accounted for in capacity planning.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity); Appendix 4.</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 13 (Network Monitoring and Defense).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-8 (Transmission Confidentiality and Integrity).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+<section class="control-card" id="control-id-sc-020">
+<div class="control-head">
+<div class="control-title-wrap">
+<div class="control-kicker-row"><span class="control-code">SC-020</span><span class="subdomain-pill">Data Protection</span></div>
+<h2>Hardware Security Module (HSM) for Master Key Storage</h2>
+</div>
+<span class="risk-pill critical">Critical</span>
+</div>
+<div class="field-grid">
+<div class="field-box"><h3>Description</h3><div class="field-body"><p>For the highest level of secret protection, the "Master Key" used to encrypt the etcd database (<a class="cross-control-link" href="pillar-sc.html#control-id-sc-010" title="Open SC-010">SC-010</a>) should not reside on the cluster's local disks. This control mandates the use of an external Hardware Security Module (HSM) to store and manage the cryptographic keys.</p>
+<h4>Key Aspects of HSM Integration:</h4>
+<ul>
+<li><p><strong>Root of Trust:</strong> The encryption key is generated and stored inside a tamper-resistant physical appliance.</p></li>
+<li><p><strong>PKCS#11 / KMIP Integration:</strong> Using standard protocols to allow OpenShift to request encryption/decryption operations without the key ever leaving the HSM.</p></li>
+<li><p><strong>Audit Logging:</strong> HSMs provide non-repudiable logs of every time the key is accessed.</p></li>
+<li><p><strong>FIPS 140-2 Level 3:</strong> Typically, HSMs are certified to a higher physical security standard than standard servers.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>What to Assess</h3><div class="field-body"><ul>
+<li><p><strong>KMS Provider Config:</strong> Verify the APIServer configuration to see if a KMS provider (e.g., Vault with HSM backend) is active.</p></li>
+<li><p><strong>Key Storage Location:</strong> Confirm through documentation that the root of trust resides in a physical HSM.</p></li>
+<li><p><strong>Access Control:</strong> Verify that only the OpenShift master nodes have the necessary permissions to call the HSM.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Technical Rationale</h3><div class="field-body"><p>If the master key is stored on the same servers as the encrypted data, the security is only as good as the server's OS hardening.</p>
+<ul>
+<li><p><strong>Physical Protection:</strong> Protects the cluster's most sensitive keys from being stolen, even if an attacker has physical access to the bare-metal servers.</p></li>
+<li><p><strong>Regulatory Requirement:</strong> Many central banks (including BNM) suggest or require HSMs for the management of keys for critical infrastructure.</p></li>
+<li><p><strong>Logical Separation:</strong> Separates the "Key Management" responsibility from the "Infrastructure Management" responsibility.</p></li>
+</ul></div></div>
+<div class="field-box"><h3>Verification</h3><div class="field-body"><ul>
+<li><strong>Validation Method:</strong> KMS configuration and HSM log audit.</li>
+</ul>
+<p><strong>Verification Steps:</strong></p>
+<ol class="verification-steps">
+<li><p><strong>Check KMS config:</strong></p><pre class="cli"><code>oc get apiserver cluster -o yaml (Look for KMS provider details).</code></pre></li>
+<li><p><strong>HSM Audit:</strong> Request a log export from the HSM administrator showing successful key-access events from the cluster.</p></li>
+<li><p><strong>Negative Test:</strong> Verify that secrets cannot be decrypted if the connection to the HSM is severed.</p></li>
+</ol></div></div>
+<div class="field-box"><h3>Evidence</h3><div class="field-body"><ul>
+<li><p><strong>KMS Configuration YAML:</strong> Snippets showing the integration with the external key manager.</p></li>
+<li><p><strong>HSM Certification:</strong> A copy of the FIPS 140-2 Level 3 certificate for the HSM appliance.</p></li>
+<li><p><strong>Audit Log Sample:</strong> A log from the HSM showing a successful key wrap/unwrap request.</p></li>
+</ul></div></div>
+<div class="field-box risk-box critical"><h3>Risk Impact</h3><div class="field-body"><ul>
+<li><p><strong>Critical Risk (Key Theft):</strong> Without an HSM, an attacker who compromises the master node's filesystem can potentially steal the decryption keys and unlock all cluster secrets.</p></li>
+<li><p><strong>Compliance Risk:</strong> Non-compliance with RMiT requirements for "Secure Key Management" in highly critical systems.</p></li>
+<li><p><strong>Security Risk:</strong> Increased risk of key duplication or unauthorized key export.</p></li>
+</ul></div></div>
+<div class="field-box field-box-full"><h3>Mapping</h3><div class="field-body"><ul>
+<li><p><strong>BNM RMiT (2025):</strong> Section 11.1 (Data Integrity); Section 11.2 (Access Control).</p></li>
+<li><p><strong>CIS Benchmarks v8:</strong> Control 3 (Data Protection).</p></li>
+<li><p><strong>NIST SP 800-53:</strong> SC-12 (Cryptographic Key Establishment and Management).</p></li>
+</ul></div></div>
+</div>
+<div class="control-links"><a href="#controls-index">Back to table of contents</a><a href="#top">Back to top</a></div>
+</section>
+</article></div><footer class="footer">Prepared as a structured HTML view of Pillar 4: Security &amp; Compliance for the OpenShift Well-Architected Assessment Framework.</footer></main></div></body></html>
